@@ -1,0 +1,104 @@
+#!/bin/bash
+# Script to run rsync in daemon mode at boot time
+#
+#===============================================================================
+# Run level information:
+#
+# chkconfig: 2345 16 91
+# description: Rsync daemon
+# processname: rsync
+#===============================================================================
+
+# Paths, variables, and system checks.
+
+# Source function library
+. /etc/rc.d/init.d/functions
+
+if [ -r /etc/sysconfig/network ]; then
+	. /etc/sysconfig/network
+	[ ${NETWORKING} = "no" ] && exit 0
+fi
+
+# Path to the executable.
+#
+rsync=/usr/bin/rsync
+
+# Path to the configuration file.
+#
+rsync_conf=/etc/rsyncd.conf
+
+rsync_options="--config=$rsync_conf --daemon"
+
+# Find the pid file, normal by default.
+rsync_pid_file=`grep "pid file" $rsync_conf | cut -f4 -d' '`
+
+if [ -z $rsync_pid_file ]; then
+    rsync_pid_file="/var/run/rsync.pid";
+fi
+
+# Check that the configuration file exists.
+#
+[ -f ${rsync_conf} ] || exit 1
+
+# Path to the lock file
+#
+rsync_lock=/var/lock/subsys/rsync
+
+# Run controls:
+
+RETVAL=0
+
+# Start rsync 
+#
+function start() {
+	echo -n $"Starting rsync: "
+	sleep 1
+	daemon $rsync $rsync_options
+	RETVAL=$?
+
+    [ $RETVAL -eq 0 ] && touch $rsync_lock || RETVAL=1
+    return $RETVAL
+}
+
+# Stop rsync
+#
+function stop() {
+	echo -n $"Shutting down rsync: "
+	killproc -p $rsync_pid_file rsync
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && rm -f $rsync_lock
+	echo ""
+	return $RETVAL
+}
+
+# See how we were called
+case "$1" in
+    start)
+	start
+	;;
+    stop)
+	stop
+	;;
+    restart)
+	stop
+	sleep 3
+	start
+	;;
+    condrestart)
+	if [ -f $LOCK_FILE ]; then
+	    stop
+	    sleep 3
+	    start
+	    RETVAL=$?
+	fi
+	;;
+    status)
+	status -p $rsync_pid_file rsync
+	RETVAL=$?
+	;;
+    *)
+	echo $"Usage: $0 {start|stop|restart|condrestart|status}"
+	RETVAL=1
+esac
+
+exit $RETVAL

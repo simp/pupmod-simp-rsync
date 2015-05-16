@@ -1,0 +1,23 @@
+[<%= @name %>]
+comment = <%= @comment %>
+path = <%= @path %>
+use chroot = <%= @use_chroot %>
+max connections = <%= @max_connections %>
+max verbosity = <%= @max_verbosity %>
+lock file = <%= @lock_file %>
+read only = <%= @read_only %>
+write only = <%= @write_only %>
+list = <%= @list %>
+uid = <%= @uid %>
+gid = <%= @gid %>
+outgoing chmod = <%= @outgoing_chmod %>
+ignore nonreadable = <%= @ignore_nonreadable %>
+transfer logging = <%= @transfer_logging %>
+log format = <%= @log_format %>
+dont compress = <%= Array(@dont_compress).join(' ') %>
+hosts allow = <%= Array(@hosts_allow).join(',') %>
+hosts deny = <%= Array(@hosts_deny).join(',') %>
+<% if not @auth_users.empty? then -%>
+auth users = <%= Array(@auth_users).join(',') %>
+secrets file = /etc/rsync/<%= @name %>.rsyncd.secrets
+<% end -%>
