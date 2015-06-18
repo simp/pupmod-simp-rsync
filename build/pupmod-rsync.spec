@@ -1,7 +1,7 @@
 Summary: Rsync Puppet Module
 Name: pupmod-rsync
 Version: 4.2.0
-Release: 0
+Release: 1
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -59,6 +59,9 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Wed May 06 2015 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.2.0-1
+- Prevent file syncs during --noop runs.
+
 * Thu Apr 02 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.2.0-0
 - Made several changes, including one potentially breaking change, to make
   things consistent with modern types and providers.
@@ -74,7 +77,7 @@ fi
   - Moved server files to /etc/rsync/secrets and left client files in
     /etc/rsync so that we could properly use 'tidy'. This is currently noisy
     and we may need to pull in external Puppet patches to fix it.
-  - Client side passwords are no longer permanently housed on the system. If
+  - Client-side passwords are no longer permanently housed on the system. If
     you need to troubleshoot the rsync connection, run Puppet in 'debug' mode
     and it will output the password in the log.
 

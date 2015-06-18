@@ -248,6 +248,7 @@ Puppet::Type.type(:rsync).provide :rsync do
       cmd << command('rsync')
     end
     cmd << ['-i', '-p', '-S']
+    cmd << ['--dry-run'] if Puppet[:noop]
     cmd << get_flags
     cmd << get_exclude
     cmd << get_bwlimit
