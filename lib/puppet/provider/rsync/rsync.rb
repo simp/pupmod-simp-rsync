@@ -53,7 +53,7 @@ Puppet::Type.type(:rsync).provide :rsync do
       end
 
       unless (selinux_failure && @resource[:ignore_selinux] == :true)
-        self.fail %(Rsync exited with code #{status.to_s})
+        self.fail %(Rsync exited with code #{output.exitstatus.to_s}\n)
       end
 
     elsif output !~ /^\s*$/

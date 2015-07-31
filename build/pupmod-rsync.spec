@@ -1,12 +1,13 @@
 Summary: Rsync Puppet Module
 Name: pupmod-rsync
 Version: 4.2.0
-Release: 1
+Release: 2
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires: hiera >= 1.2.1
+Requires: pupmod-rsyslog >= 5.0.0
 Requires: pupmod-stunnel >= 4.2.0-0
 Requires: pupmod-concat >= 4.0.0-0
 Requires: puppet >= 3.4.0
@@ -59,6 +60,13 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Sat Aug 01 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.2.0-2
+- Fixed a bug in the rsync provider that was not properly outputting the exit
+  code on a failure.
+
+* Fri Jul 31 2015 Kendall Moore <kmoore@keywcorp.com> - 4.2.0-2
+- Updated to use new rsyslog module.
+
 * Wed May 06 2015 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.2.0-1
 - Prevent file syncs during --noop runs.
 
