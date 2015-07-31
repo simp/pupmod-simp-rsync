@@ -83,16 +83,13 @@ class rsync::server (
   }
 
   if $drop_rsyslog_noise {
-    include 'rsyslog'
+    include '::rsyslog'
 
-    rsyslog::add_conf { '00_rsync':
-      # The extra &~ statements here are weird but apparently there
-      # are some bugs in a couple of versions of rsyslog that make
-      # this necessary.
-      content => 'if $programname == \'rsyncd\' and not ($msg contains \'rsync on\' or $msg contains \'SIG\' or $msg contains \'listening\') then ~
-&~
-if $programname == \'rsyncd\' and $msg contains \'127.0.0.1\' then ~
-&~'
+    rsyslog::rule::drop { '00_rsyncd':
+      rule => 'if ($programname == \'rsyncd\' and not ($msg contains \'rsync on\' or $msg contains \'SIG\' or $msg contains \'listening\'))'
+    }
+    rsyslog::rule::drop { '00_rsync_localhost':
+      rule =>  'if ($programname == \'rsyncd\' and $msg contains \'127.0.0.1\')'
     }
   }
 
