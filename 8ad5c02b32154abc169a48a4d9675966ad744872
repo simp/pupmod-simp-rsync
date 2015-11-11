@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ac7a964_d30ba029",
+        "filename": "build/pupmod-rsync.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1005194
+      },
+      "writtenOn": "2015-11-11T15:05:46Z",
+      "side": 1,
+      "message": "5.0.0-0?",
+      "range": {
+        "startLine": 12,
+        "startChar": 28,
+        "endLine": 12,
+        "endChar": 35
+      },
+      "revId": "8ad5c02b32154abc169a48a4d9675966ad744872",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
