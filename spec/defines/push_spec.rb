@@ -17,5 +17,5 @@ describe 'rsync::push' do
   # We can't do this right now because the test loader seems to be
   # parse order dependent for defines that call other defines.
   #it { should compile.with_all_deps }
-  it { should create_rsync__retrieve("pull_#{title}") }
+  it { is_expected.to create_rsync__retrieve("pull_#{title}") }
 end

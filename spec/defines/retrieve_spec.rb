@@ -14,6 +14,6 @@ describe 'rsync::retrieve' do
     :rsync_server => 'rsync.bar.baz'
   }}
 
-  it { should compile.with_all_deps }
-  it { should create_rsync(title) }
+  it { is_expected.to compile.with_all_deps }
+  it { is_expected.to create_rsync(title) }
 end

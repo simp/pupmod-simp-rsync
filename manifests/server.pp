@@ -28,7 +28,18 @@ class rsync::server (
   $drop_rsyslog_noise = true,
   $client_nets = hiera('client_nets')
 ) {
+  validate_bool($drop_rsyslog_noise)
+  validate_bool($use_stunnel)
+  validate_port($stunnel_port)
+  validate_net_list($listen_address)
+  validate_net_list($client_nets)
+
   include 'rsync'
+
+  $_subscribe  = $use_stunnel ? {
+    true    => Service['stunnel'],
+    default => undef
+  }
 
   if $use_stunnel {
     include 'stunnel'
@@ -76,10 +87,7 @@ class rsync::server (
       File['/etc/rsyncd.conf'],
       File['/etc/init.d/rsync']
     ],
-    subscribe  => $use_stunnel ? {
-      true    => Service['stunnel'],
-      default => undef
-    }
+    subscribe  => $_subscribe
   }
 
   if $drop_rsyslog_noise {
@@ -92,10 +100,4 @@ class rsync::server (
       rule =>  'if ($programname == \'rsyncd\' and $msg contains \'127.0.0.1\')'
     }
   }
-
-  validate_bool($drop_rsyslog_noise)
-  validate_bool($use_stunnel)
-  validate_port($stunnel_port)
-  validate_net_list($listen_address)
-  validate_net_list($client_nets)
 }
