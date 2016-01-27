@@ -1,0 +1,41 @@
+{
+  "name":    "simp-rsync",
+  "version": "4.1.0",
+  "author":  "simp",
+  "summary": "manage and rsync server, secured by stunnel",
+  "license": "Apache-2.0",
+  "source":  "https://github.com/simp/pupmod-simp-rsync",
+  "project_page": "https://github.com/simp/pupmod-simp-rsync",
+  "issues_url":   "https://simp-project.atlassian.net",
+  "tags": [ "simp", "rsync", "stunnel" ],
+  "dependencies": [
+    {
+      "name": "simp-rsyslog",
+      "version_requirement": ">= 5.0.0"
+    },
+    {
+      "name": "simp-stunnel",
+      "version_requirement": ">= 4.2.0"
+    },
+    {
+      "name": "simp-simpcat",
+      "version_requirement": ">= 4.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    }
+  ]
+}

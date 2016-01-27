@@ -59,6 +59,19 @@ define rsync::retrieve (
 #     been configured to allow it.
     $pull = true
   ) {
+  validate_absolute_path($rsync_path)
+  validate_bool($preserve_ACL)
+  validate_bool($preserve_xattrs)
+  validate_bool($preserve_owner)
+  validate_bool($preserve_group)
+  validate_bool($preserve_devices)
+  validate_integer($rsync_timeout)
+  validate_bool($delete)
+  validate_bool($copy_links)
+  validate_bool($size_only)
+  validate_bool($no_implied_dirs)
+  validate_bool($pull)
+
   include 'rsync'
 
   # This is some hackery to allow a global variable to exist but
@@ -68,6 +81,24 @@ define rsync::retrieve (
   }
   else {
     $lbwlimit = undef
+  }
+
+  $_user = $user ? {
+    ''      => undef,
+    default => $user
+  }
+
+  $_pass = $pass ? {
+    ''      => undef,
+    default => $pass ? {
+      ''      => passgen($user),
+      default => $pass
+    }
+  }
+
+  $_action = $pull ? {
+    false   => 'push',
+    default => 'pull'
   }
 
   rsync { $name:
@@ -91,33 +122,8 @@ define rsync::retrieve (
     no_implied_dirs  => $no_implied_dirs,
     subscribe        => $rsubscribe,
     notify           => $rnotify,
-    user             => $user ? {
-      ''      => undef,
-      default => $user
-    },
-    pass             => $pass ? {
-      ''      => undef,
-      default => $pass ? {
-        ''      => passgen($user),
-        default => $pass
-      }
-    },
-    action           => $pull ? {
-      false   => 'push',
-      default => 'pull'
-    }
+    user             => $_user,
+    pass             => $_pass,
+    action           => $_action,
   }
-
-  validate_absolute_path($rsync_path)
-  validate_bool($preserve_ACL)
-  validate_bool($preserve_xattrs)
-  validate_bool($preserve_owner)
-  validate_bool($preserve_group)
-  validate_bool($preserve_devices)
-  validate_integer($rsync_timeout)
-  validate_bool($delete)
-  validate_bool($copy_links)
-  validate_bool($size_only)
-  validate_bool($no_implied_dirs)
-  validate_bool($pull)
 }

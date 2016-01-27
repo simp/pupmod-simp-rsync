@@ -24,6 +24,11 @@ class rsync::server::global (
   $address = '127.0.0.1',
   $client_nets = 'ALL'
 ) {
+  validate_absolute_path($pid_file)
+  validate_port($port)
+  validate_net_list($address)
+  validate_net_list($client_nets,'ALL')
+
   include 'tcpwrappers'
 
   concat_fragment { 'rsync+global':
@@ -31,9 +36,4 @@ class rsync::server::global (
   }
 
   tcpwrappers::allow { 'rsync': pattern => $client_nets }
-
-  validate_absolute_path($pid_file)
-  validate_port($port)
-  validate_net_list($address)
-  validate_net_list($client_nets,'ALL')
 }
