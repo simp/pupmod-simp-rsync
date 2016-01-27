@@ -57,23 +57,6 @@ define rsync::server::section (
   $hosts_allow = $client_nets,
   $hosts_deny = '*'
 ) {
-  include 'rsync::server'
-
-  concat_fragment { "rsync+$name.section":
-    content => template('rsync/rsyncd.conf.section.erb')
-  }
-
-  if !empty($auth_users) {
-    file { "/etc/rsync/${name}.rsyncd.secrets":
-      ensure  => 'file',
-      owner   => $uid,
-      group   => $gid,
-      mode    => '0600',
-      content => template('rsync/secrets.erb'),
-      require => File['/etc/rsync']
-    }
-  }
-
   if !empty($auth_users) { validate_array($auth_users) }
   if !empty($user_pass) { validate_array($user_pass) }
   validate_bool($use_chroot)
@@ -88,4 +71,21 @@ define rsync::server::section (
   validate_bool($transfer_logging)
   validate_net_list($hosts_allow,'*')
   validate_net_list($hosts_deny,'*')
+
+  include 'rsync::server'
+
+  concat_fragment { "rsync+${name}.section":
+    content => template('rsync/rsyncd.conf.section.erb')
+  }
+
+  if !empty($auth_users) {
+    file { "/etc/rsync/${name}.rsyncd.secrets":
+      ensure  => 'file',
+      owner   => $uid,
+      group   => $gid,
+      mode    => '0600',
+      content => template('rsync/secrets.erb'),
+      require => File['/etc/rsync']
+    }
+  }
 }

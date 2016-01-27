@@ -8,7 +8,7 @@ describe 'rsync::server::global' do
     :interfaces => 'eth0'
   }}
 
-  it { should compile.with_all_deps }
-  it { should create_concat_fragment('rsync+global').with_content(/address = 127.0.0.1/) }
-  it { should create_tcpwrappers__allow('rsync') }
+  it { is_expected.to compile.with_all_deps }
+  it { is_expected.to create_concat_fragment('rsync+global').with_content(/address = 127.0.0.1/) }
+  it { is_expected.to create_tcpwrappers__allow('rsync') }
 end

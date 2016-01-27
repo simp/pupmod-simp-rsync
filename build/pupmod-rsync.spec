@@ -1,7 +1,7 @@
 Summary: Rsync Puppet Module
 Name: pupmod-rsync
 Version: 4.2.0
-Release: 3
+Release: 4
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -60,6 +60,9 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Wed Jan 27 2016 Chris Tessmer <chris.tessmer@onypoint.com> - 4.2.0-4
+- Normalized common static module assets
+
 * Mon Nov 09 2015 Chris Tessmer <chris.tessmer@onypoint.com> - 4.2.0-3
 - migration to simplib and simpcat (lib/ only)
 
