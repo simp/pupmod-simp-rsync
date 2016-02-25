@@ -29,6 +29,8 @@ class rsync::server::global (
   validate_net_list($address)
   validate_net_list($client_nets,'ALL')
 
+  compliance_map()
+
   include 'tcpwrappers'
 
   concat_fragment { 'rsync+global':

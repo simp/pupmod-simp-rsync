@@ -1,7 +1,7 @@
 Summary: Rsync Puppet Module
 Name: pupmod-rsync
 Version: 4.2.0
-Release: 4
+Release: 5
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -14,6 +14,7 @@ Requires: puppet >= 3.4.0
 Buildarch: noarch
 Requires: simp-bootstrap >= 4.2.0
 Obsoletes: pupmod-rsync-test
+Requires: pupmod-onyxpoint-compliance_markup
 
 Prefix: /etc/puppet/environments/simp/modules
 
@@ -60,6 +61,9 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Thu Feb 25 2016 Ralph Wright <ralph.wright@onyxpoint.com> - 4.2.0-5
+- Added compliance function support
+
 * Wed Jan 27 2016 Chris Tessmer <chris.tessmer@onypoint.com> - 4.2.0-4
 - Normalized common static module assets
 
