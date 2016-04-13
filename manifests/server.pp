@@ -89,6 +89,7 @@ class rsync::server (
       File['/etc/rsyncd.conf'],
       File['/etc/init.d/rsync']
     ],
+    provider   => 'redhat',
     subscribe  => $_subscribe
   }
 
