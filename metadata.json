@@ -1,6 +1,6 @@
 {
   "name":    "simp-rsync",
-  "version": "4.1.0",
+  "version": "4.2.1",
   "author":  "simp",
   "summary": "manage and rsync server, secured by stunnel",
   "license": "Apache-2.0",
@@ -10,15 +10,15 @@
   "tags": [ "simp", "rsync", "stunnel" ],
   "dependencies": [
     {
-      "name": "simp-rsyslog",
+      "name": "simp/rsyslog",
       "version_requirement": ">= 5.0.0"
     },
     {
-      "name": "simp-stunnel",
+      "name": "simp/stunnel",
       "version_requirement": ">= 4.2.0"
     },
     {
-      "name": "simp-simpcat",
+      "name": "simp/simpcat",
       "version_requirement": ">= 4.0.0"
     },
     {

@@ -1,7 +1,7 @@
 Summary: Rsync Puppet Module
 Name: pupmod-rsync
-Version: 4.2.0
-Release: 6
+Version: 4.2.1
+Release: 0
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -61,7 +61,7 @@ fi
 # Post uninstall stuff
 
 %changelog
-* Wed Apr 13 2016 Kendall Moore <kendall.moore@onyxpoint.com> - 4.2.0-6
+* Wed Apr 13 2016 Kendall Moore <kendall.moore@onyxpoint.com> - 4.2.1-0
 - Changed the default provider for the rsync service to be redhat
 
 * Thu Feb 25 2016 Ralph Wright <ralph.wright@onyxpoint.com> - 4.2.0-5
