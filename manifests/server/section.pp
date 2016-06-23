@@ -54,7 +54,7 @@ define rsync::server::section (
     '*.sar',
     '*.war'
   ],
-  $hosts_allow = $client_nets,
+  $hosts_allow = defined('$::client_nets') ? { true => getvar('::client_nets'), default => hiera('client_nets', ['127.0.0.1']) },
   $hosts_deny = '*'
 ) {
   if !empty($auth_users) { validate_array($auth_users) }
@@ -72,7 +72,7 @@ define rsync::server::section (
   validate_net_list($hosts_allow,'*')
   validate_net_list($hosts_deny,'*')
 
-  include 'rsync::server'
+  include '::rsync::server'
 
   concat_fragment { "rsync+${name}.section":
     content => template('rsync/rsyncd.conf.section.erb')

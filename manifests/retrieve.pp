@@ -72,7 +72,7 @@ define rsync::retrieve (
   validate_bool($no_implied_dirs)
   validate_bool($pull)
 
-  include 'rsync'
+  include '::rsync'
 
   # This is some hackery to allow a global variable to exist but
   # override it with a local variable if it's present.

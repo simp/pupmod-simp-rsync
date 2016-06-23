@@ -31,7 +31,7 @@ class rsync::server::global (
 
   compliance_map()
 
-  include 'tcpwrappers'
+  include '::tcpwrappers'
 
   concat_fragment { 'rsync+global':
     content => template('rsync/rsyncd.conf.global.erb')
