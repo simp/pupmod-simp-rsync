@@ -54,7 +54,7 @@ define rsync::server::section (
     '*.sar',
     '*.war'
   ],
-  $hosts_allow = $client_nets,
+  $hosts_allow = hiera(client_nets),
   $hosts_deny = '*'
 ) {
   if !empty($auth_users) { validate_array($auth_users) }
