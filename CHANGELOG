@@ -1,66 +1,7 @@
-Summary: Rsync Puppet Module
-Name: pupmod-rsync
-Version: 4.2.1
-Release: 0
-License: Apache License, Version 2.0
-Group: Applications/System
-Source: %{name}-%{version}-%{release}.tar.gz
-Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-Requires: hiera >= 1.2.1
-Requires: pupmod-rsyslog >= 5.0.0
-Requires: pupmod-stunnel >= 4.2.0-0
-Requires: pupmod-simpcat >= 4.0.0-0
-Requires: puppet >= 3.4.0
-Buildarch: noarch
-Requires: simp-bootstrap >= 4.2.0
-Obsoletes: pupmod-rsync-test
-Requires: pupmod-onyxpoint-compliance_markup
+* Thu Jul 07 2016 Nicholas Hughes <nicholasmhughes@gmail.com> - 4.2.2-0
+- Updated the client_nets parameters to pull from global prior to using Hiera
+  and to fall back to the safety of 127.0.0.1.
 
-Prefix: /etc/puppet/environments/simp/modules
-
-%description
-This Puppet module provides the capability to configure an rsync server.  The
-intent is for this server to be run encrypted via a stunnel channel.
-
-Client rsync rules have not been integrated into this module at this time.
-
-%prep
-%setup -q
-
-%build
-
-%install
-[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
-
-mkdir -p %{buildroot}/%{prefix}/rsync
-
-dirs='files lib manifests templates'
-for dir in $dirs; do
-  test -d $dir && cp -r $dir %{buildroot}/%{prefix}/rsync
-done
-
-mkdir -p %{buildroot}/usr/share/simp/tests/modules/rsync
-
-%clean
-[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
-
-mkdir -p %{buildroot}/%{prefix}/rsync
-
-%files
-%defattr(0640,root,puppet,0750)
-%{prefix}/rsync
-
-%post
-#!/bin/sh
-
-if [ -d %{prefix}/rsync/plugins ]; then
-  /bin/mv %{prefix}/rsync/plugins %{prefix}/rsync/plugins.bak
-fi
-
-%postun
-# Post uninstall stuff
-
-%changelog
 * Wed Apr 13 2016 Kendall Moore <kendall.moore@onyxpoint.com> - 4.2.1-0
 - Changed the default provider for the rsync service to be redhat
 

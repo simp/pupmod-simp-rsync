@@ -26,7 +26,7 @@ class rsync::server (
   $stunnel_port = '8730',
   $listen_address = '0.0.0.0',
   $drop_rsyslog_noise = true,
-  $client_nets = hiera('client_nets')
+  $client_nets = defined('$::client_nets') ? { true => $::client_nets, default => hiera('client_nets', ['127.0.0.1']) }
 ) {
   validate_bool($drop_rsyslog_noise)
   validate_bool($use_stunnel)
@@ -36,7 +36,7 @@ class rsync::server (
 
   compliance_map()
 
-  include 'rsync'
+  include '::rsync'
 
   $_subscribe  = $use_stunnel ? {
     true    => Service['stunnel'],
@@ -44,7 +44,7 @@ class rsync::server (
   }
 
   if $use_stunnel {
-    include 'stunnel'
+    include '::stunnel'
 
     stunnel::add { 'rsync':
       connect     => ['873'],

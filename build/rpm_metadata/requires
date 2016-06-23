@@ -1,0 +1,6 @@
+Requires: pupmod-rsyslog >= 5.0.0
+Requires: pupmod-stunnel >= 4.2.0-0
+Requires: pupmod-simpcat >= 4.0.0-0
+Requires: puppet >= 3.4.0
+Requires: pupmod-onyxpoint-compliance_markup
+Obsoletes: pupmod-rsync-test >= 0.0.1
