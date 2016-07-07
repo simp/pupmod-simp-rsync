@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_3baea598",
+        "filename": "manifests/server.pp",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1005194
+      },
+      "writtenOn": "2016-07-07T21:51:29Z",
+      "side": 1,
+      "message": "Are we using getvar now?",
+      "revId": "c1ff4a28bc2d9d0ef733f5063d47b5c57c49b56e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_fb903d50",
+        "filename": "manifests/server/section.pp",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1005194
+      },
+      "writtenOn": "2016-07-07T21:51:29Z",
+      "side": 1,
+      "message": "getvar?",
+      "range": {
+        "startLine": 57,
+        "startChar": 3,
+        "endLine": 57,
+        "endChar": 4
+      },
+      "revId": "c1ff4a28bc2d9d0ef733f5063d47b5c57c49b56e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
