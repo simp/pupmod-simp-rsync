@@ -84,6 +84,9 @@ class rsync::server (
     enable     => true,
     hasstatus  => true,
     hasrestart => true,
+    start      => '/etc/init.d/rsync start',
+    stop       => '/etc/init.d/rsync stop',
+    status     => '/etc/init.d/rsync status',
     require    => [
       Package['rsync'],
       File['/etc/rsyncd.conf'],
