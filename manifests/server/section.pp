@@ -74,7 +74,7 @@ define rsync::server::section (
 
   include '::rsync::server'
 
-  concat_fragment { "rsync+${name}.section":
+  simpcat_fragment { "rsync+${name}.section":
     content => template('rsync/rsyncd.conf.section.erb')
   }
 

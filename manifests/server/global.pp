@@ -33,7 +33,7 @@ class rsync::server::global (
 
   include '::tcpwrappers'
 
-  concat_fragment { 'rsync+global':
+  simpcat_fragment { 'rsync+global':
     content => template('rsync/rsyncd.conf.global.erb')
   }
 
