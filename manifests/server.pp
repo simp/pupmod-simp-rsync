@@ -54,7 +54,7 @@ class rsync::server (
     }
   }
 
-  concat_build { 'rsync':
+  simpcat_build { 'rsync':
     order   => ['global', '*.section'],
     target  => '/etc/rsyncd.conf',
     require => Package['rsync']
@@ -66,7 +66,7 @@ class rsync::server (
     group     => 'root',
     mode      => '0400',
     audit     => 'content',
-    subscribe => Concat_build['rsync'],
+    subscribe => Simpcat_build['rsync'],
     require   => Package['rsync'],
     notify    => Service['rsync']
   }

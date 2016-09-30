@@ -7,7 +7,7 @@ describe 'rsync::server::global' do
 
       context "on #{os}" do
         it { is_expected.to compile.with_all_deps }
-        it { is_expected.to create_concat_fragment('rsync+global').with_content(/address = 127.0.0.1/) }
+        it { is_expected.to create_simpcat_fragment('rsync+global').with_content(/address = 127.0.0.1/) }
         it { is_expected.to create_tcpwrappers__allow('rsync') }
       end
     end
