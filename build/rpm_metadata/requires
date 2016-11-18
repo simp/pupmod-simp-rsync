@@ -1,6 +1,4 @@
 Obsoletes: pupmod-rsync-test >= 0.0.1
-Requires: pupmod-simp-compliance_markup < 3.0.0-0
-Requires: pupmod-simp-compliance_markup >= 2.0.0-0
 Requires: pupmod-simp-rsyslog < 7.0.0-0
 Requires: pupmod-simp-rsyslog >= 6.0.0-0
 Requires: pupmod-simp-simpcat < 7.0.0-0
