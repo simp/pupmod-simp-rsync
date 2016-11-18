@@ -16,7 +16,7 @@ define rsync::retrieve (
     $rsync_server = hiera('rsync::server'),
     $proto = 'rsync',
     $rsync_path = '/usr/bin/rsync',
-    $preserve_ACL = true,
+    $preserve_acl = true,
     $preserve_xattrs = true,
     $preserve_owner = true,
     $preserve_group = true,
@@ -60,7 +60,7 @@ define rsync::retrieve (
     $pull = true
   ) {
   validate_absolute_path($rsync_path)
-  validate_bool($preserve_ACL)
+  validate_bool($preserve_acl)
   validate_bool($preserve_xattrs)
   validate_bool($preserve_owner)
   validate_bool($preserve_group)
@@ -107,7 +107,7 @@ define rsync::retrieve (
     rsync_server     => $rsync_server,
     proto            => $proto,
     rsync_path       => $rsync_path,
-    preserve_acl     => $preserve_ACL,
+    preserve_acl     => $preserve_acl,
     preserve_xattrs  => $preserve_xattrs,
     preserve_owner   => $preserve_owner,
     preserve_group   => $preserve_group,

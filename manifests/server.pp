@@ -34,7 +34,6 @@ class rsync::server (
   validate_net_list($listen_address)
   validate_net_list($client_nets)
 
-  compliance_map()
 
   include '::rsync'
 
