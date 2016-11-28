@@ -1,7 +1,7 @@
-# Class: rsync
+# Provides an rsync client library with a stub exec for certain edge cases.
 #
-# This class provides an rsync client library with a stub exec for certain edge
-# cases.
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+#
 class rsync {
   package { 'rsync': ensure => 'latest' }
 

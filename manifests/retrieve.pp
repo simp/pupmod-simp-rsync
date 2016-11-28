@@ -1,64 +1,94 @@
-# _Description_
-#
 # Retrieve a file over the rsync protocol.
 # See rsync(1) for details of most options.
 #
-# _Global_Variables_
+# @param source_path [String] The path *on the rsync server* from which to
+#   retrieve files. This will, most likely, not start with a forward slash.
 #
-# * $rsync_bwlimit
+# @param target_path [AbsolutePath] The path to which to write on the client
+#   system.
 #
-# _Templates_
+# @param rsync_server [Hostname] The host to which to connect.
+#
+# @param proto [String] The protocol to use. You probably won't change this.
+#
+# @param rsync_path [AbsolutePath] The path to the 'rsync' command.
+#
+# @param preserve_acl [Boolean] Preserve the ACL from the server.
+#
+# @param preserve_xattrs [Boolean] Preserve the extended attributes from the
+#   server.
+#
+# @param preserve_owner [Boolean] Preserve the file owner from the server.
+#
+# @param preserve_group [Boolean] Preserve the file group from the server.
+#
+# @param preserve_devices [Boolean] Preserve device special IDs from the server.
+#
+# @param exclude [Array] Paths and globs to exclude from transfers.
+#
+# @param rsync_timeout [String] An Integer that is the number of seconds to
+#   wait for a transfer to begin before timing out.
+#
+# @param  logoutput [String] Log the output of the rsync run at the provided trigger.
+#
+# @param  delete [Boolean] Delete local files that do not exist on the remote
+#   server.
+#
+# @param  rnotify [String] Wrap a notify so that this process will send a
+#   Puppet notification to a resource after completion. Use like the regular
+#   Puppet ``notify`` meta-parameter.
+#
+# @param bwlimit [String] The bandwidth limit for the connection.
+#
+# @param copy_links [Boolean] Copy symlinks as symlinks during the transfer.
+#
+# @param size_only [Boolean] Only compare files by size to determine if they
+#   need a transfer.
+#
+# @param no_implied_dirs [Boolean] Don't send implied directories with relative
+#   pathnames.
+#
+# @param  rsubscribe [String] Wrap a subscribe so that this process will
+#   subscribe to a Puppet resource after completion. Use like the regular
+#   Puppet ``subscribe`` meta-parameter.
+#
+# @param user [String] The username to use when connecting to the server.
+#
+# @param pass [String] The password to use when connecting to the server. If
+#   left blank, and a username is provided, the passgen() function willi be
+#   used to look up the password.
+#
+# @param pull [Boolean] Pull files from the remote server. If set to ``false``
+#   will push files to the server instead of pulling them from the server.
+#
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+#
 define rsync::retrieve (
-# _Variables_
-    $source_path,
-    $target_path,
-# This is silly, but it catches both cases.
-    $rsync_server = hiera('rsync::server'),
-    $proto = 'rsync',
-    $rsync_path = '/usr/bin/rsync',
-    $preserve_acl = true,
-    $preserve_xattrs = true,
-    $preserve_owner = true,
-    $preserve_group = true,
-    $preserve_devices = false,
-    $exclude = ['.svn/','.git/'],
-    $rsync_timeout = '2',
-# $logoutput
-#     Whether or not to log the output of the rsync run.
-#
-    $logoutput = 'on_failure',
-    $delete = false,
-# $rnotify
-#     'rsync notify' - This allows you to wrap a notify so that this process
-#     will send a Puppet notification to an object after completion. Use just
-#     like the normal 'notify' meta-parameter.
-#
-    $rnotify = undef,
-    $bwlimit = hiera('rsync::bwlimit',''),
-    $copy_links = false,
-    $size_only = false,
-    $no_implied_dirs = true,
-# $rsubscribe
-#     'rsync subscribe' - This allows you to wrap a subscribe so that this
-#     process will set up a Puppet subscription. Use like the normal
-#     'subscribe' meta-parameter.
-#
-    $rsubscribe = undef,
-# $user
-#     The username to use
-#
-    $user = '',
-# $pass
-#     The password to use, if left blank, the passgen function will be used to
-#     look up the password. This will only be used if a username is specified.
-#
-    $pass = '',
-# $pull
-#     Whether to pull or push. Pull is the default. Setting this to 'false'
-#     will allow you to push files back to the rsync server if the server has
-#     been configured to allow it.
-    $pull = true
-  ) {
+  $source_path,
+  $target_path,
+  $rsync_server     = lookup('rsync::server'),
+  $proto            = 'rsync',
+  $rsync_path       = '/usr/bin/rsync',
+  $preserve_acl     = true,
+  $preserve_xattrs  = true,
+  $preserve_owner   = true,
+  $preserve_group   = true,
+  $preserve_devices = false,
+  $exclude          = ['.svn/','.git/'],
+  $rsync_timeout    = '2',
+  $logoutput        = 'on_failure',
+  $delete           = false,
+  $rnotify          = undef,
+  $bwlimit          = lookup('rsync::bwlimit', String, 'first', ''),
+  $copy_links       = false,
+  $size_only        = false,
+  $no_implied_dirs  = true,
+  $rsubscribe       = undef,
+  $user             = '',
+  $pass             = '',
+  $pull             = true
+) {
+
   validate_absolute_path($rsync_path)
   validate_bool($preserve_acl)
   validate_bool($preserve_xattrs)
@@ -77,10 +107,10 @@ define rsync::retrieve (
   # This is some hackery to allow a global variable to exist but
   # override it with a local variable if it's present.
   if !empty($bwlimit) {
-    $lbwlimit = $bwlimit
+    $_bwlimit = $bwlimit
   }
   else {
-    $lbwlimit = undef
+    $_bwlimit = undef
   }
 
   $_user = $user ? {
@@ -116,7 +146,7 @@ define rsync::retrieve (
     rsync_timeout    => $rsync_timeout,
     logoutput        => $logoutput,
     delete           => $delete,
-    bwlimit          => $lbwlimit,
+    bwlimit          => $_bwlimit,
     copy_links       => $copy_links,
     size_only        => $size_only,
     no_implied_dirs  => $no_implied_dirs,
@@ -124,6 +154,6 @@ define rsync::retrieve (
     notify           => $rnotify,
     user             => $_user,
     pass             => $_pass,
-    action           => $_action,
+    action           => $_action
   }
 }

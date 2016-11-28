@@ -7,33 +7,35 @@ describe 'rsync::push' do
 
       # rsync::retrieve defined type isn't available in this rspec environment
       let(:pre_condition) { <<-EOM
-define rsync::retrieve (
-    $source_path,
-    $target_path,
-    $rsync_server = '127.0.0.1',
-    $proto = 'rsync',
-    $rsync_path = '/usr/bin/rsync',
-    $preserve_acl = true,
-    $preserve_xattrs = true,
-    $preserve_owner = true,
-    $preserve_group = true,
-    $preserve_devices = false,
-    $exclude = ['.svn/','.git/'],
-    $rsync_timeout = '2',
-    $logoutput = 'on_failure',
-    $delete = false,
-    $rnotify = undef,
-    $bwlimit = '',
-    $copy_links = false,
-    $size_only = false,
-    $no_implied_dirs = true,
-    $rsubscribe = undef,
-    $user = '',
-    $pass = '',
-    $pull = true
-  ) {
-}
-EOM
+        include "::rsync::server"
+
+        define rsync::retrieve (
+            $source_path,
+            $target_path,
+            $rsync_server = '127.0.0.1',
+            $proto = 'rsync',
+            $rsync_path = '/usr/bin/rsync',
+            $preserve_acl = true,
+            $preserve_xattrs = true,
+            $preserve_owner = true,
+            $preserve_group = true,
+            $preserve_devices = false,
+            $exclude = ['.svn/','.git/'],
+            $rsync_timeout = '2',
+            $logoutput = 'on_failure',
+            $delete = false,
+            $rnotify = undef,
+            $bwlimit = '',
+            $copy_links = false,
+            $size_only = false,
+            $no_implied_dirs = true,
+            $rsubscribe = undef,
+            $user = '',
+            $pass = '',
+            $pull = true
+          ) {
+        }
+        EOM
       }
 
       context "on #{os}" do
