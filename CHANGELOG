@@ -1,3 +1,6 @@
+* Thu Dec 01 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.0.0-0
+- Switched to using puppetlabs/concat
+
 * Tue Nov 22 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 5.0.0-0
 - Minor cleanup
 
