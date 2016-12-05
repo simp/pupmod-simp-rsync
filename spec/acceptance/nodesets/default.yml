@@ -1,0 +1,21 @@
+HOSTS:
+  el6:
+    roles:
+      - server
+      - default
+      - master
+      - client
+    platform: el-6-x86_64
+    box: centos/6
+    hypervisor: vagrant
+  el7:
+    roles:
+      - client
+    platform: el-7-x86_64
+    box: centos/7
+    hypervisor: vagrant
+CONFIG:
+  log_level: verbose
+  synced_folder : disabled
+  type: aio
+  vagrant_memsize: 256

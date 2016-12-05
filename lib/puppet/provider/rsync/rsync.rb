@@ -1,4 +1,4 @@
-Puppet::Type.type(:rsync).provide :rsync do
+Puppet::Type.type(:rsync).provide(:rsync) do
   require 'tempfile'
   require 'fileutils'
   require 'puppet/util'
