@@ -47,7 +47,7 @@ describe 'rsync::push' do
         }}
 
         it { should compile.with_all_deps }
-        it { is_expected.to create_rsync__retrieve("pull_#{title}") }
+        it { is_expected.to create_rsync__retrieve("push_#{title}") }
       end
     end
   end
