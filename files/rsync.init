@@ -15,8 +15,8 @@
 . /etc/rc.d/init.d/functions
 
 if [ -r /etc/sysconfig/network ]; then
-	. /etc/sysconfig/network
-	[ ${NETWORKING} = "no" ] && exit 0
+  . /etc/sysconfig/network
+  [ ${NETWORKING} = "no" ] && exit 0
 fi
 
 # Path to the executable.
@@ -51,10 +51,10 @@ RETVAL=0
 # Start rsync 
 #
 function start() {
-	echo -n $"Starting rsync: "
-	sleep 1
-	daemon $rsync $rsync_options
-	RETVAL=$?
+  echo -n $"Starting rsync: "
+  sleep 1
+  daemon $rsync $rsync_options
+  RETVAL=$?
 
     [ $RETVAL -eq 0 ] && touch $rsync_lock || RETVAL=1
     return $RETVAL
@@ -63,42 +63,42 @@ function start() {
 # Stop rsync
 #
 function stop() {
-	echo -n $"Shutting down rsync: "
-	killproc -p $rsync_pid_file rsync
-	RETVAL=$?
-	[ $RETVAL -eq 0 ] && rm -f $rsync_lock
-	echo ""
-	return $RETVAL
+  echo -n $"Shutting down rsync: "
+  killproc -p $rsync_pid_file rsync
+  RETVAL=$?
+  [ $RETVAL -eq 0 ] && rm -f $rsync_lock
+  echo ""
+  return $RETVAL
 }
 
 # See how we were called
 case "$1" in
     start)
-	start
-	;;
+  start
+  ;;
     stop)
-	stop
-	;;
+  stop
+  ;;
     restart)
-	stop
-	sleep 3
-	start
-	;;
+  stop
+  sleep 3
+  start
+  ;;
     condrestart)
-	if [ -f $LOCK_FILE ]; then
-	    stop
-	    sleep 3
-	    start
-	    RETVAL=$?
-	fi
-	;;
+  if [ -f $LOCK_FILE ]; then
+      stop
+      sleep 3
+      start
+      RETVAL=$?
+  fi
+  ;;
     status)
-	status -p $rsync_pid_file rsync
-	RETVAL=$?
-	;;
+  status -p $rsync_pid_file rsync
+  RETVAL=$?
+  ;;
     *)
-	echo $"Usage: $0 {start|stop|restart|condrestart|status}"
-	RETVAL=1
+  echo $"Usage: $0 {start|stop|restart|condrestart|status}"
+  RETVAL=1
 esac
 
 exit $RETVAL

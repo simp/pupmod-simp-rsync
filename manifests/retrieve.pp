@@ -1,135 +1,132 @@
-# Retrieve a file over the rsync protocol.
-# See rsync(1) for details of most options.
+# Retrieve a file over the rsync protocol
 #
-# @param source_path [String] The path *on the rsync server* from which to
-#   retrieve files. This will, most likely, not start with a forward slash.
+# @see rsync(1)
 #
-# @param target_path [AbsolutePath] The path to which to write on the client
-#   system.
+# @param source_path
+#   The path *on the rsync server* from which to retrieve files
 #
-# @param rsync_server [Hostname] The host to which to connect.
+#   * This will, most likely, not start with a forward slash
 #
-# @param proto [String] The protocol to use. You probably won't change this.
+# @param target_path
+#   The path to which to write on the client system
 #
-# @param rsync_path [AbsolutePath] The path to the 'rsync' command.
+# @param rsync_server
+#   The host to which to connect
 #
-# @param preserve_acl [Boolean] Preserve the ACL from the server.
+# @param proto
+#   The protocol to use
 #
-# @param preserve_xattrs [Boolean] Preserve the extended attributes from the
-#   server.
+#   * This will go before the ``://`` in the rsync connection string
+#   * You probably won't change this
 #
-# @param preserve_owner [Boolean] Preserve the file owner from the server.
+# @param rsync_path
+#   The path to the 'rsync' command
 #
-# @param preserve_group [Boolean] Preserve the file group from the server.
+# @param preserve_acl
+#   Preserve the file ACLs from the server
 #
-# @param preserve_devices [Boolean] Preserve device special IDs from the server.
+# @param preserve_xattrs
+#   Preserve the extended attributes from the server
 #
-# @param exclude [Array] Paths and globs to exclude from transfers.
+# @param preserve_owner
+#   Preserve the file owner from the server
 #
-# @param rsync_timeout [String] An Integer that is the number of seconds to
-#   wait for a transfer to begin before timing out.
+# @param preserve_group
+#   Preserve the file group from the server
 #
-# @param  logoutput [String] Log the output of the rsync run at the provided trigger.
+# @param preserve_devices
+#   Preserve device special IDs from the server
 #
-# @param  delete [Boolean] Delete local files that do not exist on the remote
-#   server.
+# @param exclude
+#   Paths and globs to exclude from transfers
 #
-# @param  rnotify [String] Wrap a notify so that this process will send a
-#   Puppet notification to a resource after completion. Use like the regular
-#   Puppet ``notify`` meta-parameter.
+# @param rsync_timeout
+#   The number of seconds to wait for a transfer to begin before timing out
 #
-# @param bwlimit [String] The bandwidth limit for the connection.
+# @param logoutput
+#   Log the output of the rsync run at the provided trigger
 #
-# @param copy_links [Boolean] Copy symlinks as symlinks during the transfer.
+# @param delete
+#   Delete local files that do not exist on the remote server
 #
-# @param size_only [Boolean] Only compare files by size to determine if they
-#   need a transfer.
+# @param bwlimit
+#   The bandwidth limit for the connection
 #
-# @param no_implied_dirs [Boolean] Don't send implied directories with relative
-#   pathnames.
+# @param copy_links
+#   Preserve symlinks during the transfer
 #
-# @param  rsubscribe [String] Wrap a subscribe so that this process will
-#   subscribe to a Puppet resource after completion. Use like the regular
-#   Puppet ``subscribe`` meta-parameter.
+# @param size_only
+#   Only compare files by size to determine if they need a transfer
 #
-# @param user [String] The username to use when connecting to the server.
+# @param no_implied_dirs
+#   Don't send implied directories with relative pathnames
 #
-# @param pass [String] The password to use when connecting to the server. If
-#   left blank, and a username is provided, the passgen() function willi be
-#   used to look up the password.
+# @param user
+#   The username to use when connecting to the server
 #
-# @param pull [Boolean] Pull files from the remote server. If set to ``false``
-#   will push files to the server instead of pulling them from the server.
+# @param pass
+#   The password to use when connecting to the server
+#
+#   * If left blank, and a username is provided, the ``passgen()`` function
+#     will be used to look up the password
+#
+# @param pull
+#   Pull files from the remote server
+#
+#   * If set to ``false``, will push files to the server instead of pulling
+#   them from the server
+#
+# @param rnotify
+#   Wrap a ``notify`` so that this process will send a Puppet notification to a
+#   resource after completion
+#
+#   * Use like the regular Puppet ``notify`` meta-parameter
+#
+# @param rsubscribe
+#   Wrap a ``subscribe`` so that this process will subscribe to a Puppet
+#   resource after completion
+#
+#   * Use like the regular Puppet ``subscribe`` meta-parameter
 #
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 define rsync::retrieve (
-  $source_path,
-  $target_path,
-  $rsync_server     = lookup('rsync::server'),
-  $proto            = 'rsync',
-  $rsync_path       = '/usr/bin/rsync',
-  $preserve_acl     = true,
-  $preserve_xattrs  = true,
-  $preserve_owner   = true,
-  $preserve_group   = true,
-  $preserve_devices = false,
-  $exclude          = ['.svn/','.git/'],
-  $rsync_timeout    = '2',
-  $logoutput        = 'on_failure',
-  $delete           = false,
-  $rnotify          = undef,
-  $bwlimit          = lookup('rsync::bwlimit', String, 'first', ''),
-  $copy_links       = false,
-  $size_only        = false,
-  $no_implied_dirs  = true,
-  $rsubscribe       = undef,
-  $user             = '',
-  $pass             = '',
-  $pull             = true
+  String                 $source_path,
+  String                 $target_path,
+  Simplib::Host          $rsync_server     = simplib::lookup('simp_options::rsync::server'),
+  String                 $proto            = 'rsync',
+  Stdlib::Absolutepath   $rsync_path       = '/usr/bin/rsync',
+  Boolean                $preserve_acl     = true,
+  Boolean                $preserve_xattrs  = true,
+  Boolean                $preserve_owner   = true,
+  Boolean                $preserve_group   = true,
+  Boolean                $preserve_devices = false,
+  Array[String]          $exclude          = ['.svn/','.git/'],
+  Integer                $rsync_timeout    = 2,
+  String                 $logoutput        = 'on_failure',
+  Boolean                $delete           = false,
+  Optional[String]       $bwlimit          = simplib::lookup('rsync::bwlimit', { 'default_value' => undef }),
+  Boolean                $copy_links       = false,
+  Boolean                $size_only        = false,
+  Boolean                $no_implied_dirs  = true,
+  Optional[String]       $user             = undef,
+  Optional[String]       $pass             = undef,
+                         $pull             = true,
+  Optional[Catalogentry] $rnotify          = undef,
+  Optional[Catalogentry] $rsubscribe       = undef
 ) {
-
-  validate_absolute_path($rsync_path)
-  validate_bool($preserve_acl)
-  validate_bool($preserve_xattrs)
-  validate_bool($preserve_owner)
-  validate_bool($preserve_group)
-  validate_bool($preserve_devices)
-  validate_integer($rsync_timeout)
-  validate_bool($delete)
-  validate_bool($copy_links)
-  validate_bool($size_only)
-  validate_bool($no_implied_dirs)
-  validate_bool($pull)
-
   include '::rsync'
 
-  # This is some hackery to allow a global variable to exist but
-  # override it with a local variable if it's present.
-  if !empty($bwlimit) {
-    $_bwlimit = $bwlimit
+  if $pass {
+    $_pass = $pass
   }
   else {
-    $_bwlimit = undef
-  }
-
-  $_user = $user ? {
-    ''      => undef,
-    default => $user
-  }
-
-  $_pass = $pass ? {
-    ''      => undef,
-    default => $pass ? {
-      ''      => passgen($user),
-      default => $pass
+    if $user {
+      $_pass = passgen($user)
     }
   }
 
-  $_action = $pull ? {
-    false   => 'push',
-    default => 'pull'
-  }
+  $_action = $pull ? { false => 'push', default => 'pull' }
 
   rsync { $name:
     source_path      => $source_path,
@@ -146,13 +143,13 @@ define rsync::retrieve (
     rsync_timeout    => $rsync_timeout,
     logoutput        => $logoutput,
     delete           => $delete,
-    bwlimit          => $_bwlimit,
+    bwlimit          => $bwlimit,
     copy_links       => $copy_links,
     size_only        => $size_only,
     no_implied_dirs  => $no_implied_dirs,
     subscribe        => $rsubscribe,
     notify           => $rnotify,
-    user             => $_user,
+    user             => $user,
     pass             => $_pass,
     action           => $_action
   }

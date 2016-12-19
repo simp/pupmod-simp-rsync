@@ -2,43 +2,43 @@
 #
 # See ``rsyncd.conf(5)`` for details of parameters not listed below.
 #
-# @param motd_file [AbsolutePath] The path to the MOTD file that should be
-#   displayed upon connection to any service.
+# @param motd_file
+#   The path to the default MOTD file that should be displayed upon connection
 #
-# @param pid_file [AbsolutePath] The path to the service PID file.
+# @param pid_file
+#   The path to the service PID file
 #
-# @param syslog_facility [SyslogFacility] A valid syslog facility to use for logging.
+# @param syslog_facility
+#   A valid syslog ``facility`` to use for logging
 #
-# @param port [Port] The port upon which to listen for client connections.
+# @param port
+#   The port upon which to listen for client connections
 #
-# @param address [IPAddress] The IP address upon which to listen for
-#   connections. Leave this at ``127.0.0.1`` if using stunnel.
+# @param address
+#   The IP address upon which to listen for connections
 #
-# @param client_nets [NetList] The networks to allow to connect to this service
+#   * Leave this at ``127.0.0.1`` if using stunnel
 #
-# == Authors
-#   * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @param trusted_nets
+#   The networks to allow to connect to this service
+#
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class rsync::server::global (
-  $motd_file = '',
-  $pid_file = '/var/run/rsyncd.pid',
-  $syslog_facility = 'daemon',
-  $port = '873',
-  $address = '127.0.0.1',
-  $client_nets = 'ALL'
+  Optional[Stdlib::Absolutepath] $motd_file       = undef,
+  Stdlib::Absolutepath           $pid_file        = '/var/run/rsyncd.pid',
+  String                         $syslog_facility = 'daemon',
+  Simplib::Port                  $port            = 873,
+  Simplib::IP                    $address         = '127.0.0.1',
+  Simplib::Netlist               $trusted_nets    = simplib::lookup('simp_options::trusted_nets', { default_value => ['127.0.0.1'] })
 ) {
-  validate_absolute_path($pid_file)
-  validate_port($port)
-  validate_net_list($address)
-  validate_net_list($client_nets,'ALL')
-
   include '::tcpwrappers'
 
   concat::fragment { 'rsync_global':
-    order   => '5',
+    order   => 5,
     target  => '/etc/rsyncd.conf',
     content => template("${module_name}/rsyncd.conf.global.erb")
   }
 
-  tcpwrappers::allow { 'rsync': pattern => $client_nets }
+  tcpwrappers::allow { 'rsync': pattern => $trusted_nets }
 }
