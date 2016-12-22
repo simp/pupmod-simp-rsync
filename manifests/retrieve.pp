@@ -102,7 +102,7 @@ define rsync::retrieve (
   Boolean                $preserve_group   = true,
   Boolean                $preserve_devices = false,
   Array[String]          $exclude          = ['.svn/','.git/'],
-  Integer                $rsync_timeout    = 2,
+  Integer[0]             $rsync_timeout    = 2,
   String                 $logoutput        = 'on_failure',
   Boolean                $delete           = false,
   Optional[String]       $bwlimit          = simplib::lookup('rsync::bwlimit', { 'default_value' => undef }),
@@ -111,7 +111,7 @@ define rsync::retrieve (
   Boolean                $no_implied_dirs  = true,
   Optional[String]       $user             = undef,
   Optional[String]       $pass             = undef,
-                         $pull             = true,
+  Boolean                $pull             = true,
   Optional[Catalogentry] $rnotify          = undef,
   Optional[Catalogentry] $rsubscribe       = undef
 ) {
