@@ -10,8 +10,8 @@ describe 'rsync class' do
       include '::iptables'
 
       iptables::add_tcp_stateful_listen { 'ssh':
-        dports      => '22',
-        client_nets => 'any'
+        dports       => '22',
+        trusted_nets => 'any'
       }
 
       file { '/srv/rsync':
