@@ -124,6 +124,9 @@ define rsync::retrieve (
     if $user {
       $_pass = passgen($user)
     }
+    else {
+      $_pass = undef
+    }
   }
 
   $_action = $pull ? { false => 'push', default => 'pull' }
