@@ -45,8 +45,8 @@ class rsync::server (
   if $use_stunnel {
     include '::stunnel'
 
-    stunnel::add { 'rsync':
-      connect      => ['873'],
+    stunnel::connection { 'rsync':
+      connect      => [873],
       accept       => "${listen_address}:${stunnel_port}",
       client       => false,
       trusted_nets => $trusted_nets
