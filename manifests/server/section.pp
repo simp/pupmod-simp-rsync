@@ -116,7 +116,7 @@ define rsync::server::section (
     '*.sar',
     '*.war'
   ],
-  Variant[Enum['*'], Simplib::Netlist] $hosts_allow        = simplib::lookup{ 'simp_options::trusted_nets'{ 'default_value' => ['127.0.0.1'] }),
+  Variant[Enum['*'], Simplib::Netlist] $hosts_allow        = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1'] }),
   Variant[Enum['*'], Simplib::Netlist] $hosts_deny         = '*'
 ) {
   include '::rsync::server'
