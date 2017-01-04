@@ -11,7 +11,7 @@ describe 'rsync class' do
 
       iptables::listen::tcp_stateful { 'ssh':
         dports       => 22,
-        trusted_nets => 'any'
+        trusted_nets => ['any']
       }
 
       file { '/srv/rsync':

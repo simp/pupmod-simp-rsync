@@ -11,7 +11,7 @@ class rsync::selinux {
   $_sebool_use_nfs       = $::rsync::sebool_use_nfs ? { true => 'on', default => 'off' }
   $_sebool_use_cifs      = $::rsync::sebool_use_cifs ? { true => 'on', default => 'off' }
 
-  if $::operatingsystem in ['RedHat','CentOS'] {
+  if $facts[os][name] in ['RedHat','CentOS'] {
     selboolean { 'rsync_client':
       persistent => true,
       value      => $_sebool_client
@@ -20,7 +20,7 @@ class rsync::selinux {
       persistent => true,
       value      => $_sebool_export_all_ro
     }
-    if (versioncmp($::operatingsystemmajrelease,'7') < 0){
+    if ( $facts['os']['release']['major'] < '7' ){
       selboolean { 'allow_rsync_anon_write':
         persistent => true,
         value      => $_sebool_anon_write
