@@ -10,6 +10,7 @@ describe 'rsync' do
 
         context 'base' do
           it { is_expected.to compile.with_all_deps }
+          it { is_expected.to create_class('rsync::selinux') }
           it { is_expected.to create_selboolean('rsync_client') }
           it { is_expected.to create_selboolean('rsync_export_all_ro') }
         end
@@ -18,8 +19,7 @@ describe 'rsync' do
           let(:facts) {{ :selinux_current_mode => 'disabled' }}
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.not_to create_selboolean('rsync_client') }
-          it { is_expected.not_to create_selboolean('rsync_export_all_ro') }
+          it { is_expected.to_not   create_class('rsync::selinux') }
         end
       end
     end
