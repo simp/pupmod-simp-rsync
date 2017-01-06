@@ -56,7 +56,7 @@ stunnel::ca_source : "%{hiera('pki_dir')}/cacerts"
 stunnel::cert : "%{hiera('pki_dir')}/public/%{fqdn}.pub"
 stunnel::key : "%{hiera('pki_dir')}/public/%{fqdn}.pem"
 
-rsync::server::use_stunnel : false
+rsync::server::stunnel : false
     EOS
   }
 

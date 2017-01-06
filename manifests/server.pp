@@ -11,7 +11,7 @@
 #
 # == Parameters ==
 #
-# @param use_stunnel [Boolean] Use Stunnel to encrypt this connection. It is
+# @param stunnel [Boolean] Use Stunnel to encrypt this connection. It is
 #   *highly* recommended to leave this enabled.
 #
 # @param stunnel_port [Port] The port upon which Stunnel should listen for
@@ -29,7 +29,7 @@
 #   allowed to connect to this service.
 #
 class rsync::server (
-  Boolean          $use_stunnel        = simplib::lookup('simp_options::stunnel', { default_value => true }),
+  Boolean          $stunnel            = simplib::lookup('simp_options::stunnel', { default_value => true }),
   Simplib::Port    $stunnel_port       = 8730,
   Simplib::IP      $listen_address     = '0.0.0.0',
   Boolean          $drop_rsyslog_noise = true,
@@ -37,12 +37,12 @@ class rsync::server (
 ) {
   include '::rsync'
 
-  $_subscribe  = $use_stunnel ? {
+  $_subscribe  = $stunnel ? {
     true    => Service['stunnel'],
     default => undef
   }
 
-  if $use_stunnel {
+  if $stunnel {
     include '::stunnel'
 
     stunnel::connection { 'rsync':
