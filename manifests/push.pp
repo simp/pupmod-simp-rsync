@@ -4,33 +4,55 @@
 #
 # See the documentation for ``rsync::retrieve`` for details.
 #
+# @param source_path
+# @param target_path
+# @param rsync_server
+# @param proto
+# @param rsync_path
+# @param preserve_acl
+# @param preserve_xattrs
+# @param preserve_owner
+# @param preserve_group
+# @param preserve_devices
+# @param exclude
+# @param rsync_timeout
+# @param logoutput
+# @param delete
+# @param bwlimit
+# @param copy_links
+# @param size_only
+# @param no_implied_dirs
+# @param user
+# @param pass
+# @param rsubscribe
+# @param rnotify
+#
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 define rsync::push (
-  $source_path,
-  $target_path,
-  $rsync_server,
-  $proto            = 'rsync',
-  $rsync_path       = '/usr/bin/rsync',
-  $preserve_acl     = true,
-  $preserve_xattrs  = true,
-  $preserve_owner   = true,
-  $preserve_group   = true,
-  $preserve_devices = false,
-  $exclude          = ['.svn/','.git/'],
-  $rsync_timeout    = '2',
-  $logoutput        = 'on_failure',
-  $delete           = false,
-  $rnotify          = '',
-  $bwlimit          = '',
-  $copy_links       = false,
-  $size_only        = false,
-  $no_implied_dirs  = true,
-  $rsubscribe       = undef,
-  $user             = '',
-  $pass             = ''
+  String                  $source_path,
+  String                  $target_path,
+  Simplib::Host           $rsync_server,
+  String                  $proto            = 'rsync',
+  Stdlib::Absolutepath    $rsync_path       = '/usr/bin/rsync',
+  Boolean                 $preserve_acl     = true,
+  Boolean                 $preserve_xattrs  = true,
+  Boolean                 $preserve_owner   = true,
+  Boolean                 $preserve_group   = true,
+  Boolean                 $preserve_devices = false,
+  Array[String]           $exclude          = ['.svn/','.git/'],
+  Integer[0]              $rsync_timeout    = 2,
+  Variant[Boolean,String] $logoutput        = 'on_failure',
+  Boolean                 $delete           = false,
+  Optional[Integer[0]]    $bwlimit          = undef,
+  Boolean                 $copy_links       = false,
+  Boolean                 $size_only        = false,
+  Boolean                 $no_implied_dirs  = true,
+  Optional[String]        $user             = undef,
+  Optional[String]        $pass             = undef,
+  Optional[Catalogentry]  $rsubscribe       = undef,
+  Optional[Catalogentry]  $rnotify          = undef
 ) {
-
   rsync::retrieve { "push_${name}":
     source_path      => $source_path,
     target_path      => $target_path,

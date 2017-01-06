@@ -11,7 +11,7 @@
 #
 # == Parameters ==
 #
-# @param use_stunnel [Boolean] Use Stunnel to encrypt this connection. It is
+# @param stunnel [Boolean] Use Stunnel to encrypt this connection. It is
 #   *highly* recommended to leave this enabled.
 #
 # @param stunnel_port [Port] The port upon which Stunnel should listen for
@@ -25,38 +25,31 @@
 #   and remote connection activities. Anything from 127.0.0.1 will be dropped
 #   as useless.
 #
-# @param client_nets [NetList] A list of networks and/or hostnames that are
+# @param trusted_nets [NetList] A list of networks and/or hostnames that are
 #   allowed to connect to this service.
 #
 class rsync::server (
-  $use_stunnel = true,
-  $stunnel_port = '8730',
-  $listen_address = '0.0.0.0',
-  $drop_rsyslog_noise = true,
-  $client_nets = lookup('client_nets', Array, 'first', ['127.0.0.1'])
+  Boolean          $stunnel            = simplib::lookup('simp_options::stunnel', { default_value => true }),
+  Simplib::Port    $stunnel_port       = 8730,
+  Simplib::IP      $listen_address     = '0.0.0.0',
+  Boolean          $drop_rsyslog_noise = true,
+  Simplib::Netlist $trusted_nets       = simplib::lookup('trusted_nets', { default_value => ['127.0.0.1'] })
 ) {
-
-  validate_bool($drop_rsyslog_noise)
-  validate_bool($use_stunnel)
-  validate_port($stunnel_port)
-  validate_net_list($listen_address)
-  validate_net_list($client_nets)
-
   include '::rsync'
 
-  $_subscribe  = $use_stunnel ? {
+  $_subscribe  = $stunnel ? {
     true    => Service['stunnel'],
     default => undef
   }
 
-  if $use_stunnel {
+  if $stunnel {
     include '::stunnel'
 
-    stunnel::add { 'rsync':
-      connect     => ['873'],
-      accept      => "${listen_address}:${stunnel_port}",
-      client      => false,
-      client_nets => $client_nets
+    stunnel::connection { 'rsync':
+      connect      => [873],
+      accept       => "${listen_address}:${stunnel_port}",
+      client       => false,
+      trusted_nets => $trusted_nets
     }
   }
 
@@ -71,11 +64,11 @@ class rsync::server (
   }
 
   file { '/etc/init.d/rsync':
-    ensure => 'file',
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0750',
-    source => 'puppet:///modules/rsync/rsync.init'
+    ensure  => 'file',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0750',
+    content => file("${module_name}/rsync.init")
   }
 
   service { 'rsync':

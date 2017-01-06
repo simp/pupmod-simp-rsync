@@ -9,9 +9,9 @@ describe 'rsync class' do
 
       include '::iptables'
 
-      iptables::add_tcp_stateful_listen { 'ssh':
-        dports      => '22',
-        client_nets => 'any'
+      iptables::listen::tcp_stateful { 'ssh':
+        dports       => 22,
+        trusted_nets => ['any']
       }
 
       file { '/srv/rsync':
@@ -56,7 +56,7 @@ stunnel::ca_source : "%{hiera('pki_dir')}/cacerts"
 stunnel::cert : "%{hiera('pki_dir')}/public/%{fqdn}.pub"
 stunnel::key : "%{hiera('pki_dir')}/public/%{fqdn}.pem"
 
-rsync::server::use_stunnel : false
+rsync::server::stunnel : false
     EOS
   }
 

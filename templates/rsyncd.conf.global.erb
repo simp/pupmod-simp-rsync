@@ -1,4 +1,4 @@
-<% if not @motd_file.empty? then -%>
+<% if @motd_file -%>
 motd file = <%= @motd_file %>
 <% end -%>
 pid file = <%= @pid_file %>
