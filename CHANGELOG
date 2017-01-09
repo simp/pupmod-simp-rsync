@@ -1,3 +1,6 @@
+* Mon Jan 09 2016 Nick Markowski <nmarkowski@keywcorp.com> - 6.0.0-0
+- Updated to use new pki scheme.
+
 * Thu Dec 01 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.0.0-0
 - Switched to using puppetlabs/concat
 

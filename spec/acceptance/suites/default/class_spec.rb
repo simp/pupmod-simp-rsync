@@ -48,14 +48,7 @@ describe 'rsync class' do
   let(:hieradata) {
     <<-EOS
 ---
-use_simp_pki : false
-
-pki_dir : '/etc/pki/simp-testing/pki'
-
-stunnel::ca_source : "%{hiera('pki_dir')}/cacerts"
-stunnel::cert : "%{hiera('pki_dir')}/public/%{fqdn}.pub"
-stunnel::key : "%{hiera('pki_dir')}/public/%{fqdn}.pem"
-
+simp_options::pki: false
 rsync::server::stunnel : false
     EOS
   }
