@@ -63,7 +63,7 @@ class rsync::server (
     require        => Package['rsync']
   }
 
-   if ($facts['os']['name'] in ['RedHat', 'CentOS']) and (versioncmp($facts['os']['release']['major'], '7') < 0) {
+  if ($facts['os']['name'] in ['RedHat', 'CentOS']) and (versioncmp($facts['os']['release']['major'], '7') < 0) {
     file { '/etc/init.d/rsyncd':
       ensure  => 'file',
       owner   => 'root',
