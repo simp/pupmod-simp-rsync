@@ -1,8 +1,11 @@
+* Sun Jan 22 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.0.0-0
+- Switched to using puppetlabs/concat
+- Fixed the startup script for EL6
+- Fixed minor ordering issues
+- Renamed the service to 'rsyncd' to match the service name in EL7
+
 * Mon Jan 09 2017 Nick Markowski <nmarkowski@keywcorp.com> - 6.0.0-0
 - Updated to use new pki scheme.
-
-* Thu Dec 01 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.0.0-0
-- Switched to using puppetlabs/concat
 
 * Tue Nov 22 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 5.0.0-0
 - Minor cleanup
