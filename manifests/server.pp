@@ -36,6 +36,7 @@ class rsync::server (
   Simplib::Netlist $trusted_nets       = simplib::lookup('trusted_nets', { default_value => ['127.0.0.1'] })
 ) {
   include '::rsync'
+  include '::rsync::server::global'
 
   $_subscribe  = $stunnel ? {
     true    => Service['stunnel'],
@@ -59,33 +60,43 @@ class rsync::server (
     mode           => '0400',
     ensure_newline => true,
     warn           => true,
-    require        => Package['rsync'],
-    notify         => Service['rsync']
+    require        => Package['rsync']
   }
 
-  file { '/etc/init.d/rsync':
-    ensure  => 'file',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0750',
-    content => file("${module_name}/rsync.init")
+  if ($facts['os']['name'] in ['RedHat', 'CentOS']) and (versioncmp($facts['os']['release']['major'], '7') < 0) {
+    file { '/etc/init.d/rsyncd':
+      ensure  => 'file',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0750',
+      content => file("${module_name}/rsync.init")
+    }
+
+    service { 'rsyncd':
+      ensure     => 'running',
+      enable     => true,
+      hasstatus  => true,
+      hasrestart => true,
+      require    => Package['rsync'],
+      provider   => 'redhat',
+      subscribe  => $_subscribe
+    }
+
+    File['/etc/init.d/rsyncd'] ~> Service['rsyncd']
+  }
+  else {
+    service { 'rsyncd':
+      ensure     => 'running',
+      enable     => true,
+      hasstatus  => true,
+      hasrestart => true,
+      require    => Package['rsync'],
+      subscribe  => $_subscribe
+    }
+
   }
 
-  service { 'rsync':
-    ensure     => 'running',
-    enable     => true,
-    hasstatus  => true,
-    hasrestart => true,
-    start      => '/etc/init.d/rsync start',
-    stop       => '/etc/init.d/rsync stop',
-    status     => '/etc/init.d/rsync status',
-    require    => [
-      Package['rsync'],
-      File['/etc/init.d/rsync']
-    ],
-    provider   => 'redhat',
-    subscribe  => $_subscribe
-  }
+  Concat['/etc/rsyncd.conf'] ~> Service['rsyncd']
 
   if $drop_rsyslog_noise {
     include '::rsyslog'

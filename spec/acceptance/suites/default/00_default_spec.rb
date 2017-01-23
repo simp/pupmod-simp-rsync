@@ -5,7 +5,7 @@ test_name 'rsync class'
 describe 'rsync class' do
   let(:manifest) {
     <<-EOS
-      include '::rsync::server::global'
+      include '::rsync::server'
 
       include '::iptables'
 
