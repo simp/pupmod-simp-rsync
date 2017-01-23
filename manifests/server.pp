@@ -36,6 +36,7 @@ class rsync::server (
   Simplib::Netlist $trusted_nets       = simplib::lookup('trusted_nets', { default_value => ['127.0.0.1'] })
 ) {
   include '::rsync'
+  include '::rsync::server::global'
 
   $_subscribe  = $stunnel ? {
     true    => Service['stunnel'],
