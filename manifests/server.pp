@@ -63,7 +63,17 @@ class rsync::server (
     require        => Package['rsync']
   }
 
-  if ($facts['os']['name'] in ['RedHat', 'CentOS']) and (versioncmp($facts['os']['release']['major'], '7') < 0) {
+  if 'systemd' in $facts['init_systems'] {
+    service { 'rsyncd':
+      ensure     => 'running',
+      enable     => true,
+      hasstatus  => true,
+      hasrestart => true,
+      require    => Package['rsync'],
+      subscribe  => $_subscribe
+    }
+  }
+  else {
     file { '/etc/init.d/rsyncd':
       ensure  => 'file',
       owner   => 'root',
@@ -81,19 +91,7 @@ class rsync::server (
       provider   => 'redhat',
       subscribe  => $_subscribe
     }
-
     File['/etc/init.d/rsyncd'] ~> Service['rsyncd']
-  }
-  else {
-    service { 'rsyncd':
-      ensure     => 'running',
-      enable     => true,
-      hasstatus  => true,
-      hasrestart => true,
-      require    => Package['rsync'],
-      subscribe  => $_subscribe
-    }
-
   }
 
   Concat['/etc/rsyncd.conf'] ~> Service['rsyncd']
@@ -102,10 +100,10 @@ class rsync::server (
     include '::rsyslog'
 
     rsyslog::rule::drop { '00_rsyncd':
-      rule => 'if ($programname == \'rsyncd\' and not ($msg contains \'rsync on\' or $msg contains \'SIG\' or $msg contains \'listening\'))'
+      rule => '$programname == \'rsyncd\' and not ($msg contains \'rsync on\' or $msg contains \'SIG\' or $msg contains \'listening\')'
     }
     rsyslog::rule::drop { '00_rsync_localhost':
-      rule =>  'if ($programname == \'rsyncd\' and $msg contains \'127.0.0.1\')'
+      rule => '$programname == \'rsyncd\' and $msg contains \'127.0.0.1\''
     }
   }
 }
