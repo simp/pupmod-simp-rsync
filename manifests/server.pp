@@ -33,7 +33,7 @@ class rsync::server (
   Simplib::Port    $stunnel_port       = 8730,
   Simplib::IP      $listen_address     = '0.0.0.0',
   Boolean          $drop_rsyslog_noise = true,
-  Simplib::Netlist $trusted_nets       = simplib::lookup('trusted_nets', { default_value => ['127.0.0.1'] })
+  Simplib::Netlist $trusted_nets       = simplib::lookup('simp_options::trusted_nets', { default_value => ['127.0.0.1'] })
 ) {
   include '::rsync'
   include '::rsync::server::global'
