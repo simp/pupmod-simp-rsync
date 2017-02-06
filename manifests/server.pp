@@ -46,7 +46,8 @@ class rsync::server (
   if $stunnel {
     include '::stunnel'
 
-    stunnel::connection { 'rsync':
+    # See simp/init.pp for the other end of this connection.
+    stunnel::connection { 'rsync_server':
       connect      => [873],
       accept       => "${listen_address}:${stunnel_port}",
       client       => false,
