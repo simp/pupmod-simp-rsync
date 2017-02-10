@@ -10,9 +10,6 @@ Puppet::Type.type(:rsync).provide(:rsync) do
 
   def initialize(*args)
     super(*args)
-
-    # This will be used to temporarily house the password file
-    @passfile = Tempfile.new('.rsync_provider')
   end
 
   def action
@@ -25,6 +22,9 @@ Puppet::Type.type(:rsync).provide(:rsync) do
   # We've chosen to sync here because of the potential overhead involved with a
   # double rsync run.
   def action_insync?
+    # This will be used to temporarily house the password file
+    @passfile = Tempfile.new('.rsync_provider')
+
     cmd = build_command.join(' ')
     debug %(Executing command #{cmd} with password #{get_password})
     output = Puppet::Util::Execution.execute(cmd, :failonfail => false, :combine => true)
