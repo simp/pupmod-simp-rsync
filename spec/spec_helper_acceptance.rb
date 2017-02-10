@@ -1,20 +1,17 @@
 require 'beaker-rspec'
+require 'beaker/puppet_install_helper'
 require 'tmpdir'
 require 'yaml'
 require 'simp/beaker_helpers'
 include Simp::BeakerHelpers
 
 unless ENV['BEAKER_provision'] == 'no'
-  hosts.each do |host|
-    # Install Puppet
-    if host.is_pe?
-      install_pe
-    else
-      install_puppet
-    end
+  if ENV['PUPPET_INSTALL_VERSION'] == nil
+    run_puppet_install_helper('agent', '1.7.1')
+  else
+    run_puppet_install_helper
   end
 end
-
 
 RSpec.configure do |c|
   # ensure that environment OS is ready on each host
