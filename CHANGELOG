@@ -1,3 +1,7 @@
+* Fri Feb 10 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.0-0
+- Fixed minor bug in rsync provider that caused  'Unknown failure
+  using insync_values?' Puppet message to be generated.
+
 * Sun Jan 22 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.0.0-0
 - Switched to using puppetlabs/concat
 - Fixed the startup script for EL6
