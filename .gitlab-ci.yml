@@ -61,7 +61,7 @@ acceptance-test-puppet-agent-4.7.1:
     - export PUPPET_INSTALL_VERSION=1.7.2
     - bundle install --no-binstubs --path=vendor
     - bundle exec rake acceptance
-acceptance-test-puppet-agent-4.9.2:
+acceptance-test-puppet-agent-4.9.3:
   stage: test
   cache:
     paths:
@@ -71,6 +71,6 @@ acceptance-test-puppet-agent-4.9.2:
     - beaker
   script:
     - export PUPPET_INSTALL_TYPE=agent
-    - export PUPPET_INSTALL_VERSION=1.9.1
+    - export PUPPET_INSTALL_VERSION=1.9.2
     - bundle install --no-binstubs --path=vendor
     - bundle exec rake acceptance
