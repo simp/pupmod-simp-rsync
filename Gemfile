@@ -28,7 +28,7 @@ group :development do
   gem 'guard-rake'
   gem 'pry'
   gem 'pry-doc'
-
+  gem 'pry-byebug'
   # `listen` is a dependency of `guard`
   # from `listen` 3.1+, `ruby_dep` requires Ruby version >= 2.2.3, ~> 2.2
   gem 'listen', '~> 3.0.6'
@@ -36,7 +36,10 @@ end
 
 group :system_tests do
   # This patch is required to fix Beaker's broken `aio` handling
-  gem 'beaker', :git => 'https://github.com/trevor-vaughan/beaker.git', :branch => 'BKR-931-2.51.0'
+#  gem 'beaker', :git => 'https://github.com/trevor-vaughan/beaker.git', :branch => 'BKR-931-2.51.0'
+  gem 'beaker'
   gem 'beaker-rspec'
+
+  gem 'beaker-puppet_install_helper',                                            :require => false
   gem 'simp-beaker-helpers', ENV.fetch('SIMP_BEAKER_HELPERS_VERSION', '~> 1.5')
 end
