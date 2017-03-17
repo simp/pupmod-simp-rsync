@@ -1,3 +1,10 @@
+* Thu Mar 17 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.1-0
+- Remove OBE 'pe' requirement from metadata.json
+- Update puppet version in .travis.yaml
+
+* Wed Mar 8 2017 Dylan Cochran <heliocentric@gmail.com> - 6.0.1-0
+- Wire down rsync's beaker acceptance tests
+
 * Fri Feb 10 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.0-0
 - Fixed minor bug in rsync provider that caused  'Unknown failure
   using insync_values?' Puppet message to be generated.
