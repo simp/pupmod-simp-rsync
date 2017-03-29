@@ -129,12 +129,13 @@ define rsync::server::section (
 
   if !empty($auth_users) {
     file { "/etc/rsync/${name}.rsyncd.secrets":
-      ensure  => 'file',
-      owner   => $uid,
-      group   => $gid,
-      mode    => '0600',
-      content => template('rsync/secrets.erb'),
-      require => File['/etc/rsync']
+      ensure    => 'file',
+      owner     => $uid,
+      group     => $gid,
+      mode      => '0600',
+      content   => template('rsync/secrets.erb'),
+      show_diff => false,
+      require   => File['/etc/rsync']
     }
   }
 }

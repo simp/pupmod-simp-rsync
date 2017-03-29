@@ -1,3 +1,6 @@
+* Wed Mar 29 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.0.2-0
+- Ensure that rsync password files are not echoed to the Puppet log
+
 * Thu Mar 17 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.1-0
 - Remove OBE 'pe' requirement from metadata.json
 - Update puppet version in .travis.yaml
