@@ -1,3 +1,6 @@
+* Thu Jul 06 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.3-0
+- Update puppet dependency in metadata.json
+
 * Wed Mar 29 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.0.2-0
 - Ensure that rsync password files are not echoed to the Puppet log
 
