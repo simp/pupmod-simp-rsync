@@ -1,6 +1,6 @@
 {
   "name": "simp-rsync",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "author": "SIMP Team",
   "summary": "manage and rsync server, secured by stunnel",
   "license": "Apache-2.0",
@@ -53,7 +53,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": "4.x"
+      "version_requirement": ">= 4.7.0 < 5.0.0"
     }
   ],
   "data_provider": "hiera"

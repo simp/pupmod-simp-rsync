@@ -1,17 +1,18 @@
-#  PE/SIMP versions
-#  app    pup  ruby
-# 2015.2  4.3  2.1.7
-# 2015.3  4.3  2.1.8
-# 2016.1  4.4  2.1.9
-# 2016.2  4.5  2.1.9
-# S6.0.0  4.7  2.1.9
+# The testing matrix considers ruby/puppet versions supported by SIMP and PE:
+# ------------------------------------------------------------------------------
+#  release    pup   ruby      eol
+# PE 2016.4   4.7   2.1.9  TBD (LTS)
+# PE 2016.5   4.8   2.1.9  2017-10-31
+# SIMP6.0.0   4.8   2.1.9  TBD
+# PE 2017.1   4.9   2.1.9  2017-10-31
+# PE 2017.2   4.10  2.1.9  TBD
 ---
 language: ruby
 sudo: false
 cache: bundler
 before_script:
-  - bundle
-bundler_args: --without development system_tests
+  - bundle update
+bundler_args: --without development system_tests --path .vendor
 before_install: rm Gemfile.lock || true
 script:
   - bundle exec rake test
@@ -22,23 +23,33 @@ rvm:
 env:
   global:
     - STRICT_VARIABLES=yes
-    - TRUSTED_NODE_DATA=yes
   matrix:
-    - PUPPET_VERSION="~> 4.9.4"
-    - PUPPET_VERSION="~> 4.8.2"
+    - PUPPET_VERSION="~> 4.8.2" FORGE_PUBLISH=true
+    - PUPPET_VERSION="~> 4.10.0"
+    - PUPPET_VERSION="~> 4.9.2"
     - PUPPET_VERSION="~> 4.7.0"
-    - PUPPET_VERSION="~> 4.5.0"
-    - PUPPET_VERSION="~> 3.8.0"
-    - PUPPET_VERSION="~> 4.4.0"
-    - PUPPET_VERSION="~> 4.3.0"
-    - PUPPET_VERSION="~> 3.8.0" FUTURE_PARSER=yes
 matrix:
   fast_finish: true
-  allow_failures:
-    - env: PUPPET_VERSION="~> 4.9.4"
-    - env: PUPPET_VERSION="~> 4.7.0"
-    - env: PUPPET_VERSION="~> 4.5.0"
-    - env: PUPPET_VERSION="~> 3.8.0"
-    - env: PUPPET_VERSION="~> 4.4.0"
-    - env: PUPPET_VERSION="~> 4.3.0"
-    - env: PUPPET_VERSION="~> 3.8.0" FUTURE_PARSER=yes
+
+before_deploy:
+  - 'bundle exec rake metadata_lint'
+  - 'bundle exec rake clobber'
+  - 'bundle exec rake spec_clean'
+  - "export PUPMOD_METADATA_VERSION=`ruby -r json -e \"puts JSON.parse(File.read('metadata.json')).fetch('version')\"`"
+  - '[[ $TRAVIS_TAG =~ ^simp-${PUPMOD_METADATA_VERSION}$|^${PUPMOD_METADATA_VERSION}$ ]]'
+deploy:
+  - provider: puppetforge
+    user: simp
+    password:
+        secure: "COztkAQTmJ/2+xFzJ0Rnt6GPALXcr5qpdoM/27ahWyLkmb1up903X98p7ZqaiEmrElAHHo+h31XvQVmk3lKZspZEocdEsrEu1aAKKe4EMbX6x/W+Dirq4UVjlBlTOiDeXA5k8SFOw+9R8HrvAEyNjRt3MAegs3FpWN+HMZDP9dUJJjcgHHVC69HtfcekOj9GLkAdPzDNVz8jPY+d8Bmn1cN3Dc7NVLtitI6vLV+2NK2LqEbs6ECLn6djnXtPcH1fvBiVmLBtRIGnfWX5OA3dSzA2qufmE9VcWYX2trk4ygWnN1NcBM4g+jUgyT2hVbTZDH4QcyMrK3C/tMYAptfvxfXm0wfsesq5vPrYPmGSstAu2T/7E+DVYQmlka4m8c1gAMHc/JkNr61QcRoOW21UHavBOFqfG2PEsKeA7iJBYu+4jfn5/oezVtCJQTd7m7E9Ecw+llctxAPmtSGcm4+/5Sllq1nxlrcl/zJrPnreH22r2TsvptiY1upsQKNy0g3gb/AsguvMjDHrrDN93ahJqkgDII+w3ZrYPzNOFsnHEENl6zC8M43TPxlZ2DrIhBkUpNZmQiQDYL9X4xi6qWifTycyutkRmpwvdoGmkT0xDeSVO4nlwEy/1BveYOGonN8aM9eRhnjXoa8mKqViuDqwtTWX72mCL7Z+/8yCPY2HCOQ="
+    on:
+      tags: true
+      rvm: 2.1.9
+      condition: '($SKIP_FORGE_PUBLISH != true) && ($FORGE_PUBLISH = true)'
+  - provider: releases
+    api_key:
+        secure: "Sa+OXh3jGhXw21Se7nR+q+mK+v2Tdq/WOuMWo3JJQ6JslXFC4YjG7DGYLYadrp82Mz3Pg4NtSdE0aXCfNfOa1xYiZYtZtdcwLqYAXFjbcKztWhRD29B0J6Jl+xUP0DLshLaAPzHB4242cA5k1wTIiYjZfbqjmZLuQPZZylCR6NmIsf4BpcgEtNTxD0TwZVJEj4S1YH67zQlzTTn28Sa8KKYt7KBmMIayElSc7qWgSjiyKgLgfAmPTO/rTq9p1M/ybndJxf69N3gSP5NGHVmpTEAVyG7jdH6x+ya825HxfYQMzFxB5eI9a60U4e4+sB0FrD8EvOqH0Y1QfWLeRmg2Ap89TUjlaw5hHZ5Os/HW2aALfsxwJPebRjX8RJGYtpnCDonQAtJLYnXroH28CMzC2AimlN/OIx8QwwV8qXo/RoZrqDM8pCJRdrpQJsvtZdzAYAkw6I2R68M2t7fmYv86cBxDlQrVsInXkDkIZczlbqvTyHNhvQu2E83yif5U1T1cx21LhuZjP8Y9HNqFxPYF2Kea45DnHqglWtSW3At2VSnjVITMTDv98h4tvhqucPt6HxBi3ZYXk3atTdRsv51KValCSVkdHNalOqzm7P5PNcohZmGxzKLR/C1lV1lDFM2Pa3cPfB/v3lHYyVYJAU/fdFKFgfNRFC3t2j+g/jLgpak="
+    skip_cleanup: true
+    on:
+      tags: true
+      condition: '($SKIP_FORGE_PUBLISH != true) && ($FORGE_PUBLISH = true)'
