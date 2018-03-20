@@ -16,10 +16,10 @@ describe 'rsync' do
         end
 
         context 'no_selinux' do
-          let(:facts) {{ :selinux_current_mode => 'disabled' }}
+          let(:facts) {os_facts.merge({ :selinux_current_mode => 'disabled' })}
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to_not   create_class('rsync::selinux') }
+          it { is_expected.to_not create_class('rsync::selinux') }
         end
       end
     end

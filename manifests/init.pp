@@ -31,6 +31,8 @@ class rsync (
   Boolean $sebool_use_nfs       = false,
   Boolean $sebool_use_cifs      = false,
 ){
+  simplib::assert_metadata($module_name)
+
   package { 'rsync': ensure => 'latest' }
 
   file { '/etc/rsync':
