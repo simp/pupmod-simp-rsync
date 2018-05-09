@@ -58,6 +58,7 @@ class rsync::server (
     owner          => 'root',
     group          => 'root',
     mode           => '0400',
+    order          => 'numeric',
     ensure_newline => true,
     warn           => true,
     require        => Package['rsync']
