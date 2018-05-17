@@ -11,7 +11,7 @@ class rsync::selinux {
   $_sebool_use_nfs       = $::rsync::sebool_use_nfs ? { true => 'on', default => 'off' }
   $_sebool_use_cifs      = $::rsync::sebool_use_cifs ? { true => 'on', default => 'off' }
 
-  if $facts[os][name] in ['RedHat','CentOS'] {
+  if $facts[os][name] in ['RedHat','CentOS','OracleLinux'] {
     selboolean { 'rsync_client':
       persistent => true,
       value      => $_sebool_client
@@ -44,8 +44,5 @@ class rsync::selinux {
         value      => $_sebool_full_access
       }
     }
-  }
-  else {
-    fail("The rsync class does not yet support ${::operatingsystem}")
   }
 }

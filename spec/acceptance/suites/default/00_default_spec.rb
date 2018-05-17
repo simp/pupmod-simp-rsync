@@ -60,11 +60,9 @@ rsync::server::stunnel : false
       apply_manifest_on(host, manifest, :catch_failures => true)
     end
 
-=begin
     it 'should be idempotent' do
       apply_manifest(manifest, {:catch_changes => true})
     end
-=end
 
     it 'should have a file transferred' do
       on(host, 'ls /tmp/test_file', :acceptable_exit_codes => [0])
