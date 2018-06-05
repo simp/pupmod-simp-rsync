@@ -18,6 +18,9 @@ fixtures:
     simpcat: https://github.com/simp/pupmod-simp-simpcat
     stdlib: https://github.com/simp/puppetlabs-stdlib
     stunnel: https://github.com/simp/pupmod-simp-stunnel
+    systemd:
+      repo: https://github.com/simp/puppet-systemd
+      branch: simp-master
     tcpwrappers: https://github.com/simp/pupmod-simp-tcpwrappers
   symlinks:
     rsync: "#{source_dir}"
