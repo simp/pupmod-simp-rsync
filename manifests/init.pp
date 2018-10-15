@@ -21,7 +21,9 @@
 #
 #   * Only functional if ``selinux`` is not disabled
 #
-# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+# @param package_ensure The ensure status of the package to be managed
+#
+# @author https://github.com/simp/pupmod-simp-rsync/graphs/contributors
 #
 class rsync (
   Boolean $sebool_anon_write    = false,
@@ -30,10 +32,13 @@ class rsync (
   Boolean $sebool_full_access   = false,
   Boolean $sebool_use_nfs       = false,
   Boolean $sebool_use_cifs      = false,
-){
+  String  $package_ensure       = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
+) {
   simplib::assert_metadata($module_name)
 
-  package { 'rsync': ensure => 'latest' }
+  package { 'rsync':
+    ensure => $package_ensure
+  }
 
   file { '/etc/rsync':
     ensure => 'directory',
@@ -43,8 +48,7 @@ class rsync (
     purge  => true
   }
 
-
   if $facts['selinux_current_mode'] and $facts['selinux_current_mode'] != 'disabled' {
-    include rsync::selinux
+    include 'rsync::selinux'
   }
 }

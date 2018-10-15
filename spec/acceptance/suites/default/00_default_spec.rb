@@ -45,16 +45,12 @@ describe 'rsync class' do
     EOS
   }
 
-  let(:hieradata) {
-    <<-EOS
----
-simp_options::pki: false
-rsync::server::stunnel : false
-    EOS
-  }
+  let(:hieradata) {{
+    'simp_options::pki'      => false,
+    'rsync::server::stunnel' => false
+  }}
 
   hosts.each do |host|
-    # Using puppet_apply as a helper
     it 'should work with no errors' do
       set_hieradata_on(host, hieradata)
       apply_manifest_on(host, manifest, :catch_failures => true)

@@ -1,3 +1,10 @@
+<%
+  if ENV['BEAKER_HYPERVISOR']
+    hypervisor = ENV['BEAKER_HYPERVISOR']
+  else
+    hypervisor = 'vagrant'
+  end
+-%>
 HOSTS:
   leap42:
     roles:
@@ -6,10 +13,13 @@ HOSTS:
       - client
     platform: sles-12-x86_64
     box: M0ses/openSUSE-Leap-42.1-minimal
-    hypervisor: vagrant
+    hypervisor: <%= hypervisor %>
 
 CONFIG:
   log_level: verbose
   synced_folder : disabled
   type: aio
   vagrant_memsize: 256
+<% if ENV['BEAKER_PUPPET_COLLECTION'] -%>
+  puppet_collection: <%= ENV['BEAKER_PUPPET_COLLECTION'] %>
+<% end -%>
