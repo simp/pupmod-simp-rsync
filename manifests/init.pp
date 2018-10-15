@@ -21,9 +21,9 @@
 #
 #   * Only functional if ``selinux`` is not disabled
 #
-# @param package_ensure The ensure status of packages to be managed
+# @param package_ensure The ensure status of the package to be managed
 #
-# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author https://github.com/simp/pupmod-simp-rsync/graphs/contributors
 #
 class rsync (
   Boolean $sebool_anon_write    = false,
