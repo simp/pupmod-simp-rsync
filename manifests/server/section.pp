@@ -11,15 +11,16 @@
 # @param auth_users
 #   A list of usernames that are allowed to connect to this section
 #
-#   * ``passgen()`` will be used to generated random passwords for these users
-#     if they do not already exist in the system
+#   * ``simplib::passgen()`` will be used to generated random passwords for
+#     these users, if they do not already exist in the system
+#   * Ignored if ``user_pass`` is set.
 #
 # @param user_pass
 #   An optional array of ``username:password`` combinations to be added to the
 #   secrets file
 #
-#   * It is recommended that you do not set this and instead let the
-#     ``passgen()`` function generate your passwords
+#   * Not recommended.  Instead, use ``auth_users`` to let the
+#     ``simplib::passgen()`` function generate your passwords
 #   * Entries in this Array should be of the following form:
 #     ``username:password``
 #
@@ -127,7 +128,7 @@ define rsync::server::section (
     content => template('rsync/rsyncd.conf.section.erb')
   }
 
-  if !empty($auth_users) {
+  if !empty($auth_users) or !empty($user_pass) {
     file { "/etc/rsync/${name}.rsyncd.secrets":
       ensure    => 'file',
       owner     => $uid,

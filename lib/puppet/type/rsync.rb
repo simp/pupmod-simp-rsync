@@ -43,7 +43,7 @@ Puppet::Type.newtype(:rsync) do
     desc <<-EOM
       The password to use. Only used if a username is specified
       If you want the password to be auto-generated, you can use the
-      SIMP 'passgen' function.
+      SIMP 'simplib::passgen' function.
 
         $user = 'foo'
 
@@ -52,7 +52,7 @@ Puppet::Type.newtype(:rsync) do
           target   => '/tmp/foo',
           server   => 'puppet',
           user     => $user,
-          password => passgen($user)
+          password => simplib::passgen($user)
         }
      EOM
   end
@@ -61,7 +61,7 @@ Puppet::Type.newtype(:rsync) do
     desc <<-EOM
       The password to use. Only used if a username is specified
       If you want the password to be auto-generated, you can use the
-      SIMP 'passgen' function.
+      SIMP 'simplib::passgen' function.
 
         $user = 'foo'
 
@@ -70,7 +70,7 @@ Puppet::Type.newtype(:rsync) do
           target   => '/tmp/foo',
           server   => 'puppet',
           user     => $user,
-          password => passgen($user)
+          password => simplib::passgen($user)
         }
      EOM
   end

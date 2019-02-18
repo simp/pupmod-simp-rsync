@@ -67,8 +67,8 @@
 # @param pass
 #   The password to use when connecting to the server
 #
-#   * If left blank, and a username is provided, the ``passgen()`` function
-#     will be used to look up the password
+#   * If left blank, and a username is provided, the ``simplib::passgen()``
+#     function will be used to look up the password
 #
 # @param pull
 #   Pull files from the remote server
@@ -122,7 +122,7 @@ define rsync::retrieve (
   }
   else {
     if $user {
-      $_pass = passgen($user)
+      $_pass = simplib::passgen($user)
     }
     else {
       $_pass = undef
