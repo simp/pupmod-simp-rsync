@@ -33,6 +33,7 @@ class rsync::server (
   Simplib::Port    $stunnel_port       = 8730,
   Simplib::IP      $listen_address     = '0.0.0.0',
   Boolean          $drop_rsyslog_noise = true,
+  Boolean          $firewall           = simplib::lookup('simp_options::firewall', { default_value => false }),
   Simplib::Netlist $trusted_nets       = simplib::lookup('simp_options::trusted_nets', { default_value => ['127.0.0.1'] })
 ) {
   include '::rsync'
@@ -46,11 +47,19 @@ class rsync::server (
   if $stunnel {
     include '::stunnel'
 
-    stunnel::connection { 'rsync':
-      connect      => [873],
+    stunnel::connection { 'rsync_server':
+      connect      => [$::rsync::server::global::port],
       accept       => "${listen_address}:${stunnel_port}",
       client       => false,
       trusted_nets => $trusted_nets
+    }
+  } else {
+    if $firewall {
+      iptables::listen::tcp_stateful { 'allow_rsync_server':
+        order        => 11,
+        trusted_nets => $trusted_nets,
+        dports       => [$::rsync::server::global::port],
+      }
     }
   }
 

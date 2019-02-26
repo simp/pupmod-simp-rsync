@@ -44,7 +44,21 @@ class rsync::server::global (
   if $tcpwrappers {
     include '::tcpwrappers'
 
-    tcpwrappers::allow { 'rsync': pattern => $trusted_nets }
+    $_tcp_wrappers_name = $::rsync::server::stunnel ? {
+      true    => 'rsync_server',
+      default => 'rsync',
+    }
+
+    tcpwrappers::allow { $_tcp_wrappers_name: pattern => $trusted_nets }
+  }
+
+  if $facts['selinux_current_mode'] and $facts['selinux_current_mode'] != 'disabled' {
+    vox_selinux::port { "allow_rsync_port_${port}":
+      ensure   => 'present',
+      seltype  => 'rsync_port_t',
+      protocol => 'tcp',
+      port     => $port,
+    }
   }
 
   concat::fragment { 'rsync_global':
