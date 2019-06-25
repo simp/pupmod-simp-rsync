@@ -20,7 +20,8 @@ describe 'compliance_markup', type: :class do
     # defaults
     expected_classes = [
       'rsync',
-      'rsync::server'
+      'rsync::server',
+      'simp_options'
     ]
 
     allowed_failures = {
