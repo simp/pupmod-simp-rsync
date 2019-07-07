@@ -1,3 +1,9 @@
+* Thu Jun 06 2019 Steven Pritchard <steven.pritchard@onyxpoint.com> - 6.2.0-0
+- Add v2 compliance_markup data
+- Remove puppet 4 support
+- Add puppet 6 support
+- Add puppetlabs-stdlib 6 support
+
 * Mon Mar 04 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 6.1.1-0
 - Expanded the upper limit of the concat and stdlib Puppet module versions
 - Updated a URL in the README.md
