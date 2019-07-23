@@ -15,6 +15,7 @@ describe 'rsync::push' do
             $rsync_server = '127.0.0.1',
             $proto = 'rsync',
             $rsync_path = '/usr/bin/rsync',
+            $preserve_perms = true,
             $preserve_acl = true,
             $preserve_xattrs = true,
             $preserve_owner = true,
