@@ -160,7 +160,7 @@ Puppet::Type.type(:rsync).provide(:rsync) do
   def get_flags
     flags = []
     flags << '-p' if @resource.preserve_perms?
-    flags << '--chmod=ugo=rwX' if not @resource.preserve_perms?
+    flags << '--chmod=u=rwX,g=rX,o-rwx' if not @resource.preserve_perms?
     flags << '-A' if @resource.preserve_acl?
     flags << '-X' if @resource.preserve_xattrs?
     flags << '-o' if @resource.preserve_owner?
