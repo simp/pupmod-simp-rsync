@@ -1,3 +1,8 @@
+* Thu Aug 01 2019 Mike Renfro <renfro@tntech.edu>
+- Add 'preserve_perms' attribute to allow users to disable the preservation of
+  server-side permissions.
+- If this flag is set to `false`, sets `chmod` to `u=rwX,g=rwX,o-rwx`
+
 * Thu Jun 06 2019 Steven Pritchard <steven.pritchard@onyxpoint.com> - 6.2.0-0
 - Add v2 compliance_markup data
 - Remove puppet 4 support
