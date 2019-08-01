@@ -1,6 +1,6 @@
 {
   "name": "simp-rsync",
-  "version": "6.3.0",
+  "version": "6.3.1",
   "author": "SIMP Team",
   "summary": "manage an rsync server, secured by stunnel",
   "license": "Apache-2.0",
@@ -15,7 +15,7 @@
   "dependencies": [
     {
       "name": "puppetlabs/concat",
-      "version_requirement": ">= 2.2.0 < 6.0.0"
+      "version_requirement": ">= 2.2.0 < 7.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
