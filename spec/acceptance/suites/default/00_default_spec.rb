@@ -36,7 +36,7 @@ describe 'rsync class' do
 
       rsync::retrieve { 'test_pull':
         user         => 'test_user',
-        pass         => passgen('test_user'),
+        pass         => simplib::passgen('test_user'),
         source_path  => 'test/test_file',
         target_path  => '/tmp',
         rsync_server => '127.0.0.1',

@@ -9,6 +9,7 @@
 # @param rsync_server
 # @param proto
 # @param rsync_path
+# @param preserve_perms
 # @param preserve_acl
 # @param preserve_xattrs
 # @param preserve_owner
@@ -35,6 +36,7 @@ define rsync::push (
   Simplib::Host           $rsync_server,
   String                  $proto            = 'rsync',
   Stdlib::Absolutepath    $rsync_path       = '/usr/bin/rsync',
+  Boolean                 $preserve_perms   = true,
   Boolean                 $preserve_acl     = true,
   Boolean                 $preserve_xattrs  = true,
   Boolean                 $preserve_owner   = true,
@@ -59,6 +61,7 @@ define rsync::push (
     rsync_server     => $rsync_server,
     proto            => $proto,
     rsync_path       => $rsync_path,
+    preserve_perms   => $preserve_perms,
     preserve_acl     => $preserve_acl,
     preserve_xattrs  => $preserve_xattrs,
     preserve_owner   => $preserve_owner,

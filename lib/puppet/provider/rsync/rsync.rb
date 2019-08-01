@@ -159,6 +159,8 @@ Puppet::Type.type(:rsync).provide(:rsync) do
 
   def get_flags
     flags = []
+    flags << '-p' if @resource.preserve_perms?
+    flags << '--chmod=u=rwX,g=rX,o-rwx' if not @resource.preserve_perms?
     flags << '-A' if @resource.preserve_acl?
     flags << '-X' if @resource.preserve_xattrs?
     flags << '-o' if @resource.preserve_owner?
@@ -247,7 +249,7 @@ Puppet::Type.type(:rsync).provide(:rsync) do
     else
       cmd << command('rsync')
     end
-    cmd << ['-i', '-p', '-S']
+    cmd << ['-i', '-S']
     cmd << ['--dry-run'] if Puppet[:noop]
     cmd << get_flags
     cmd << get_exclude

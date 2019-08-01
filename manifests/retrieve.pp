@@ -22,6 +22,9 @@
 # @param rsync_path
 #   The path to the 'rsync' command
 #
+# @param preserve_perms
+#   Preserve the file permissions from the server
+#
 # @param preserve_acl
 #   Preserve the file ACLs from the server
 #
@@ -96,6 +99,7 @@ define rsync::retrieve (
   Variant[Simplib::Host, Simplib::Host::Port] $rsync_server     = simplib::lookup('simp_options::rsync::server'),
   String                                      $proto            = 'rsync',
   Stdlib::Absolutepath                        $rsync_path       = '/usr/bin/rsync',
+  Boolean                                     $preserve_perms   = true,
   Boolean                                     $preserve_acl     = true,
   Boolean                                     $preserve_xattrs  = true,
   Boolean                                     $preserve_owner   = true,
@@ -137,6 +141,7 @@ define rsync::retrieve (
     rsync_server     => $rsync_server,
     proto            => $proto,
     rsync_path       => $rsync_path,
+    preserve_perms   => $preserve_perms,
     preserve_acl     => $preserve_acl,
     preserve_xattrs  => $preserve_xattrs,
     preserve_owner   => $preserve_owner,

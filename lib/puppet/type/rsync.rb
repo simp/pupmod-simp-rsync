@@ -142,6 +142,12 @@ Puppet::Type.newtype(:rsync) do
     desc 'The fully qualified path to the rsync executable'
   end
 
+  newparam(:preserve_perms, :boolean => true) do
+    desc 'Whether or not to preserve permissions. Defaults to true.'
+    newvalues(:true, :false)
+    defaultto :true
+  end
+
   newparam(:preserve_acl, :boolean => true) do
     desc 'Whether or not to preserve ACL. Defaults to true.'
     newvalues(:true, :false)
