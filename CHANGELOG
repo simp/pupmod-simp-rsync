@@ -1,4 +1,4 @@
-* Thu Aug 01 2019 Mike Renfro <renfro@tntech.edu>
+* Thu Aug 01 2019 Mike Renfro <renfro@tntech.edu> - 6.2.0-0
 - Add 'preserve_perms' attribute to allow users to disable the preservation of
   server-side permissions.
 - If this flag is set to `false`, sets `chmod` to `u=rwX,g=rwX,o-rwx`
