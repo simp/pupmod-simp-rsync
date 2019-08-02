@@ -2,7 +2,7 @@
   "name": "simp-rsync",
   "version": "6.3.0",
   "author": "SIMP Team",
-  "summary": "manage and rsync server, secured by stunnel",
+  "summary": "manage an rsync server, secured by stunnel",
   "license": "Apache-2.0",
   "source": "https://github.com/simp/pupmod-simp-rsync",
   "project_page": "https://github.com/simp/pupmod-simp-rsync",
