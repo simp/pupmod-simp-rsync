@@ -1,3 +1,6 @@
+* Fri Aug 02 2019 Robert Vincent <pillarsdotnet@gmail.com> - 6.3.1-0
+- Support puppetlabs/concat 6.x.
+
 * Thu Aug 01 2019 Mike Renfro <renfro@tntech.edu> - 6.3.0-0
 - Add 'preserve_perms' attribute to allow users to disable the preservation of
   server-side permissions.
