@@ -20,9 +20,7 @@ fixtures:
     simpcat: https://github.com/simp/pupmod-simp-simpcat
     stdlib: https://github.com/simp/puppetlabs-stdlib
     stunnel: https://github.com/simp/pupmod-simp-stunnel
-    systemd:
-      repo: https://github.com/simp/puppet-systemd
-      branch: simp-master
+    systemd: https://github.com/simp/puppet-systemd
     tcpwrappers: https://github.com/simp/pupmod-simp-tcpwrappers
     vox_selinux:
       repo: https://github.com/simp/pupmod-voxpupuli-selinux
