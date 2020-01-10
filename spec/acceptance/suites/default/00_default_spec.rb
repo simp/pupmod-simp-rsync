@@ -57,6 +57,11 @@ describe 'rsync class' do
     end
 
     it 'should be idempotent' do
+     # FIXME - Workaround for systemd::dropin_file idempotency issue:
+     #   Selinux type of the override unit file (from simp-rsyslog module)
+     #   gets fixed with a second puppet run.
+      apply_manifest_on(host, manifest, :catch_failures => true)
+
       apply_manifest(manifest, {:catch_changes => true})
     end
 

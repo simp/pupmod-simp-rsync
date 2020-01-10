@@ -8,6 +8,7 @@ describe 'server and client connectivity' do
       skip('You need at least two hosts in your nodeset to run this test')
     end
   else
+    # test interoperability between 1st and 2nd server in the node set
     server1 = hosts[0]
     server2 = hosts[1]
 
@@ -105,7 +106,7 @@ describe 'server and client connectivity' do
         set_hieradata_on(server2, hieradata_server2)
       end
 
-      hosts.each do |host|
+      [server1, server2].each do |host|
         context "on #{host}" do
           it 'should work with no errors' do
             apply_manifest_on(host, manifest, :catch_failures => true)
@@ -128,7 +129,7 @@ describe 'server and client connectivity' do
         apply_manifest_on(server2, manifest_test_server2, :catch_failures => true)
       end
 
-      hosts.each do |host|
+      [server1, server2].each do |host|
         it 'should have a file transferred' do
           on(host, 'ls /tmp/test_file_srvcli', :acceptable_exit_codes => [0])
         end

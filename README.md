@@ -13,11 +13,12 @@ If you find any issues, they can be submitted to our [JIRA](https://simp-project
 
 Please read our [Contribution Guide](https://simp.readthedocs.io/en/stable/contributors_guide/index.html).
 
-## Work in Progress
+## Module Description
 
-Please excuse us as we transition this code into the public domain.
+This module configures rsync for sharing large files that would be problematic to
+share using the native Puppet fileserving type.
 
-Downloads, discussion, and patches are still welcome!
+## Setup
 
 ### Configuring Host as Server and Client
 
@@ -50,3 +51,21 @@ NOTE: If not using stunnel for the server/client connections, both values for
 `rsync::server::trusted_nets` and `rsync::server::global::trusted_nets` will
 need to match, as well as the `trusted_nets` values for any `rsync::server::section`
 resources. These all default to '127.0.0.1' for stunnel usage.
+
+## Reference
+
+Please refer to the [REFERENCE.md](./REFERENCE.md).
+
+## Limitations
+
+SIMP Puppet modules are generally intended for use on Red Hat Enterprise
+Linux and compatible distributions, such as CentOS. Please see the
+[`metadata.json` file](./metadata.json) for the most up-to-date list of
+supported operating systems, Puppet versions, and module dependencies.
+
+## Development
+
+Please read our [Contribution Guide](https://simp.readthedocs.io/en/stable/contributors_guide/index.html).
+
+Visit the project homepage on [GitHub](https://simp-project.com),
+and look at our issues on  [JIRA](https://simp-project.atlassian.net/).

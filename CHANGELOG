@@ -1,4 +1,8 @@
-* Fri Aug 02 2019 Robert Vincent <pillarsdotnet@gmail.com> - 6.3.1-0
+* Fri Jan 10 2020 Liz Nemsick <lnemsick.simp@gmail.com> - 6.4.0-0
+- Add EL8 support
+- Update the upper bound of simp-simplib to < 5.0.0
+
+* Fri Aug 02 2019 Robert Vincent <pillarsdotnet@gmail.com> - 6.4.0-0
 - Support puppetlabs/concat 6.x.
 
 * Thu Aug 01 2019 Mike Renfro <renfro@tntech.edu> - 6.3.0-0

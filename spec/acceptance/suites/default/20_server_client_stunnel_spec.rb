@@ -8,6 +8,7 @@ describe 'server and client stunnel connectivity' do
       skip('You need at least two hosts in your nodeset to run this test')
     end
   else
+    # test interoperability between 1st and 2nd server in the node set
     server1 = hosts[0]
     server2 = hosts[1]
 
@@ -169,7 +170,7 @@ describe 'server and client stunnel connectivity' do
     end
 
     context 'test a file retrieval' do
-      hosts.each do |host|
+      [server1, server2].each do |host|
         it "should run server1 retrieval code on #{host}" do
           apply_manifest_on(host, manifest_test_server1, :catch_failures => true)
         end

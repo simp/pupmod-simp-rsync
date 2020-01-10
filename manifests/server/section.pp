@@ -63,11 +63,14 @@
 #   A symbolic ``chmod`` that will be applied to files that are transferred
 #   outbound
 #
-# @param ignore_noreadable
+# @param ignore_nonreadable
 #   Completely ignore any file that is not readable by the user
 #
 # @param transfer_logging
 #   Enable per-file logging of transfers
+#
+# @param log_format
+#   Format used for logging file transfers when transfer logging is enabled
 #
 # @param dont_compress
 #   Filenames and globs that should not be compressed upon transfer
