@@ -31,7 +31,7 @@ HOSTS:
 
 CONFIG:
   type: aio
-  vagrant_memsize: 256
+  vagrant_memsize: 512
   log_level: verbose
   synced_folder: disabled
 <% if ENV['BEAKER_PUPPET_COLLECTION'] -%>
