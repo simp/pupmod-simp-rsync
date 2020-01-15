@@ -6,10 +6,17 @@
   end
 -%>
 HOSTS:
-  el7:
+  el8:
     roles:
       - default
       - master
+      - client
+    platform: el-8-x86_64
+    box: generic/oracle8
+    hypervisor: <%= hypervisor %>
+
+  el7:
+    roles:
       - client
     platform: el-7-x86_64
     box: onyxpoint/oel-7-x86_64
@@ -24,7 +31,7 @@ HOSTS:
 
 CONFIG:
   type: aio
-  vagrant_memsize: 256
+  vagrant_memsize: 512
   log_level: verbose
   synced_folder: disabled
 <% if ENV['BEAKER_PUPPET_COLLECTION'] -%>

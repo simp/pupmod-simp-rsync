@@ -1,4 +1,4 @@
-# This class provides a method to set up a fully functioning rsync server.
+# @summary Sets up a fully functioning rsync server.
 #
 # The main idea behind this was to work around limitations of the native Puppet
 # fileserving type.
@@ -9,24 +9,37 @@
 # This mainly daemonizes rsync and keeps it running. It will also subscribe it
 # to the stunnel service if it has been declared.
 #
-# == Parameters ==
+# @param stunnel
+#   Use Stunnel to encrypt this connection. It is *highly* recommended to leave
+#   this enabled.
 #
-# @param stunnel [Boolean] Use Stunnel to encrypt this connection. It is
-#   *highly* recommended to leave this enabled.
+# @param stunnel_port
+#   The port upon which Stunnel should listen for connections.
 #
-# @param stunnel_port [Port] The port upon which Stunnel should listen for
-#   connections.
+# @param listen_address
+#   The IP Address upon which to listen. Set to 0.0.0.0 to listen on all
+#   addresses.
 #
-# @param listen_address [IPAddress] The IP Address upon which to listen. Set to
-#   0.0.0.0 to listen on all addresses.
+# @param drop_rsyslog_noise
+#   Ensure that any noise from rsync is dropped. The only items that will be
+#   retained will be startup, shutdown, and remote connection activities.
+#   Anything from 127.0.0.1 will be dropped as useless.
 #
-# @param drop_rsyslog_noise [Boolean] Ensure that any noise from rsync is
-#   dropped. The only items that will be retained will be startup, shutdown,
-#   and remote connection activities. Anything from 127.0.0.1 will be dropped
-#   as useless.
+# @param firewall
+#   If true, use the SIMP iptables class to manage firewall rules for this
+#   module.
 #
-# @param trusted_nets [NetList] A list of networks and/or hostnames that are
-#   allowed to connect to this service.
+# @param trusted_nets
+#   A list of networks and/or hostnames that are allowed to connect to this
+#   service.
+#
+# @param package_ensure
+#   The ensure status of the package to be managed
+#
+# @param package
+#   The rsync daemon package
+#
+# @author https://github.com/simp/pupmod-simp-rsync/graphs/contributors
 #
 class rsync::server (
   Boolean          $stunnel            = simplib::lookup('simp_options::stunnel', { default_value => true }),
@@ -34,10 +47,17 @@ class rsync::server (
   Simplib::IP      $listen_address     = '0.0.0.0',
   Boolean          $drop_rsyslog_noise = true,
   Boolean          $firewall           = simplib::lookup('simp_options::firewall', { default_value => false }),
-  Simplib::Netlist $trusted_nets       = simplib::lookup('simp_options::trusted_nets', { default_value => ['127.0.0.1'] })
+  Simplib::Netlist $trusted_nets       = simplib::lookup('simp_options::trusted_nets', { default_value => ['127.0.0.1'] }),
+  String           $package_ensure     = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
+  String           $package            # module data
 ) {
   include '::rsync'
   include '::rsync::server::global'
+
+  # ensure_resource instead of package resource, because for some OS versions,
+  # the client package managed by the rsync class also contains the rsync
+  # daemon files.
+  ensure_resource('package', $package , { ensure => $package_ensure })
 
   $_subscribe  = $stunnel ? {
     true    => Service['stunnel'],
@@ -70,7 +90,7 @@ class rsync::server (
     order          => 'numeric',
     ensure_newline => true,
     warn           => true,
-    require        => Package['rsync']
+    require        => Package[$package]
   }
 
   if 'systemd' in $facts['init_systems'] {
@@ -79,7 +99,7 @@ class rsync::server (
       enable     => true,
       hasstatus  => true,
       hasrestart => true,
-      require    => Package['rsync'],
+      require    => Package[$package],
       subscribe  => $_subscribe
     }
   }
@@ -97,7 +117,7 @@ class rsync::server (
       enable     => true,
       hasstatus  => true,
       hasrestart => true,
-      require    => Package['rsync'],
+      require    => Package[$package],
       provider   => 'redhat',
       subscribe  => $_subscribe
     }

@@ -21,6 +21,18 @@
 #
 #   * Only functional if ``selinux`` is not disabled
 #
+# @param sebool_use_nfs
+#   Allow rsync servers to share nfs files systems
+#
+#   * Only functional if ``selinux`` is not disabled
+#   * Only applies to El6
+#
+# @param sebool_use_cifs
+#   Allow rsync servers to share cifs files systems
+#
+#   * Only functional if ``selinux`` is not disabled
+#   * Only applies to El6
+#
 # @param package_ensure The ensure status of the package to be managed
 #
 # @author https://github.com/simp/pupmod-simp-rsync/graphs/contributors
