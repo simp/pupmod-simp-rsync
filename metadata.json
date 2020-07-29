@@ -1,6 +1,6 @@
 {
   "name": "simp-rsync",
-  "version": "6.4.0",
+  "version": "6.4.1",
   "author": "SIMP Team",
   "summary": "manage an rsync server, secured by stunnel",
   "license": "Apache-2.0",
@@ -35,7 +35,7 @@
     },
     {
       "name": "simp/vox_selinux",
-      "version_requirement": ">= 1.5.2 < 2.0.0"
+      "version_requirement": ">= 1.5.2 < 4.0.0"
     }
   ],
   "operatingsystem_support": [
