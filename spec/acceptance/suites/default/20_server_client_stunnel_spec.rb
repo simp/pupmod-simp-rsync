@@ -163,8 +163,6 @@ describe 'server and client stunnel connectivity' do
             end
 
             it 'should be idempotent' do
-              # IPTables changes may occur
-              apply_manifest_on(server1, manifest_server1, :catch_failures => true)
               apply_manifest_on(server1, manifest_server1, :catch_changes => true)
             end
           end

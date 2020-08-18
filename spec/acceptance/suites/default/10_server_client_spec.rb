@@ -123,8 +123,6 @@ describe 'server and client connectivity' do
               end
 
               it 'should be idempotent' do
-                # IPTables updates may occur
-                apply_manifest_on(host, manifest, :catch_failures => true)
                 apply_manifest_on(host, manifest, {:catch_changes => true})
               end
             end
