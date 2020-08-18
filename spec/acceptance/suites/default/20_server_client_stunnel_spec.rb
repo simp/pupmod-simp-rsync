@@ -127,6 +127,7 @@ describe 'server and client stunnel connectivity' do
         }
 
         let(:hieradata_server1) {{
+          'iptables::precise_match'     => true,
           'simp_options::pki'           => true,
           'simp_options::pki::source'   => '/etc/pki/simp-testing/pki',
           'simp_options::firewall'      => true,
@@ -135,11 +136,12 @@ describe 'server and client stunnel connectivity' do
         }}
 
         let(:hieradata_server2) {{
+          'iptables::precise_match'     => true,
           'simp_options::pki'           => true,
           'simp_options::pki::source'   => '/etc/pki/simp-testing/pki',
           'simp_options::firewall'      => true,
           'rsync::server::stunnel'      => true,
-          'rsync::server::global::port'  => 8873,
+          'rsync::server::global::port' => 8873,
           'rsync::server::trusted_nets' => [server1_ip],
         }}
 
@@ -161,6 +163,8 @@ describe 'server and client stunnel connectivity' do
             end
 
             it 'should be idempotent' do
+              # IPTables changes may occur
+              apply_manifest_on(server1, manifest_server1, :catch_failures => true)
               apply_manifest_on(server1, manifest_server1, :catch_changes => true)
             end
           end

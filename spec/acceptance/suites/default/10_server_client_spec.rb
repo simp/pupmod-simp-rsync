@@ -80,6 +80,7 @@ describe 'server and client connectivity' do
         }
 
         let(:hieradata_server1) {{
+          'iptables::precise_match'             => true,
           'simp_options::pki'                   => false,
           'simp_options::firewall'              => true,
           'rsync::server::stunnel'              => false,
@@ -89,6 +90,7 @@ describe 'server and client connectivity' do
         }}
 
         let(:hieradata_server2) {{
+          'iptables::precise_match'             => true,
           'simp_options::pki'                   => false,
           'simp_options::firewall'              => true,
           'rsync::server::stunnel'              => false,
@@ -121,11 +123,12 @@ describe 'server and client connectivity' do
               end
 
               it 'should be idempotent' do
+                # IPTables updates may occur
+                apply_manifest_on(host, manifest, :catch_failures => true)
                 apply_manifest_on(host, manifest, {:catch_changes => true})
               end
             end
           end
-
         end
 
         context 'test a file retrieval' do
