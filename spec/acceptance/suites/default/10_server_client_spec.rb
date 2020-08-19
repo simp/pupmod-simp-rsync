@@ -80,6 +80,7 @@ describe 'server and client connectivity' do
         }
 
         let(:hieradata_server1) {{
+          'iptables::precise_match'             => true,
           'simp_options::pki'                   => false,
           'simp_options::firewall'              => true,
           'rsync::server::stunnel'              => false,
@@ -89,6 +90,7 @@ describe 'server and client connectivity' do
         }}
 
         let(:hieradata_server2) {{
+          'iptables::precise_match'             => true,
           'simp_options::pki'                   => false,
           'simp_options::firewall'              => true,
           'rsync::server::stunnel'              => false,
@@ -125,7 +127,6 @@ describe 'server and client connectivity' do
               end
             end
           end
-
         end
 
         context 'test a file retrieval' do

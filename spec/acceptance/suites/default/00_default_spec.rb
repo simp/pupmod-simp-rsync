@@ -46,8 +46,9 @@ describe 'rsync class' do
   }
 
   let(:hieradata) {{
-    'simp_options::pki'      => false,
-    'rsync::server::stunnel' => false
+    'iptables::precise_match' => true,
+    'simp_options::pki'       => false,
+    'rsync::server::stunnel'  => false
   }}
 
   hosts.each do |host|
