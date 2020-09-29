@@ -1,6 +1,6 @@
 {
   "name": "simp-rsync",
-  "version": "6.4.1",
+  "version": "6.4.2",
   "author": "SIMP Team",
   "summary": "manage an rsync server, secured by stunnel",
   "license": "Apache-2.0",
