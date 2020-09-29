@@ -25,6 +25,9 @@ Puppet::Type.newtype(:rsync) do
   end
 
   newparam(:name) do
+    desc <<-EOM
+    The globally unique name of the resource. Has no effect on provider functionality.
+    EOM
     isnamevar
   end
 
@@ -231,7 +234,9 @@ Puppet::Type.newtype(:rsync) do
     desc 'Connection timeout in seconds.'
   end
 
-  newparam(:rsync_timeout, :parent => self.paramclass(:contimeout))
+  newparam(:rsync_timeout, :parent => self.paramclass(:contimeout)) do
+    desc 'Alias for :timeout'
+  end
 
   newparam(:iotimeout, :parent => self.paramclass(:timeout)) do
     desc 'I/O timeout in seconds.'
