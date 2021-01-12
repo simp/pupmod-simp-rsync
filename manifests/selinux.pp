@@ -8,8 +8,6 @@ class rsync::selinux {
   $_sebool_client        = $::rsync::sebool_client ? { true => 'on', default => 'off' }
   $_sebool_export_all_ro = $::rsync::sebool_export_all_ro ? { true => 'on', default => 'off' }
   $_sebool_full_access   = $::rsync::sebool_full_access ? { true => 'on', default => 'off' }
-  $_sebool_use_nfs       = $::rsync::sebool_use_nfs ? { true => 'on', default => 'off' }
-  $_sebool_use_cifs      = $::rsync::sebool_use_cifs ? { true => 'on', default => 'off' }
 
   if $facts[os][name] in ['RedHat','CentOS','OracleLinux'] {
     selboolean { 'rsync_client':
