@@ -22,13 +22,6 @@ HOSTS:
     box: onyxpoint/oel-7-x86_64
     hypervisor: <%= hypervisor %>
 
-  el6:
-    roles:
-      - client
-    platform: el-6-x86_64
-    box: onyxpoint/oel-6-x86_64
-    hypervisor: <%= hypervisor %>
-
 CONFIG:
   type: aio
   vagrant_memsize: 512

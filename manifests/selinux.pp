@@ -1,6 +1,6 @@
 # This will configure selinux for rsync
 #
-# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author https://github.com/simp/pupmod-simp-selinux/graphs/contributors
 #
 class rsync::selinux {
 
@@ -20,29 +20,13 @@ class rsync::selinux {
       persistent => true,
       value      => $_sebool_export_all_ro
     }
-    if ( $facts['os']['release']['major'] < '7' ){
-      selboolean { 'allow_rsync_anon_write':
-        persistent => true,
-        value      => $_sebool_anon_write
-      }
-      selboolean { 'rsync_use_cifs':
-        persistent => true,
-        value      => $_sebool_use_cifs
-      }
-      selboolean { 'rsync_use_nfs':
-        persistent => true,
-        value      => $_sebool_use_nfs
-      }
+    selboolean { 'rsync_anon_write':
+      persistent => true,
+      value      => $_sebool_anon_write
     }
-    else {
-      selboolean { 'rsync_anon_write':
-        persistent => true,
-        value      => $_sebool_anon_write
-      }
-      selboolean { 'rsync_full_access':
-        persistent => true,
-        value      => $_sebool_full_access
-      }
+    selboolean { 'rsync_full_access':
+      persistent => true,
+      value      => $_sebool_full_access
     }
   }
 }
