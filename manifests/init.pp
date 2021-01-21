@@ -26,12 +26,14 @@
 #
 #   * Only functional if ``selinux`` is not disabled
 #   * Only applies to El6
+#   * WARNING: Will be removed in version 7 of this module
 #
 # @param sebool_use_cifs
 #   Allow rsync servers to share cifs files systems
 #
 #   * Only functional if ``selinux`` is not disabled
 #   * Only applies to El6
+#   * WARNING: Will be removed in version 7 of this module
 #
 # @param package_ensure The ensure status of the package to be managed
 #

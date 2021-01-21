@@ -80,6 +80,7 @@ Allow rsync servers to share nfs files systems
 
 * Only functional if ``selinux`` is not disabled
 * Only applies to El6
+* WARNING: Will be removed in version 7 of this module
 
 Default value: ``false``
 
@@ -91,6 +92,7 @@ Allow rsync servers to share cifs files systems
 
 * Only functional if ``selinux`` is not disabled
 * Only applies to El6
+* WARNING: Will be removed in version 7 of this module
 
 Default value: ``false``
 
