@@ -1,8 +1,11 @@
-* Tue Jan 12 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.4.2-0
+* Wed Feb 03 2021 Liz Nemsick <lnemsick.simp@gmail.com> - 6.4.2
+- Expanded simp/rsyslog dependendency range to < 9.0.0.
+
+* Tue Jan 12 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.4.2
 - Fix REFERENCE.md documentation
 - Note sebool_use_nfs and sebool_cifs upcoming deprecation
 
-* Tue Jan 12 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 6.4.2-0
+* Tue Jan 12 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 6.4.2
 - Removed EL6 support
 
 * Wed Jul 29 2020 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 6.4.1-0
