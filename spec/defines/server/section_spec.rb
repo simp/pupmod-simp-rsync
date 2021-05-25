@@ -5,7 +5,14 @@ describe 'rsync::server::section' do
     context "on #{os}" do
       let(:title) { 'test' }
 
-      let(:facts) { os_facts }
+      let(:facts) {
+        _facts = os_facts
+        _facts[:os] ||= {}
+        _facts[:os]['selinux'] ||= {}
+        _facts[:os]['selinux']['enabled'] = true
+
+        _facts
+      }
 
       let(:pre_condition) {
         'include "::rsync::server"'

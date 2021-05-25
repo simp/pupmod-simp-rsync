@@ -16,7 +16,6 @@ fixtures:
     pki: https://github.com/simp/pupmod-simp-pki
     rsyslog: https://github.com/simp/pupmod-simp-rsyslog
     selinux_core: https://github.com/puppetlabs/puppetlabs-selinux_core
-    simp_firewalld: https://github.com/simp/pupmod-simp-simp_firewalld
     simp_options: https://github.com/simp/pupmod-simp-simp_options
     simp_firewalld: https://github.com/simp/pupmod-simp-simp_firewalld
     simplib: https://github.com/simp/pupmod-simp-simplib
@@ -25,8 +24,8 @@ fixtures:
     stunnel: https://github.com/simp/pupmod-simp-stunnel
     systemd: https://github.com/simp/puppet-systemd
     tcpwrappers: https://github.com/simp/pupmod-simp-tcpwrappers
-    vox_selinux:
-      repo: https://github.com/simp/pupmod-voxpupuli-selinux
-      branch: simp-master
+   vox_selinux:
+     repo: https://github.com/simp/pupmod-voxpupuli-selinux
+     branch: simp-master
   symlinks:
     rsync: "#{source_dir}"
