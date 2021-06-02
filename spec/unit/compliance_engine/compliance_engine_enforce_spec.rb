@@ -33,11 +33,17 @@ describe 'compliance_markup', type: :class do
     context "on #{os}" do
       compliance_profiles.each do |target_profile|
         context "with compliance profile '#{target_profile}'" do
-          let(:facts){
-            os_facts.merge({
+          let(:facts) do
+            _facts = os_facts.merge({
               :target_compliance_profile => target_profile
             })
-          }
+
+            _facts[:os] ||= {}
+            _facts[:os]['selinux'] ||= {}
+            _facts[:os]['selinux']['enabled'] = true
+
+            _facts
+          end
 
           let(:pre_condition) {%(
             #{expected_classes.map{|c| %{include #{c}}}.join("\n")}
