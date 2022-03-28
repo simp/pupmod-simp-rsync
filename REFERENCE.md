@@ -23,7 +23,7 @@
 
 ## Classes
 
-### <a name="rsync"></a>`rsync`
+### <a name="rsync"></a> `rsync`
 
 Provides an rsync client library with a stub exec for certain edge cases
 
