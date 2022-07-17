@@ -1,6 +1,6 @@
 {
   "name": "simp-rsync",
-  "version": "6.5.0",
+  "version": "6.5.1",
   "author": "SIMP Team",
   "summary": "manage an rsync server, secured by stunnel",
   "license": "Apache-2.0",
@@ -39,6 +39,12 @@
     }
   ],
   "operatingsystem_support": [
+    {
+      "operatingsystem": "Amazon",
+      "operatingsystemrelease": [
+        "2"
+      ]
+    },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
