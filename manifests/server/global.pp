@@ -2,6 +2,9 @@
 #
 # See ``rsyncd.conf(5)`` for details of parameters not listed below.
 #
+# @param port
+#   The port upon which to listen for client connections
+#
 # @param motd_file
 #   The path to the default MOTD file that should be displayed upon connection
 #
@@ -11,46 +14,21 @@
 # @param syslog_facility
 #   A valid syslog ``facility`` to use for logging
 #
-# @param port
-#   The port upon which to listen for client connections
-#
 # @param address
 #   The IP address upon which to listen for connections
 #
 #   * Leave this at ``127.0.0.1`` if using stunnel
 #
-# @param trusted_nets
-#   The networks to allow to connect to this service
-#
-#
-# @param tcpwrappers
-#   Use tcpwrappers to secure the rsync service
-#
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class rsync::server::global (
+  Simplib::Port                  $port,
   Optional[Stdlib::Absolutepath] $motd_file       = undef,
   Stdlib::Absolutepath           $pid_file        = '/var/run/rsyncd.pid',
   String                         $syslog_facility = 'daemon',
-  Simplib::Port                  $port            = 873,
   Simplib::IP                    $address         = '127.0.0.1',
-  Simplib::Netlist               $trusted_nets    = simplib::lookup('simp_options::trusted_nets', { default_value => ['127.0.0.1'] }),
-  Boolean                        $tcpwrappers     = simplib::lookup('simp_options::tcpwrappers', { default_value => false })
 ) {
   assert_private()
-
-  include '::rsync::server'
-
-  if $tcpwrappers {
-    include '::tcpwrappers'
-
-    $_tcp_wrappers_name = $::rsync::server::stunnel ? {
-      true    => 'rsync_server',
-      default => 'rsync',
-    }
-
-    tcpwrappers::allow { $_tcp_wrappers_name: pattern => $trusted_nets }
-  }
 
   if $facts['selinux_current_mode'] and $facts['selinux_current_mode'] != 'disabled' {
     vox_selinux::port { "allow_rsync_port_${port}":
