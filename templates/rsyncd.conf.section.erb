@@ -1,3 +1,4 @@
+
 [<%= @name %>]
 comment = <%= @comment %>
 path = <%= @path %>
@@ -17,7 +18,7 @@ log format = <%= @log_format %>
 dont compress = <%= Array(@dont_compress).join(' ') %>
 hosts allow = <%= Array(@hosts_allow).join(',') %>
 hosts deny = <%= Array(@hosts_deny).join(',') %>
-<% if @auth_users -%>
-auth users = <%= Array(@auth_users).join(',') %>
+<% if @auth_users or @user_pass -%>
+auth users = <%= @auth_users.to_a.empty? ? 'all:deny' : @auth_users.map { |entry| [entry].flatten[0] }.join(',') %>
 secrets file = /etc/rsync/<%= @name %>.rsyncd.secrets
 <% end -%>
