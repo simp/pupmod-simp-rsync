@@ -45,8 +45,7 @@ describe 'server and client connectivity' do
             }
 
             rsync::server::section { 'test':
-              auth_users  => ['test_user'],
-              user_pass   => ['test_user:test_pass'],
+              auth_users  => { 'test_user' => 'test_pass' },
               comment     => 'A test system',
               hosts_allow => ['#{server1_ip}', '#{server2_ip}'],
               path        => '/srv/rsync/test',

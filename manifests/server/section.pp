@@ -140,7 +140,7 @@ define rsync::server::section (
       $secretsfile_lines = $user_pass
         .map |$line| { "${line}\n" }
     } else {
-      $secretsfile_lines = Hash.assert_type($auth_users) |$ex, $act| { 
+      $secretsfile_lines = Hash.assert_type($auth_users) |$ex, $act| {
           $auth_users.reduce({}) |$hash, $user| { $hash + { $user => undef } }
         }.map |$username, $maybe_password| {
         $password = $maybe_password ? {
