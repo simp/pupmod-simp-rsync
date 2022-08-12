@@ -80,24 +80,20 @@ describe 'server and client connectivity' do
         }
 
         let(:hieradata_server1) {{
-          'iptables::precise_match'             => true,
-          'simp_options::pki'                   => false,
-          'simp_options::firewall'              => true,
-          'rsync::server::stunnel'              => false,
-          'rsync::server::trusted_nets'         => [server2_ip],
-          'rsync::server::global::trusted_nets' => [server2_ip],
-          'rsync::server::global::address'      => '0.0.0.0',
+          'iptables::precise_match'     => true,
+          'simp_options::pki'           => false,
+          'simp_options::firewall'      => true,
+          'rsync::server::stunnel'      => false,
+          'rsync::server::trusted_nets' => [server2_ip],
         }}
 
         let(:hieradata_server2) {{
-          'iptables::precise_match'             => true,
-          'simp_options::pki'                   => false,
-          'simp_options::firewall'              => true,
-          'rsync::server::stunnel'              => false,
-          'rsync::server::global::port'         => 8873,
-          'rsync::server::trusted_nets'         => [server1_ip],
-          'rsync::server::global::trusted_nets' => [server1_ip],
-          'rsync::server::global::address'      => '0.0.0.0',
+          'iptables::precise_match'     => true,
+          'simp_options::pki'           => false,
+          'simp_options::firewall'      => true,
+          'rsync::server::stunnel'      => false,
+          'rsync::server::listen_port'  => 8873,
+          'rsync::server::trusted_nets' => [server1_ip],
         }}
 
         let(:server1_interface) { get_private_network_interface(server1) }

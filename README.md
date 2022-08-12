@@ -31,7 +31,7 @@ To configure a Compile Master (or other node) to function as both a server
 and a client (of the primary server), setup hiera for the node:
 
 ```
-rsync::server::global::port: 8873
+rsync::server::listen_port: 8873
 rsync::server::trusted_nets:
   - <client_net>
   - <client_net>
