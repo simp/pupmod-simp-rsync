@@ -1,25 +1,18 @@
-<%
-  if ENV['BEAKER_HYPERVISOR']
-    hypervisor = ENV['BEAKER_HYPERVISOR']
-  else
-    hypervisor = 'vagrant'
-  end
--%>
+---
 HOSTS:
   leap42:
     roles:
-      - server
-      - default
-      - client
+    - server
+    - default
+    - client
     platform: sles-12-x86_64
     box: M0ses/openSUSE-Leap-42.1-minimal
-    hypervisor: <%= hypervisor %>
-
+    hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
+    family: opensuse-cloud/opensuse-leap
+    gce_machine_type: n1-standard-2
 CONFIG:
   log_level: verbose
-  synced_folder : disabled
+  synced_folder: disabled
   type: aio
   vagrant_memsize: 256
-<% if ENV['BEAKER_PUPPET_COLLECTION'] -%>
-  puppet_collection: <%= ENV['BEAKER_PUPPET_COLLECTION'] %>
-<% end -%>
+  puppet_collection: "<%= ENV.fetch('BEAKER_PUPPET_COLLECTION', 'puppet7') %>"
