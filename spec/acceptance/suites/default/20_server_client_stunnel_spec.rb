@@ -49,11 +49,10 @@ describe 'server and client stunnel connectivity' do
             }
 
             rsync::server::section { 'test':
-              auth_users  => ['test_user'],
-              user_pass   => ['test_user:test_pass'],
-              comment     => 'A test system',
-              path        => '/srv/rsync/test',
-              require     => File['/srv/rsync/test/test_file_srvcli2_server1']
+              auth_users => { 'test_user' => 'test_pass' },
+              comment    => 'A test system',
+              path       => '/srv/rsync/test',
+              require    => File['/srv/rsync/test/test_file_srvcli2_server1']
             }
 
             stunnel::connection { 'rsync':
@@ -88,11 +87,10 @@ describe 'server and client stunnel connectivity' do
             }
 
             rsync::server::section { 'test':
-              auth_users  => ['test_user'],
-              user_pass   => ['test_user:test_pass'],
-              comment     => 'A test system',
-              path        => '/srv/rsync/test',
-              require     => File['/srv/rsync/test/test_file_srvcli2_server2']
+              auth_users => { 'test_user' => 'test_pass' },
+              comment    => 'A test system',
+              path       => '/srv/rsync/test',
+              require    => File['/srv/rsync/test/test_file_srvcli2_server2']
             }
 
             stunnel::connection { 'rsync':

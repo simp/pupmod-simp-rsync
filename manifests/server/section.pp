@@ -9,11 +9,15 @@
 #   The directory to make available to clients
 #
 # @param auth_users
-#   A list of usernames that are allowed to connect to this section
-#
-#   * ``simplib::passgen()`` will be used to generated random passwords for
+#   This should be either:
+#   * A list of usernames that are allowed to connect to this section.
+#     ``simplib::passgen()`` will be used to generated random passwords for
 #     these users, if they do not already exist in the system
-#   * Ignored if ``user_pass`` is set.
+#   * A hash of usernames to their passwords.  If the password is `undef` or 
+#     an empty string, ``simplib::passgen()`` will be used to generate or 
+#     retrieve it.  
+#   In either case, the contents of the auth_users parameter will be ignored 
+#   if ``user_pass`` is set.
 #
 # @param user_pass
 #   An optional array of ``username:password`` combinations to be added to the
@@ -50,14 +54,14 @@
 #   List this share when clients ask for a list of available modules
 #
 # @param uid
-#   The user ID that transfers should take place as
-#
-#   * This user must have access to all of the relevant files
+#   The user ID that transfers should take place as.  Keep in mind that if this 
+#   user is non-root, it may cause issues if the user lacks permission to write 
+#   out any files that are transferred.
 #
 # @param gid
-#   The group ID that transfers should take place as
-#
-#   * Must have access to all of the relevant files
+#   The group ID that transfers should take place as.  Keep in mind that if this 
+#   group is non-root, it may cause issues if the group lacks permission to 
+#   write out any files that are transferred.
 #
 # @param outgoing_chmod
 #   A symbolic ``chmod`` that will be applied to files that are transferred
@@ -87,24 +91,24 @@
 #   * Should be set to the String ``*`` as it is overridden by ``$hosts_allow``
 #
 define rsync::server::section (
-  Stdlib::Absolutepath                 $path,
-  Optional[Array[String]]              $auth_users         = undef,
-  Optional[Array[String]]              $user_pass          = undef,
-  Optional[String]                     $comment            = undef,
-  Boolean                              $use_chroot         = false,
-  Integer[0]                           $max_connections    = 0,
-  Integer[0]                           $max_verbosity      = 1,
-  Stdlib::Absolutepath                 $lock_file          = '/var/run/rsyncd.lock',
-  Boolean                              $read_only          = true,
-  Boolean                              $write_only         = false,
-  Boolean                              $list               = false,
-  String                               $uid                = 'root',
-  String                               $gid                = 'root',
-  String                               $outgoing_chmod     = 'o-w',
-  Boolean                              $ignore_nonreadable = true,
-  Boolean                              $transfer_logging   = true,
-  String                               $log_format         = "'%o %h [%a] %m (%u) %f %l'",
-  Array[String]                        $dont_compress      = [
+  Stdlib::Absolutepath                  $path,
+  Optional[Rsync::Auth_users]           $auth_users         = undef,
+  Optional[Array[Pattern[/\A.*:.*\z/]]] $user_pass          = undef,
+  Optional[String]                      $comment            = undef,
+  Boolean                               $use_chroot         = false,
+  Integer[0]                            $max_connections    = 0,
+  Integer[0]                            $max_verbosity      = 1,
+  Stdlib::Absolutepath                  $lock_file          = '/var/run/rsyncd.lock',
+  Boolean                               $read_only          = true,
+  Boolean                               $write_only         = false,
+  Boolean                               $list               = false,
+  String                                $uid                = 'root',
+  String                                $gid                = 'root',
+  String                                $outgoing_chmod     = 'o-w',
+  Boolean                               $ignore_nonreadable = true,
+  Boolean                               $transfer_logging   = true,
+  String                                $log_format         = "'%o %h [%a] %m (%u) %f %l'",
+  Array[String]                         $dont_compress      = [
     '*.gz',
     '*.tgz',
     '*.zip',
@@ -131,13 +135,29 @@ define rsync::server::section (
     content => template('rsync/rsyncd.conf.section.erb')
   }
 
-  if !empty($auth_users) or !empty($user_pass) {
+  if $auth_users or $user_pass {
+    if $user_pass {
+      $secretsfile_lines = $user_pass
+        .map |$line| { "${line}\n" }
+    } else {
+      $secretsfile_lines = Hash.assert_type($auth_users) |$ex, $act| {
+          $auth_users.reduce({}) |$hash, $user| { $hash + { $user => undef } }
+        }.map |$username, $maybe_password| {
+        $password = $maybe_password ? {
+          String[1] => $maybe_password, # non-empty string: it's a password, use it
+          default   => simplib::passgen($username), # undef or '': look up the password
+        }
+
+        [$username, ':', $password, "\n"].join
+      }
+    }
+
     file { "/etc/rsync/${name}.rsyncd.secrets":
       ensure    => 'file',
-      owner     => $uid,
-      group     => $gid,
+      owner     => 'root',
+      group     => 'root',
       mode      => '0600',
-      content   => template('rsync/secrets.erb'),
+      content   => $secretsfile_lines.join,
       show_diff => false,
       require   => File['/etc/rsync']
     }
