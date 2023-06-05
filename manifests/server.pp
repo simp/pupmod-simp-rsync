@@ -16,6 +16,9 @@
 # @param stunnel_port
 #   The port upon which Stunnel should listen for connections.
 #
+# @param listen_port
+#   The port upon which the rsync daemon should listen for connections.
+#
 # @param listen_address
 #   The IP Address upon which to listen. Set to 0.0.0.0 to listen on all
 #   addresses.
@@ -33,6 +36,9 @@
 #   A list of networks and/or hostnames that are allowed to connect to this
 #   service.
 #
+# @param tcpwrappers
+#   Use tcpwrappers to secure the rsync service
+#
 # @param package_ensure
 #   The ensure status of the package to be managed
 #
@@ -44,43 +50,59 @@
 class rsync::server (
   Boolean          $stunnel            = simplib::lookup('simp_options::stunnel', { default_value => true }),
   Simplib::Port    $stunnel_port       = 8730,
+  Simplib::Port    $listen_port        = 873,
   Simplib::IP      $listen_address     = '0.0.0.0',
   Boolean          $drop_rsyslog_noise = true,
   Boolean          $firewall           = simplib::lookup('simp_options::firewall', { default_value => false }),
   Simplib::Netlist $trusted_nets       = simplib::lookup('simp_options::trusted_nets', { default_value => ['127.0.0.1'] }),
+  Boolean          $tcpwrappers        = simplib::lookup('simp_options::tcpwrappers', { default_value => false }),
   String           $package_ensure     = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
-  String           $package            # module data
+  String           $package,           # module data
 ) {
   include '::rsync'
-  include '::rsync::server::global'
 
   # ensure_resource instead of package resource, because for some OS versions,
   # the client package managed by the rsync class also contains the rsync
   # daemon files.
   ensure_resource('package', $package , { ensure => $package_ensure })
 
-  $_subscribe  = $stunnel ? {
-    true    => Service['stunnel'],
-    default => undef
-  }
-
   if $stunnel {
+    class { '::rsync::server::global':
+      port    => $listen_port,
+    }
+
     include '::stunnel'
 
     stunnel::connection { 'rsync_server':
-      connect      => [$::rsync::server::global::port],
+      connect      => [$listen_port],
       accept       => "${listen_address}:${stunnel_port}",
       client       => false,
-      trusted_nets => $trusted_nets
+      trusted_nets => $trusted_nets,
+      notify       => Service['rsyncd'],
     }
+
+    $_tcp_wrappers_name = 'rsync_server'
   } else {
+    class { '::rsync::server::global':
+      port    => $listen_port,
+      address => $listen_address,
+    }
+
     if $firewall {
       iptables::listen::tcp_stateful { 'allow_rsync_server':
         order        => 11,
         trusted_nets => $trusted_nets,
-        dports       => [$::rsync::server::global::port],
+        dports       => [$listen_port],
       }
     }
+
+    $_tcp_wrappers_name = 'rsync'
+  }
+
+  if $tcpwrappers {
+    include '::tcpwrappers'
+
+    tcpwrappers::allow { $_tcp_wrappers_name: pattern => $trusted_nets }
   }
 
   concat { '/etc/rsyncd.conf':
@@ -100,7 +122,6 @@ class rsync::server (
       hasstatus  => true,
       hasrestart => true,
       require    => Package[$package],
-      subscribe  => $_subscribe
     }
   }
   else {
@@ -119,7 +140,6 @@ class rsync::server (
       hasrestart => true,
       require    => Package[$package],
       provider   => 'redhat',
-      subscribe  => $_subscribe
     }
     File['/etc/init.d/rsyncd'] ~> Service['rsyncd']
   }

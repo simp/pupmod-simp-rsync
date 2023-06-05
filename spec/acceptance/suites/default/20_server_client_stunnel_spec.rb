@@ -141,7 +141,7 @@ describe 'server and client stunnel connectivity' do
           'simp_options::pki::source'   => '/etc/pki/simp-testing/pki',
           'simp_options::firewall'      => true,
           'rsync::server::stunnel'      => true,
-          'rsync::server::global::port' => 8873,
+          'rsync::server::listen_port'  => 8873,
           'rsync::server::trusted_nets' => [server1_ip],
         }}
 
