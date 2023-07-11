@@ -52,7 +52,7 @@ class rsync::server::global (
     tcpwrappers::allow { $_tcp_wrappers_name: pattern => $trusted_nets }
   }
 
-  if $facts['selinux_current_mode'] and $facts['selinux_current_mode'] != 'disabled' {
+  if $facts['os']['selinux']['current_mode'] and $facts['os']['selinux']['current_mode'] != 'disabled' {
     vox_selinux::port { "allow_rsync_port_${port}":
       ensure   => 'present',
       seltype  => 'rsync_port_t',
