@@ -7,15 +7,15 @@
 ### Classes
 
 * [`rsync`](#rsync): Provides an rsync client library with a stub exec for certain edge cases
-* [`rsync::selinux`](#rsyncselinux): This will configure selinux for rsync
-* [`rsync::server`](#rsyncserver): Sets up a fully functioning rsync server.
-* [`rsync::server::global`](#rsyncserverglobal): Setup the global section of /etc/rsyncd.conf.  See ``rsyncd.conf(5)`` for details of parameters not listed below.
+* [`rsync::selinux`](#rsync--selinux): This will configure selinux for rsync
+* [`rsync::server`](#rsync--server): Sets up a fully functioning rsync server.
+* [`rsync::server::global`](#rsync--server--global): Setup the global section of /etc/rsyncd.conf.  See ``rsyncd.conf(5)`` for details of parameters not listed below.
 
 ### Defined types
 
-* [`rsync::push`](#rsyncpush): This is simply a call to rsync::retrieve with $pull set to false. It's present for clarity and hopefully won't break any dependency chains if
-* [`rsync::retrieve`](#rsyncretrieve): Retrieve a file over the rsync protocol
-* [`rsync::server::section`](#rsyncserversection): Set up a 'section' of /etc/rsyncd.conf pertaining to a particular rsync share.  See ``rsyncd.conf(5)`` for descriptions of most variables.
+* [`rsync::push`](#rsync--push): This is simply a call to rsync::retrieve with $pull set to false. It's present for clarity and hopefully won't break any dependency chains if
+* [`rsync::retrieve`](#rsync--retrieve): Retrieve a file over the rsync protocol
+* [`rsync::server::section`](#rsync--server--section): Set up a 'section' of /etc/rsyncd.conf pertaining to a particular rsync share.  See ``rsyncd.conf(5)`` for descriptions of most variables.
 
 ### Resource types
 
@@ -23,7 +23,7 @@
 
 ## Classes
 
-### <a name="rsync"></a> `rsync`
+### <a name="rsync"></a>`rsync`
 
 Provides an rsync client library with a stub exec for certain edge cases
 
@@ -31,15 +31,15 @@ Provides an rsync client library with a stub exec for certain edge cases
 
 The following parameters are available in the `rsync` class:
 
-* [`sebool_anon_write`](#sebool_anon_write)
-* [`sebool_client`](#sebool_client)
-* [`sebool_export_all_ro`](#sebool_export_all_ro)
-* [`sebool_full_access`](#sebool_full_access)
-* [`sebool_use_nfs`](#sebool_use_nfs)
-* [`sebool_use_cifs`](#sebool_use_cifs)
-* [`package_ensure`](#package_ensure)
+* [`sebool_anon_write`](#-rsync--sebool_anon_write)
+* [`sebool_client`](#-rsync--sebool_client)
+* [`sebool_export_all_ro`](#-rsync--sebool_export_all_ro)
+* [`sebool_full_access`](#-rsync--sebool_full_access)
+* [`sebool_use_nfs`](#-rsync--sebool_use_nfs)
+* [`sebool_use_cifs`](#-rsync--sebool_use_cifs)
+* [`package_ensure`](#-rsync--package_ensure)
 
-##### <a name="sebool_anon_write"></a>`sebool_anon_write`
+##### <a name="-rsync--sebool_anon_write"></a>`sebool_anon_write`
 
 Data type: `Boolean`
 
@@ -48,9 +48,9 @@ Allow anonymous rsync users to write to shares
 * Share spaces must be labeled as ``public_content_rw_t``
 * Only functional if ``selinux`` is not disabled
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="sebool_client"></a>`sebool_client`
+##### <a name="-rsync--sebool_client"></a>`sebool_client`
 
 Data type: `Boolean`
 
@@ -58,9 +58,9 @@ Allow rsync to act as a client
 
 * Only functional if ``selinux`` is not disabled
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="sebool_export_all_ro"></a>`sebool_export_all_ro`
+##### <a name="-rsync--sebool_export_all_ro"></a>`sebool_export_all_ro`
 
 Data type: `Boolean`
 
@@ -68,9 +68,9 @@ Allow rsync to export of anything on the system as read only
 
 * Only functional if ``selinux`` is not disabled
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="sebool_full_access"></a>`sebool_full_access`
+##### <a name="-rsync--sebool_full_access"></a>`sebool_full_access`
 
 Data type: `Boolean`
 
@@ -78,9 +78,9 @@ Allow rsync management of **ALL** files on the system
 
 * Only functional if ``selinux`` is not disabled
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="sebool_use_nfs"></a>`sebool_use_nfs`
+##### <a name="-rsync--sebool_use_nfs"></a>`sebool_use_nfs`
 
 Data type: `Boolean`
 
@@ -90,9 +90,9 @@ Allow rsync servers to share nfs files systems
 * Only applies to El6
 * WARNING: Will be removed in version 7 of this module
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="sebool_use_cifs"></a>`sebool_use_cifs`
+##### <a name="-rsync--sebool_use_cifs"></a>`sebool_use_cifs`
 
 Data type: `Boolean`
 
@@ -102,9 +102,9 @@ Allow rsync servers to share cifs files systems
 * Only applies to El6
 * WARNING: Will be removed in version 7 of this module
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="package_ensure"></a>`package_ensure`
+##### <a name="-rsync--package_ensure"></a>`package_ensure`
 
 Data type: `String`
 
@@ -112,11 +112,11 @@ The ensure status of the package to be managed
 
 Default value: `simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' })`
 
-### <a name="rsyncselinux"></a>`rsync::selinux`
+### <a name="rsync--selinux"></a>`rsync::selinux`
 
 This will configure selinux for rsync
 
-### <a name="rsyncserver"></a>`rsync::server`
+### <a name="rsync--server"></a>`rsync::server`
 
 The main idea behind this was to work around limitations of the native Puppet
 fileserving type.
@@ -131,16 +131,16 @@ to the stunnel service if it has been declared.
 
 The following parameters are available in the `rsync::server` class:
 
-* [`stunnel`](#stunnel)
-* [`stunnel_port`](#stunnel_port)
-* [`listen_address`](#listen_address)
-* [`drop_rsyslog_noise`](#drop_rsyslog_noise)
-* [`firewall`](#firewall)
-* [`trusted_nets`](#trusted_nets)
-* [`package_ensure`](#package_ensure)
-* [`package`](#package)
+* [`stunnel`](#-rsync--server--stunnel)
+* [`stunnel_port`](#-rsync--server--stunnel_port)
+* [`listen_address`](#-rsync--server--listen_address)
+* [`drop_rsyslog_noise`](#-rsync--server--drop_rsyslog_noise)
+* [`firewall`](#-rsync--server--firewall)
+* [`trusted_nets`](#-rsync--server--trusted_nets)
+* [`package_ensure`](#-rsync--server--package_ensure)
+* [`package`](#-rsync--server--package)
 
-##### <a name="stunnel"></a>`stunnel`
+##### <a name="-rsync--server--stunnel"></a>`stunnel`
 
 Data type: `Boolean`
 
@@ -149,7 +149,7 @@ this enabled.
 
 Default value: `simplib::lookup('simp_options::stunnel', { default_value => true })`
 
-##### <a name="stunnel_port"></a>`stunnel_port`
+##### <a name="-rsync--server--stunnel_port"></a>`stunnel_port`
 
 Data type: `Simplib::Port`
 
@@ -157,7 +157,7 @@ The port upon which Stunnel should listen for connections.
 
 Default value: `8730`
 
-##### <a name="listen_address"></a>`listen_address`
+##### <a name="-rsync--server--listen_address"></a>`listen_address`
 
 Data type: `Simplib::IP`
 
@@ -166,7 +166,7 @@ addresses.
 
 Default value: `'0.0.0.0'`
 
-##### <a name="drop_rsyslog_noise"></a>`drop_rsyslog_noise`
+##### <a name="-rsync--server--drop_rsyslog_noise"></a>`drop_rsyslog_noise`
 
 Data type: `Boolean`
 
@@ -174,9 +174,9 @@ Ensure that any noise from rsync is dropped. The only items that will be
 retained will be startup, shutdown, and remote connection activities.
 Anything from 127.0.0.1 will be dropped as useless.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="firewall"></a>`firewall`
+##### <a name="-rsync--server--firewall"></a>`firewall`
 
 Data type: `Boolean`
 
@@ -185,7 +185,7 @@ module.
 
 Default value: `simplib::lookup('simp_options::firewall', { default_value => false })`
 
-##### <a name="trusted_nets"></a>`trusted_nets`
+##### <a name="-rsync--server--trusted_nets"></a>`trusted_nets`
 
 Data type: `Simplib::Netlist`
 
@@ -194,7 +194,7 @@ service.
 
 Default value: `simplib::lookup('simp_options::trusted_nets', { default_value => ['127.0.0.1'] })`
 
-##### <a name="package_ensure"></a>`package_ensure`
+##### <a name="-rsync--server--package_ensure"></a>`package_ensure`
 
 Data type: `String`
 
@@ -202,13 +202,13 @@ The ensure status of the package to be managed
 
 Default value: `simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' })`
 
-##### <a name="package"></a>`package`
+##### <a name="-rsync--server--package"></a>`package`
 
 Data type: `String`
 
 The rsync daemon package
 
-### <a name="rsyncserverglobal"></a>`rsync::server::global`
+### <a name="rsync--server--global"></a>`rsync::server::global`
 
 Setup the global section of /etc/rsyncd.conf.
 
@@ -218,23 +218,23 @@ See ``rsyncd.conf(5)`` for details of parameters not listed below.
 
 The following parameters are available in the `rsync::server::global` class:
 
-* [`motd_file`](#motd_file)
-* [`pid_file`](#pid_file)
-* [`syslog_facility`](#syslog_facility)
-* [`port`](#port)
-* [`address`](#address)
-* [`trusted_nets`](#trusted_nets)
-* [`tcpwrappers`](#tcpwrappers)
+* [`motd_file`](#-rsync--server--global--motd_file)
+* [`pid_file`](#-rsync--server--global--pid_file)
+* [`syslog_facility`](#-rsync--server--global--syslog_facility)
+* [`port`](#-rsync--server--global--port)
+* [`address`](#-rsync--server--global--address)
+* [`trusted_nets`](#-rsync--server--global--trusted_nets)
+* [`tcpwrappers`](#-rsync--server--global--tcpwrappers)
 
-##### <a name="motd_file"></a>`motd_file`
+##### <a name="-rsync--server--global--motd_file"></a>`motd_file`
 
 Data type: `Optional[Stdlib::Absolutepath]`
 
 The path to the default MOTD file that should be displayed upon connection
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="pid_file"></a>`pid_file`
+##### <a name="-rsync--server--global--pid_file"></a>`pid_file`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -242,7 +242,7 @@ The path to the service PID file
 
 Default value: `'/var/run/rsyncd.pid'`
 
-##### <a name="syslog_facility"></a>`syslog_facility`
+##### <a name="-rsync--server--global--syslog_facility"></a>`syslog_facility`
 
 Data type: `String`
 
@@ -250,7 +250,7 @@ A valid syslog ``facility`` to use for logging
 
 Default value: `'daemon'`
 
-##### <a name="port"></a>`port`
+##### <a name="-rsync--server--global--port"></a>`port`
 
 Data type: `Simplib::Port`
 
@@ -258,7 +258,7 @@ The port upon which to listen for client connections
 
 Default value: `873`
 
-##### <a name="address"></a>`address`
+##### <a name="-rsync--server--global--address"></a>`address`
 
 Data type: `Simplib::IP`
 
@@ -268,7 +268,7 @@ The IP address upon which to listen for connections
 
 Default value: `'127.0.0.1'`
 
-##### <a name="trusted_nets"></a>`trusted_nets`
+##### <a name="-rsync--server--global--trusted_nets"></a>`trusted_nets`
 
 Data type: `Simplib::Netlist`
 
@@ -276,7 +276,7 @@ The networks to allow to connect to this service
 
 Default value: `simplib::lookup('simp_options::trusted_nets', { default_value => ['127.0.0.1'] })`
 
-##### <a name="tcpwrappers"></a>`tcpwrappers`
+##### <a name="-rsync--server--global--tcpwrappers"></a>`tcpwrappers`
 
 Data type: `Boolean`
 
@@ -286,7 +286,7 @@ Default value: `simplib::lookup('simp_options::tcpwrappers', { default_value => 
 
 ## Defined types
 
-### <a name="rsyncpush"></a>`rsync::push`
+### <a name="rsync--push"></a>`rsync::push`
 
 This is simply a call to rsync::retrieve with $pull set to false. It's
 present for clarity and hopefully won't break any dependency chains if you
@@ -298,49 +298,49 @@ See the documentation for ``rsync::retrieve`` for details.
 
 The following parameters are available in the `rsync::push` defined type:
 
-* [`source_path`](#source_path)
-* [`target_path`](#target_path)
-* [`rsync_server`](#rsync_server)
-* [`proto`](#proto)
-* [`rsync_path`](#rsync_path)
-* [`preserve_perms`](#preserve_perms)
-* [`preserve_acl`](#preserve_acl)
-* [`preserve_xattrs`](#preserve_xattrs)
-* [`preserve_owner`](#preserve_owner)
-* [`preserve_group`](#preserve_group)
-* [`preserve_devices`](#preserve_devices)
-* [`exclude`](#exclude)
-* [`rsync_timeout`](#rsync_timeout)
-* [`logoutput`](#logoutput)
-* [`delete`](#delete)
-* [`bwlimit`](#bwlimit)
-* [`copy_links`](#copy_links)
-* [`size_only`](#size_only)
-* [`no_implied_dirs`](#no_implied_dirs)
-* [`user`](#user)
-* [`pass`](#pass)
-* [`rsubscribe`](#rsubscribe)
-* [`rnotify`](#rnotify)
+* [`source_path`](#-rsync--push--source_path)
+* [`target_path`](#-rsync--push--target_path)
+* [`rsync_server`](#-rsync--push--rsync_server)
+* [`proto`](#-rsync--push--proto)
+* [`rsync_path`](#-rsync--push--rsync_path)
+* [`preserve_perms`](#-rsync--push--preserve_perms)
+* [`preserve_acl`](#-rsync--push--preserve_acl)
+* [`preserve_xattrs`](#-rsync--push--preserve_xattrs)
+* [`preserve_owner`](#-rsync--push--preserve_owner)
+* [`preserve_group`](#-rsync--push--preserve_group)
+* [`preserve_devices`](#-rsync--push--preserve_devices)
+* [`exclude`](#-rsync--push--exclude)
+* [`rsync_timeout`](#-rsync--push--rsync_timeout)
+* [`logoutput`](#-rsync--push--logoutput)
+* [`delete`](#-rsync--push--delete)
+* [`bwlimit`](#-rsync--push--bwlimit)
+* [`copy_links`](#-rsync--push--copy_links)
+* [`size_only`](#-rsync--push--size_only)
+* [`no_implied_dirs`](#-rsync--push--no_implied_dirs)
+* [`user`](#-rsync--push--user)
+* [`pass`](#-rsync--push--pass)
+* [`rsubscribe`](#-rsync--push--rsubscribe)
+* [`rnotify`](#-rsync--push--rnotify)
 
-##### <a name="source_path"></a>`source_path`
-
-Data type: `String`
-
-
-
-##### <a name="target_path"></a>`target_path`
+##### <a name="-rsync--push--source_path"></a>`source_path`
 
 Data type: `String`
 
 
 
-##### <a name="rsync_server"></a>`rsync_server`
+##### <a name="-rsync--push--target_path"></a>`target_path`
+
+Data type: `String`
+
+
+
+##### <a name="-rsync--push--rsync_server"></a>`rsync_server`
 
 Data type: `Simplib::Host`
 
 
 
-##### <a name="proto"></a>`proto`
+##### <a name="-rsync--push--proto"></a>`proto`
 
 Data type: `String`
 
@@ -348,7 +348,7 @@ Data type: `String`
 
 Default value: `'rsync'`
 
-##### <a name="rsync_path"></a>`rsync_path`
+##### <a name="-rsync--push--rsync_path"></a>`rsync_path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -356,55 +356,55 @@ Data type: `Stdlib::Absolutepath`
 
 Default value: `'/usr/bin/rsync'`
 
-##### <a name="preserve_perms"></a>`preserve_perms`
+##### <a name="-rsync--push--preserve_perms"></a>`preserve_perms`
 
 Data type: `Boolean`
 
 
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="preserve_acl"></a>`preserve_acl`
-
-Data type: `Boolean`
-
-
-
-Default value: ``true``
-
-##### <a name="preserve_xattrs"></a>`preserve_xattrs`
+##### <a name="-rsync--push--preserve_acl"></a>`preserve_acl`
 
 Data type: `Boolean`
 
 
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="preserve_owner"></a>`preserve_owner`
-
-Data type: `Boolean`
-
-
-
-Default value: ``true``
-
-##### <a name="preserve_group"></a>`preserve_group`
+##### <a name="-rsync--push--preserve_xattrs"></a>`preserve_xattrs`
 
 Data type: `Boolean`
 
 
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="preserve_devices"></a>`preserve_devices`
+##### <a name="-rsync--push--preserve_owner"></a>`preserve_owner`
 
 Data type: `Boolean`
 
 
 
-Default value: ``false``
+Default value: `true`
 
-##### <a name="exclude"></a>`exclude`
+##### <a name="-rsync--push--preserve_group"></a>`preserve_group`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### <a name="-rsync--push--preserve_devices"></a>`preserve_devices`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### <a name="-rsync--push--exclude"></a>`exclude`
 
 Data type: `Array[String]`
 
@@ -412,7 +412,7 @@ Data type: `Array[String]`
 
 Default value: `['.svn/','.git/']`
 
-##### <a name="rsync_timeout"></a>`rsync_timeout`
+##### <a name="-rsync--push--rsync_timeout"></a>`rsync_timeout`
 
 Data type: `Integer[0]`
 
@@ -420,7 +420,7 @@ Data type: `Integer[0]`
 
 Default value: `2`
 
-##### <a name="logoutput"></a>`logoutput`
+##### <a name="-rsync--push--logoutput"></a>`logoutput`
 
 Data type: `Variant[Boolean,String]`
 
@@ -428,79 +428,79 @@ Data type: `Variant[Boolean,String]`
 
 Default value: `'on_failure'`
 
-##### <a name="delete"></a>`delete`
+##### <a name="-rsync--push--delete"></a>`delete`
 
 Data type: `Boolean`
 
 
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="bwlimit"></a>`bwlimit`
+##### <a name="-rsync--push--bwlimit"></a>`bwlimit`
 
 Data type: `Optional[Integer[0]]`
 
 
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="copy_links"></a>`copy_links`
-
-Data type: `Boolean`
-
-
-
-Default value: ``false``
-
-##### <a name="size_only"></a>`size_only`
+##### <a name="-rsync--push--copy_links"></a>`copy_links`
 
 Data type: `Boolean`
 
 
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="no_implied_dirs"></a>`no_implied_dirs`
+##### <a name="-rsync--push--size_only"></a>`size_only`
 
 Data type: `Boolean`
 
 
 
-Default value: ``true``
+Default value: `false`
 
-##### <a name="user"></a>`user`
+##### <a name="-rsync--push--no_implied_dirs"></a>`no_implied_dirs`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### <a name="-rsync--push--user"></a>`user`
 
 Data type: `Optional[String]`
 
 
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="pass"></a>`pass`
+##### <a name="-rsync--push--pass"></a>`pass`
 
 Data type: `Optional[String]`
 
 
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="rsubscribe"></a>`rsubscribe`
-
-Data type: `Optional[Catalogentry]`
-
-
-
-Default value: ``undef``
-
-##### <a name="rnotify"></a>`rnotify`
+##### <a name="-rsync--push--rsubscribe"></a>`rsubscribe`
 
 Data type: `Optional[Catalogentry]`
 
 
 
-Default value: ``undef``
+Default value: `undef`
 
-### <a name="rsyncretrieve"></a>`rsync::retrieve`
+##### <a name="-rsync--push--rnotify"></a>`rnotify`
+
+Data type: `Optional[Catalogentry]`
+
+
+
+Default value: `undef`
+
+### <a name="rsync--retrieve"></a>`rsync::retrieve`
 
 Retrieve a file over the rsync protocol
 
@@ -511,32 +511,32 @@ Retrieve a file over the rsync protocol
 
 The following parameters are available in the `rsync::retrieve` defined type:
 
-* [`source_path`](#source_path)
-* [`target_path`](#target_path)
-* [`rsync_server`](#rsync_server)
-* [`proto`](#proto)
-* [`rsync_path`](#rsync_path)
-* [`preserve_perms`](#preserve_perms)
-* [`preserve_acl`](#preserve_acl)
-* [`preserve_xattrs`](#preserve_xattrs)
-* [`preserve_owner`](#preserve_owner)
-* [`preserve_group`](#preserve_group)
-* [`preserve_devices`](#preserve_devices)
-* [`exclude`](#exclude)
-* [`rsync_timeout`](#rsync_timeout)
-* [`logoutput`](#logoutput)
-* [`delete`](#delete)
-* [`bwlimit`](#bwlimit)
-* [`copy_links`](#copy_links)
-* [`size_only`](#size_only)
-* [`no_implied_dirs`](#no_implied_dirs)
-* [`user`](#user)
-* [`pass`](#pass)
-* [`pull`](#pull)
-* [`rnotify`](#rnotify)
-* [`rsubscribe`](#rsubscribe)
+* [`source_path`](#-rsync--retrieve--source_path)
+* [`target_path`](#-rsync--retrieve--target_path)
+* [`rsync_server`](#-rsync--retrieve--rsync_server)
+* [`proto`](#-rsync--retrieve--proto)
+* [`rsync_path`](#-rsync--retrieve--rsync_path)
+* [`preserve_perms`](#-rsync--retrieve--preserve_perms)
+* [`preserve_acl`](#-rsync--retrieve--preserve_acl)
+* [`preserve_xattrs`](#-rsync--retrieve--preserve_xattrs)
+* [`preserve_owner`](#-rsync--retrieve--preserve_owner)
+* [`preserve_group`](#-rsync--retrieve--preserve_group)
+* [`preserve_devices`](#-rsync--retrieve--preserve_devices)
+* [`exclude`](#-rsync--retrieve--exclude)
+* [`rsync_timeout`](#-rsync--retrieve--rsync_timeout)
+* [`logoutput`](#-rsync--retrieve--logoutput)
+* [`delete`](#-rsync--retrieve--delete)
+* [`bwlimit`](#-rsync--retrieve--bwlimit)
+* [`copy_links`](#-rsync--retrieve--copy_links)
+* [`size_only`](#-rsync--retrieve--size_only)
+* [`no_implied_dirs`](#-rsync--retrieve--no_implied_dirs)
+* [`user`](#-rsync--retrieve--user)
+* [`pass`](#-rsync--retrieve--pass)
+* [`pull`](#-rsync--retrieve--pull)
+* [`rnotify`](#-rsync--retrieve--rnotify)
+* [`rsubscribe`](#-rsync--retrieve--rsubscribe)
 
-##### <a name="source_path"></a>`source_path`
+##### <a name="-rsync--retrieve--source_path"></a>`source_path`
 
 Data type: `String`
 
@@ -544,13 +544,13 @@ The path *on the rsync server* from which to retrieve files
 
 * This will, most likely, not start with a forward slash
 
-##### <a name="target_path"></a>`target_path`
+##### <a name="-rsync--retrieve--target_path"></a>`target_path`
 
 Data type: `String`
 
 The path to which to write on the client system
 
-##### <a name="rsync_server"></a>`rsync_server`
+##### <a name="-rsync--retrieve--rsync_server"></a>`rsync_server`
 
 Data type: `Variant[Simplib::Host, Simplib::Host::Port]`
 
@@ -558,7 +558,7 @@ The host to which to connect
 
 Default value: `simplib::lookup('simp_options::rsync::server')`
 
-##### <a name="proto"></a>`proto`
+##### <a name="-rsync--retrieve--proto"></a>`proto`
 
 Data type: `String`
 
@@ -569,7 +569,7 @@ The protocol to use
 
 Default value: `'rsync'`
 
-##### <a name="rsync_path"></a>`rsync_path`
+##### <a name="-rsync--retrieve--rsync_path"></a>`rsync_path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -577,55 +577,55 @@ The path to the 'rsync' command
 
 Default value: `'/usr/bin/rsync'`
 
-##### <a name="preserve_perms"></a>`preserve_perms`
+##### <a name="-rsync--retrieve--preserve_perms"></a>`preserve_perms`
 
 Data type: `Boolean`
 
 Preserve the file permissions from the server
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="preserve_acl"></a>`preserve_acl`
+##### <a name="-rsync--retrieve--preserve_acl"></a>`preserve_acl`
 
 Data type: `Boolean`
 
 Preserve the file ACLs from the server
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="preserve_xattrs"></a>`preserve_xattrs`
+##### <a name="-rsync--retrieve--preserve_xattrs"></a>`preserve_xattrs`
 
 Data type: `Boolean`
 
 Preserve the extended attributes from the server
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="preserve_owner"></a>`preserve_owner`
+##### <a name="-rsync--retrieve--preserve_owner"></a>`preserve_owner`
 
 Data type: `Boolean`
 
 Preserve the file owner from the server
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="preserve_group"></a>`preserve_group`
+##### <a name="-rsync--retrieve--preserve_group"></a>`preserve_group`
 
 Data type: `Boolean`
 
 Preserve the file group from the server
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="preserve_devices"></a>`preserve_devices`
+##### <a name="-rsync--retrieve--preserve_devices"></a>`preserve_devices`
 
 Data type: `Boolean`
 
 Preserve device special IDs from the server
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="exclude"></a>`exclude`
+##### <a name="-rsync--retrieve--exclude"></a>`exclude`
 
 Data type: `Array[String]`
 
@@ -633,7 +633,7 @@ Paths and globs to exclude from transfers
 
 Default value: `['.svn/','.git/']`
 
-##### <a name="rsync_timeout"></a>`rsync_timeout`
+##### <a name="-rsync--retrieve--rsync_timeout"></a>`rsync_timeout`
 
 Data type: `Integer[0]`
 
@@ -641,7 +641,7 @@ The number of seconds to wait for a transfer to begin before timing out
 
 Default value: `2`
 
-##### <a name="logoutput"></a>`logoutput`
+##### <a name="-rsync--retrieve--logoutput"></a>`logoutput`
 
 Data type: `String`
 
@@ -649,15 +649,15 @@ Log the output of the rsync run at the provided trigger
 
 Default value: `'on_failure'`
 
-##### <a name="delete"></a>`delete`
+##### <a name="-rsync--retrieve--delete"></a>`delete`
 
 Data type: `Boolean`
 
 Delete local files that do not exist on the remote server
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="bwlimit"></a>`bwlimit`
+##### <a name="-rsync--retrieve--bwlimit"></a>`bwlimit`
 
 Data type: `Optional[String]`
 
@@ -665,39 +665,39 @@ The bandwidth limit for the connection
 
 Default value: `simplib::lookup('rsync::bwlimit', { 'default_value' => undef })`
 
-##### <a name="copy_links"></a>`copy_links`
+##### <a name="-rsync--retrieve--copy_links"></a>`copy_links`
 
 Data type: `Boolean`
 
 Preserve symlinks during the transfer
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="size_only"></a>`size_only`
+##### <a name="-rsync--retrieve--size_only"></a>`size_only`
 
 Data type: `Boolean`
 
 Only compare files by size to determine if they need a transfer
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="no_implied_dirs"></a>`no_implied_dirs`
+##### <a name="-rsync--retrieve--no_implied_dirs"></a>`no_implied_dirs`
 
 Data type: `Boolean`
 
 Don't send implied directories with relative pathnames
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="user"></a>`user`
+##### <a name="-rsync--retrieve--user"></a>`user`
 
 Data type: `Optional[String]`
 
 The username to use when connecting to the server
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="pass"></a>`pass`
+##### <a name="-rsync--retrieve--pass"></a>`pass`
 
 Data type: `Optional[String]`
 
@@ -706,9 +706,9 @@ The password to use when connecting to the server
 * If left blank, and a username is provided, the ``simplib::passgen()``
   function will be used to look up the password
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="pull"></a>`pull`
+##### <a name="-rsync--retrieve--pull"></a>`pull`
 
 Data type: `Boolean`
 
@@ -717,9 +717,9 @@ Pull files from the remote server
 * If set to ``false``, will push files to the server instead of pulling
 them from the server
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="rnotify"></a>`rnotify`
+##### <a name="-rsync--retrieve--rnotify"></a>`rnotify`
 
 Data type: `Optional[Catalogentry]`
 
@@ -728,9 +728,9 @@ resource after completion
 
 * Use like the regular Puppet ``notify`` meta-parameter
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="rsubscribe"></a>`rsubscribe`
+##### <a name="-rsync--retrieve--rsubscribe"></a>`rsubscribe`
 
 Data type: `Optional[Catalogentry]`
 
@@ -739,9 +739,9 @@ resource after completion
 
 * Use like the regular Puppet ``subscribe`` meta-parameter
 
-Default value: ``undef``
+Default value: `undef`
 
-### <a name="rsyncserversection"></a>`rsync::server::section`
+### <a name="rsync--server--section"></a>`rsync::server::section`
 
 Set up a 'section' of /etc/rsyncd.conf pertaining to a particular rsync share.
 
@@ -751,39 +751,39 @@ See ``rsyncd.conf(5)`` for descriptions of most variables.
 
 The following parameters are available in the `rsync::server::section` defined type:
 
-* [`name`](#name)
-* [`path`](#path)
-* [`auth_users`](#auth_users)
-* [`user_pass`](#user_pass)
-* [`comment`](#comment)
-* [`use_chroot`](#use_chroot)
-* [`max_connections`](#max_connections)
-* [`max_verbosity`](#max_verbosity)
-* [`lock_file`](#lock_file)
-* [`read_only`](#read_only)
-* [`write_only`](#write_only)
-* [`list`](#list)
-* [`uid`](#uid)
-* [`gid`](#gid)
-* [`outgoing_chmod`](#outgoing_chmod)
-* [`ignore_nonreadable`](#ignore_nonreadable)
-* [`transfer_logging`](#transfer_logging)
-* [`log_format`](#log_format)
-* [`dont_compress`](#dont_compress)
-* [`hosts_allow`](#hosts_allow)
-* [`hosts_deny`](#hosts_deny)
+* [`name`](#-rsync--server--section--name)
+* [`path`](#-rsync--server--section--path)
+* [`auth_users`](#-rsync--server--section--auth_users)
+* [`user_pass`](#-rsync--server--section--user_pass)
+* [`comment`](#-rsync--server--section--comment)
+* [`use_chroot`](#-rsync--server--section--use_chroot)
+* [`max_connections`](#-rsync--server--section--max_connections)
+* [`max_verbosity`](#-rsync--server--section--max_verbosity)
+* [`lock_file`](#-rsync--server--section--lock_file)
+* [`read_only`](#-rsync--server--section--read_only)
+* [`write_only`](#-rsync--server--section--write_only)
+* [`list`](#-rsync--server--section--list)
+* [`uid`](#-rsync--server--section--uid)
+* [`gid`](#-rsync--server--section--gid)
+* [`outgoing_chmod`](#-rsync--server--section--outgoing_chmod)
+* [`ignore_nonreadable`](#-rsync--server--section--ignore_nonreadable)
+* [`transfer_logging`](#-rsync--server--section--transfer_logging)
+* [`log_format`](#-rsync--server--section--log_format)
+* [`dont_compress`](#-rsync--server--section--dont_compress)
+* [`hosts_allow`](#-rsync--server--section--hosts_allow)
+* [`hosts_deny`](#-rsync--server--section--hosts_deny)
 
-##### <a name="name"></a>`name`
+##### <a name="-rsync--server--section--name"></a>`name`
 
 The arbitrary name of this configuration section
 
-##### <a name="path"></a>`path`
+##### <a name="-rsync--server--section--path"></a>`path`
 
 Data type: `Stdlib::Absolutepath`
 
 The directory to make available to clients
 
-##### <a name="auth_users"></a>`auth_users`
+##### <a name="-rsync--server--section--auth_users"></a>`auth_users`
 
 Data type: `Optional[Array[String]]`
 
@@ -793,9 +793,9 @@ A list of usernames that are allowed to connect to this section
   these users, if they do not already exist in the system
 * Ignored if ``user_pass`` is set.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="user_pass"></a>`user_pass`
+##### <a name="-rsync--server--section--user_pass"></a>`user_pass`
 
 Data type: `Optional[Array[String]]`
 
@@ -807,25 +807,25 @@ secrets file
 * Entries in this Array should be of the following form:
   ``username:password``
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="comment"></a>`comment`
+##### <a name="-rsync--server--section--comment"></a>`comment`
 
 Data type: `Optional[String]`
 
 A comment for the section
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="use_chroot"></a>`use_chroot`
+##### <a name="-rsync--server--section--use_chroot"></a>`use_chroot`
 
 Data type: `Boolean`
 
 Use a ``chroot`` for this service
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="max_connections"></a>`max_connections`
+##### <a name="-rsync--server--section--max_connections"></a>`max_connections`
 
 Data type: `Integer[0]`
 
@@ -833,7 +833,7 @@ The maximum number of connections allowed
 
 Default value: `0`
 
-##### <a name="max_verbosity"></a>`max_verbosity`
+##### <a name="-rsync--server--section--max_verbosity"></a>`max_verbosity`
 
 Data type: `Integer[0]`
 
@@ -842,7 +842,7 @@ service
 
 Default value: `1`
 
-##### <a name="lock_file"></a>`lock_file`
+##### <a name="-rsync--server--section--lock_file"></a>`lock_file`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -850,31 +850,31 @@ The path to the lock file for this service
 
 Default value: `'/var/run/rsyncd.lock'`
 
-##### <a name="read_only"></a>`read_only`
+##### <a name="-rsync--server--section--read_only"></a>`read_only`
 
 Data type: `Boolean`
 
 Do not allow clients to write to this share
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="write_only"></a>`write_only`
+##### <a name="-rsync--server--section--write_only"></a>`write_only`
 
 Data type: `Boolean`
 
 Only allow clients to write to this share
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="list"></a>`list`
+##### <a name="-rsync--server--section--list"></a>`list`
 
 Data type: `Boolean`
 
 List this share when clients ask for a list of available modules
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="uid"></a>`uid`
+##### <a name="-rsync--server--section--uid"></a>`uid`
 
 Data type: `String`
 
@@ -884,7 +884,7 @@ The user ID that transfers should take place as
 
 Default value: `'root'`
 
-##### <a name="gid"></a>`gid`
+##### <a name="-rsync--server--section--gid"></a>`gid`
 
 Data type: `String`
 
@@ -894,7 +894,7 @@ The group ID that transfers should take place as
 
 Default value: `'root'`
 
-##### <a name="outgoing_chmod"></a>`outgoing_chmod`
+##### <a name="-rsync--server--section--outgoing_chmod"></a>`outgoing_chmod`
 
 Data type: `String`
 
@@ -903,23 +903,23 @@ outbound
 
 Default value: `'o-w'`
 
-##### <a name="ignore_nonreadable"></a>`ignore_nonreadable`
+##### <a name="-rsync--server--section--ignore_nonreadable"></a>`ignore_nonreadable`
 
 Data type: `Boolean`
 
 Completely ignore any file that is not readable by the user
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="transfer_logging"></a>`transfer_logging`
+##### <a name="-rsync--server--section--transfer_logging"></a>`transfer_logging`
 
 Data type: `Boolean`
 
 Enable per-file logging of transfers
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="log_format"></a>`log_format`
+##### <a name="-rsync--server--section--log_format"></a>`log_format`
 
 Data type: `String`
 
@@ -927,13 +927,16 @@ Format used for logging file transfers when transfer logging is enabled
 
 Default value: `"'%o %h [%a] %m (%u) %f %l'"`
 
-##### <a name="dont_compress"></a>`dont_compress`
+##### <a name="-rsync--server--section--dont_compress"></a>`dont_compress`
 
 Data type: `Array[String]`
 
 Filenames and globs that should not be compressed upon transfer
 
-Default value: `[
+Default value:
+
+```puppet
+[
     '*.gz',
     '*.tgz',
     '*.zip',
@@ -948,9 +951,10 @@ Default value: `[
     '*.pdf',
     '*.sar',
     '*.war'
-  ]`
+  ]
+```
 
-##### <a name="hosts_allow"></a>`hosts_allow`
+##### <a name="-rsync--server--section--hosts_allow"></a>`hosts_allow`
 
 Data type: `Variant[Enum['*'], Simplib::Netlist]`
 
@@ -961,7 +965,7 @@ Hosts that should be allowed to connect to this share
 
 Default value: `simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1'] })`
 
-##### <a name="hosts_deny"></a>`hosts_deny`
+##### <a name="-rsync--server--section--hosts_deny"></a>`hosts_deny`
 
 Data type: `Variant[Enum['*'], Simplib::Netlist]`
 
@@ -1004,107 +1008,107 @@ Default value: `pull`
 
 The following parameters are available in the `rsync` type.
 
-* [`bwlimit`](#bwlimit)
-* [`compress`](#compress)
-* [`contimeout`](#contimeout)
-* [`copy_links`](#copy_links)
-* [`delete`](#delete)
-* [`exclude`](#exclude)
-* [`hard_links`](#hard_links)
-* [`ignore_selinux`](#ignore_selinux)
-* [`iotimeout`](#iotimeout)
-* [`logoutput`](#logoutput)
-* [`name`](#name)
-* [`no_implied_dirs`](#no_implied_dirs)
-* [`pass`](#pass)
-* [`password`](#password)
-* [`path`](#path)
-* [`preserve_acl`](#preserve_acl)
-* [`preserve_devices`](#preserve_devices)
-* [`preserve_group`](#preserve_group)
-* [`preserve_owner`](#preserve_owner)
-* [`preserve_perms`](#preserve_perms)
-* [`preserve_xattrs`](#preserve_xattrs)
-* [`proto`](#proto)
-* [`protocol`](#protocol)
-* [`provider`](#provider)
-* [`recurse`](#recurse)
-* [`rsync_path`](#rsync_path)
-* [`rsync_server`](#rsync_server)
-* [`rsync_timeout`](#rsync_timeout)
-* [`server`](#server)
-* [`size_only`](#size_only)
-* [`source`](#source)
-* [`source_path`](#source_path)
-* [`target`](#target)
-* [`target_path`](#target_path)
-* [`timeout`](#timeout)
-* [`user`](#user)
+* [`bwlimit`](#-rsync--bwlimit)
+* [`compress`](#-rsync--compress)
+* [`contimeout`](#-rsync--contimeout)
+* [`copy_links`](#-rsync--copy_links)
+* [`delete`](#-rsync--delete)
+* [`exclude`](#-rsync--exclude)
+* [`hard_links`](#-rsync--hard_links)
+* [`ignore_selinux`](#-rsync--ignore_selinux)
+* [`iotimeout`](#-rsync--iotimeout)
+* [`logoutput`](#-rsync--logoutput)
+* [`name`](#-rsync--name)
+* [`no_implied_dirs`](#-rsync--no_implied_dirs)
+* [`pass`](#-rsync--pass)
+* [`password`](#-rsync--password)
+* [`path`](#-rsync--path)
+* [`preserve_acl`](#-rsync--preserve_acl)
+* [`preserve_devices`](#-rsync--preserve_devices)
+* [`preserve_group`](#-rsync--preserve_group)
+* [`preserve_owner`](#-rsync--preserve_owner)
+* [`preserve_perms`](#-rsync--preserve_perms)
+* [`preserve_xattrs`](#-rsync--preserve_xattrs)
+* [`proto`](#-rsync--proto)
+* [`protocol`](#-rsync--protocol)
+* [`provider`](#-rsync--provider)
+* [`recurse`](#-rsync--recurse)
+* [`rsync_path`](#-rsync--rsync_path)
+* [`rsync_server`](#-rsync--rsync_server)
+* [`rsync_timeout`](#-rsync--rsync_timeout)
+* [`server`](#-rsync--server)
+* [`size_only`](#-rsync--size_only)
+* [`source`](#-rsync--source)
+* [`source_path`](#-rsync--source_path)
+* [`target`](#-rsync--target)
+* [`target_path`](#-rsync--target_path)
+* [`timeout`](#-rsync--timeout)
+* [`user`](#-rsync--user)
 
-##### <a name="bwlimit"></a>`bwlimit`
+##### <a name="-rsync--bwlimit"></a>`bwlimit`
 
 KB/s to limit I/O bandwidth to
 
-##### <a name="compress"></a>`compress`
+##### <a name="-rsync--compress"></a>`compress`
 
-Valid values: ``true``, ``false``
+Valid values: `true`, `false`
 
 Whether or not to compress content prior to transfer. Defaults to true.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="contimeout"></a>`contimeout`
+##### <a name="-rsync--contimeout"></a>`contimeout`
 
 Connection timeout in seconds.
 
-##### <a name="copy_links"></a>`copy_links`
+##### <a name="-rsync--copy_links"></a>`copy_links`
 
-Valid values: ``true``, ``false``
+Valid values: `true`, `false`
 
 Whether to copy links as symlinks. Defaults to false
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="delete"></a>`delete`
+##### <a name="-rsync--delete"></a>`delete`
 
-Valid values: ``true``, ``false``
+Valid values: `true`, `false`
 
 Whether to delete files that do not exist on server. Defaults to false
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="exclude"></a>`exclude`
+##### <a name="-rsync--exclude"></a>`exclude`
 
 Exclude files matching PATTERN.  Multiple values may be specified as an
 array.  Defaults to ['.svn/','.git/']
 
 Default value: `['.svn/','.git/']`
 
-##### <a name="hard_links"></a>`hard_links`
+##### <a name="-rsync--hard_links"></a>`hard_links`
 
-Valid values: ``true``, ``false``
+Valid values: `true`, `false`
 
 Preserve hard links. Defaults to true.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="ignore_selinux"></a>`ignore_selinux`
+##### <a name="-rsync--ignore_selinux"></a>`ignore_selinux`
 
-Valid values: ``true``, ``false``
+Valid values: `true`, `false`
 
 If this is set to 'true' then this type will ignore SELinux errors. If
 set to false, then an SELinux permissions copy error is a complete
 failure state.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="iotimeout"></a>`iotimeout`
+##### <a name="-rsync--iotimeout"></a>`iotimeout`
 
 I/O timeout in seconds.
 
-##### <a name="logoutput"></a>`logoutput`
+##### <a name="-rsync--logoutput"></a>`logoutput`
 
-Valid values: ``true``, ``false``, `on_failure`
+Valid values: `true`, `false`, `on_failure`
 
 Whether to log output.  Defaults to logging output at the loglevel for
 the `exec` resource. Use *on_failure* to only log the output when the
@@ -1113,37 +1117,21 @@ and any legal log level.
 
 Default value: `on_failure`
 
-##### <a name="name"></a>`name`
+##### <a name="-rsync--name"></a>`name`
 
 namevar
 
 The globally unique name of the resource. Has no effect on provider functionality.
 
-##### <a name="no_implied_dirs"></a>`no_implied_dirs`
+##### <a name="-rsync--no_implied_dirs"></a>`no_implied_dirs`
 
-Valid values: ``true``, ``false``
+Valid values: `true`, `false`
 
 Do not send implied dirs.  Defaults to true
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="pass"></a>`pass`
-
-The password to use. Only used if a username is specified
-If you want the password to be auto-generated, you can use the
-SIMP 'simplib::passgen' function.
-
-  $user = 'foo'
-
-  rsync::retrieve { \"foo\":
-    source   => 'bar',
-    target   => '/tmp/foo',
-    server   => 'puppet',
-    user     => $user,
-    password => simplib::passgen($user)
-  }
-
-##### <a name="password"></a>`password`
+##### <a name="-rsync--pass"></a>`pass`
 
 The password to use. Only used if a username is specified
 If you want the password to be auto-generated, you can use the
@@ -1159,126 +1147,142 @@ SIMP 'simplib::passgen' function.
     password => simplib::passgen($user)
   }
 
-##### <a name="path"></a>`path`
+##### <a name="-rsync--password"></a>`password`
+
+The password to use. Only used if a username is specified
+If you want the password to be auto-generated, you can use the
+SIMP 'simplib::passgen' function.
+
+  $user = 'foo'
+
+  rsync::retrieve { \"foo\":
+    source   => 'bar',
+    target   => '/tmp/foo',
+    server   => 'puppet',
+    user     => $user,
+    password => simplib::passgen($user)
+  }
+
+##### <a name="-rsync--path"></a>`path`
 
 The fully qualified path to the rsync executable
 
-##### <a name="preserve_acl"></a>`preserve_acl`
+##### <a name="-rsync--preserve_acl"></a>`preserve_acl`
 
-Valid values: ``true``, ``false``
+Valid values: `true`, `false`
 
 Whether or not to preserve ACL. Defaults to true.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="preserve_devices"></a>`preserve_devices`
+##### <a name="-rsync--preserve_devices"></a>`preserve_devices`
 
-Valid values: ``true``, ``false``
+Valid values: `true`, `false`
 
 Whether or not to preserve device files. Defaults to false.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="preserve_group"></a>`preserve_group`
+##### <a name="-rsync--preserve_group"></a>`preserve_group`
 
-Valid values: ``true``, ``false``
+Valid values: `true`, `false`
 
 Whether or not to preserve group. Defaults to true.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="preserve_owner"></a>`preserve_owner`
+##### <a name="-rsync--preserve_owner"></a>`preserve_owner`
 
-Valid values: ``true``, ``false``
+Valid values: `true`, `false`
 
 Whether or not to preserve owner. Defaults to true.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="preserve_perms"></a>`preserve_perms`
+##### <a name="-rsync--preserve_perms"></a>`preserve_perms`
 
-Valid values: ``true``, ``false``
+Valid values: `true`, `false`
 
 Whether or not to preserve permissions. Defaults to true.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="preserve_xattrs"></a>`preserve_xattrs`
+##### <a name="-rsync--preserve_xattrs"></a>`preserve_xattrs`
 
-Valid values: ``true``, ``false``
+Valid values: `true`, `false`
 
 Whether or not to preserve extended attributes. Defaults to true.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="proto"></a>`proto`
-
-The protocol to use in connecting to the rsync server. Defaults to "rsync"
-
-##### <a name="protocol"></a>`protocol`
+##### <a name="-rsync--proto"></a>`proto`
 
 The protocol to use in connecting to the rsync server. Defaults to "rsync"
 
-##### <a name="provider"></a>`provider`
+##### <a name="-rsync--protocol"></a>`protocol`
+
+The protocol to use in connecting to the rsync server. Defaults to "rsync"
+
+##### <a name="-rsync--provider"></a>`provider`
 
 The specific backend to use for this `rsync` resource. You will seldom need to specify this --- Puppet will usually
 discover the appropriate provider for your platform.
 
-##### <a name="recurse"></a>`recurse`
+##### <a name="-rsync--recurse"></a>`recurse`
 
-Valid values: ``true``, ``false``
+Valid values: `true`, `false`
 
 Whether or not to recursively copy. Defaults to true.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="rsync_path"></a>`rsync_path`
+##### <a name="-rsync--rsync_path"></a>`rsync_path`
 
 The fully qualified path to the rsync executable
 
-##### <a name="rsync_server"></a>`rsync_server`
+##### <a name="-rsync--rsync_server"></a>`rsync_server`
 
 The hostname or IP of the rsync server
 
-##### <a name="rsync_timeout"></a>`rsync_timeout`
+##### <a name="-rsync--rsync_timeout"></a>`rsync_timeout`
 
 Alias for :timeout
 
-##### <a name="server"></a>`server`
+##### <a name="-rsync--server"></a>`server`
 
 The hostname or IP of the rsync server
 
-##### <a name="size_only"></a>`size_only`
+##### <a name="-rsync--size_only"></a>`size_only`
 
-Valid values: ``true``, ``false``
+Valid values: `true`, `false`
 
 Whether to skip files that match in size. Defaults to true
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="source"></a>`source`
-
-The fully qualified source path on the rsync server
-
-##### <a name="source_path"></a>`source_path`
+##### <a name="-rsync--source"></a>`source`
 
 The fully qualified source path on the rsync server
 
-##### <a name="target"></a>`target`
+##### <a name="-rsync--source_path"></a>`source_path`
+
+The fully qualified source path on the rsync server
+
+##### <a name="-rsync--target"></a>`target`
 
 The fully qualified target path on the rsync client
 
-##### <a name="target_path"></a>`target_path`
+##### <a name="-rsync--target_path"></a>`target_path`
 
 The fully qualified target path on the rsync client
 
-##### <a name="timeout"></a>`timeout`
+##### <a name="-rsync--timeout"></a>`timeout`
 
 Connection timeout in seconds. Note: This is different from what the man
 page states due to backward compatibility issues. Use iotimeout for the
 man page compatible timeout value.
 
-##### <a name="user"></a>`user`
+##### <a name="-rsync--user"></a>`user`
 
 The username to use
 
