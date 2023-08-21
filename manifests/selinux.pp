@@ -9,7 +9,7 @@ class rsync::selinux {
   $_sebool_export_all_ro = $::rsync::sebool_export_all_ro ? { true => 'on', default => 'off' }
   $_sebool_full_access   = $::rsync::sebool_full_access ? { true => 'on', default => 'off' }
 
-  if $facts[os][name] in ['RedHat','CentOS','OracleLinux','Amazon'] {
+  if $facts[os][name] in ['RedHat','CentOS','OracleLinux','Amazon','Rocky'] {
     selboolean { 'rsync_client':
       persistent => true,
       value      => $_sebool_client

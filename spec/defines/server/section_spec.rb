@@ -1,18 +1,24 @@
 require 'spec_helper'
 
 describe 'rsync::server::section' do
+  def mock_selinux_enforcing_facts(os_facts)
+    os_facts[:selinux] = true
+    os_facts[:os][:selinux][:config_mode] = 'enforcing'
+    os_facts[:os][:selinux][:config_policy] = 'targeted'
+    os_facts[:os][:selinux][:current_mode] = 'enforcing'
+    os_facts[:os][:selinux][:enabled] = true
+    os_facts[:os][:selinux][:enforced] = true
+    os_facts
+  end
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
       let(:title) { 'test' }
 
-      let(:facts) {
-        _facts = os_facts
-        _facts[:os] ||= {}
-        _facts[:os]['selinux'] ||= {}
-        _facts[:os]['selinux']['enabled'] = true
-
-        _facts
-      }
+      let(:facts) do
+        os_facts = os_facts.dup
+        os_facts = mock_selinux_enforcing_facts(os_facts)
+        os_facts
+      end
 
       let(:pre_condition) {
         'include "::rsync::server"'
