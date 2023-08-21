@@ -1,3 +1,6 @@
+* Mon Aug 21 2023 Rick Gardner <Rick@sicura.us> - 6.6.1
+- Add Rhel 9 Hiera data
+
 * Mon Jul 10 2023 Chris Tessmer <chris.tessmer@onyxpoint.com> - 6.6.0
 - Add RockyLinux 8 support
 
