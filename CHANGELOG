@@ -1,3 +1,9 @@
+* Tue Sep 26 2023 Steven Pritchard <steve@sicura.us> - 6.7.0
+- Add AlmaLinux 8 support
+- Update module dependencies
+- Add Puppet 8 support
+- Drop Puppet 6 support
+
 * Mon Aug 21 2023 Rick Gardner <Rick@sicura.us> - 6.6.1
 - Add Rhel 9 Hiera data
 
