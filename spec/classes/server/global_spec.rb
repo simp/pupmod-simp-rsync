@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'rsync::server::global' do
   before(:each) do
     Puppet::Parser::Functions.newfunction('assert_private') do |f|
-      f.stubs(:call).returns(true)
+      allow(f).to receive(:call).and_return(true)
     end
   end
 
