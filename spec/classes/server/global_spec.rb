@@ -2,9 +2,8 @@ require 'spec_helper'
 
 describe 'rsync::server::global' do
   before(:each) do
-    Puppet::Parser::Functions.newfunction('assert_private') do |f|
-      f.stubs(:call).returns(true)
-    end
+    # Mask 'assert_private' for testing
+    Puppet::Parser::Functions.newfunction(:assert_private, :type => :rvalue) { |args| }
   end
 
   context 'supported operating systems' do
