@@ -17,7 +17,7 @@ Puppet::Type.newtype(:rsync) do
   def initialize(args)
     super
 
-    self.tags = [Array(self.tags),'rsync'].flatten
+    self.tags = [Array(tags), 'rsync'].flatten
   end
 
   def finish
@@ -83,11 +83,11 @@ Puppet::Type.newtype(:rsync) do
     newvalues(:push, :pull)
     defaultto :pull
 
-    def insync?(is)
+    def insync?(_is)
       provider.action_insync?
     end
 
-    def change_to_s(currentvalue, newvalue)
+    def change_to_s(_currentvalue, _newvalue)
       'executed successfully'
     end
   end
@@ -112,20 +112,20 @@ Puppet::Type.newtype(:rsync) do
     desc 'The hostname or IP of the rsync server'
 
     validate do |value|
-      if value !~ /[a-zA-Z][a-zA-Z\-]*(\.[a-zA-Z][a-zA-Z\-]*)*/ &&
-        value !~ /^(?-mix:\A((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?)):([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\z)$/ &&
-        value !~ /^(?x-mi:(?:(?x-mi:\A\[(?:[0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}\]:([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\z))|(?:(?x-mi:\A\[((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)\]:([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\z))|(?:(?x-mi:\A\[((?:[0-9A-Fa-f]{1,4}:){6,6})(\d+)\.(\d+)\.(\d+)\.(\d+)\]:([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\z))|(?:(?x-mi:\A\[((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}:)*)(\d+)\.(\d+)\.(\d+)\.(\d+)\]:([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\z)))$/
+      if value !~ %r{[a-zA-Z][a-zA-Z\-]*(\.[a-zA-Z][a-zA-Z\-]*)*} &&
+         value !~ %r{^(?-mix:\A((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?)):([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\z)$} &&
+         value !~ %r{^(?x-mi:(?:(?x-mi:\A\[(?:[0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}\]:([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\z))|(?:(?x-mi:\A\[((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)\]:([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\z))|(?:(?x-mi:\A\[((?:[0-9A-Fa-f]{1,4}:){6,6})(\d+)\.(\d+)\.(\d+)\.(\d+)\]:([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\z))|(?:(?x-mi:\A\[((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}:)*)(\d+)\.(\d+)\.(\d+)\.(\d+)\]:([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\z)))$}
         begin
           require 'ipaddr'
           IPAddr.new(value)
         rescue Exception
-          fail Puppet::Error, %(#{value} does not appear to be a valid hostname or IP address)
+          raise Puppet::Error, %(#{value} does not appear to be a valid hostname or IP address)
         end
       end
     end
   end
 
-  newparam(:rsync_server, :parent => self.paramclass(:server)) do
+  newparam(:rsync_server, parent: paramclass(:server)) do
     desc 'The hostname or IP of the rsync server'
   end
 
@@ -145,55 +145,55 @@ Puppet::Type.newtype(:rsync) do
     desc 'The fully qualified path to the rsync executable'
   end
 
-  newparam(:preserve_perms, :boolean => true) do
+  newparam(:preserve_perms, boolean: true) do
     desc 'Whether or not to preserve permissions. Defaults to true.'
     newvalues(:true, :false)
     defaultto :true
   end
 
-  newparam(:preserve_acl, :boolean => true) do
+  newparam(:preserve_acl, boolean: true) do
     desc 'Whether or not to preserve ACL. Defaults to true.'
     newvalues(:true, :false)
     defaultto :true
   end
 
-  newparam(:preserve_xattrs, :boolean => true) do
+  newparam(:preserve_xattrs, boolean: true) do
     desc 'Whether or not to preserve extended attributes. Defaults to true.'
     newvalues(:true, :false)
     defaultto :true
   end
 
-  newparam(:preserve_owner, :boolean => true) do
+  newparam(:preserve_owner, boolean: true) do
     desc 'Whether or not to preserve owner. Defaults to true.'
     newvalues(:true, :false)
     defaultto :true
   end
 
-  newparam(:preserve_group, :boolean => true) do
+  newparam(:preserve_group, boolean: true) do
     desc 'Whether or not to preserve group. Defaults to true.'
     newvalues(:true, :false)
     defaultto :true
   end
 
-  newparam(:preserve_devices, :boolean => true) do
+  newparam(:preserve_devices, boolean: true) do
     desc 'Whether or not to preserve device files. Defaults to false.'
     newvalues(:true, :false)
     defaultto :false
   end
 
-  newparam(:compress, :boolean => true) do
+  newparam(:compress, boolean: true) do
     desc 'Whether or not to compress content prior to transfer. Defaults to true.'
     newvalues(:true, :false)
     defaultto :true
   end
 
-  newparam(:recurse, :boolean => true) do
+  newparam(:recurse, boolean: true) do
     desc 'Whether or not to recursively copy. Defaults to true.'
     newvalues(:true, :false)
     defaultto :true
   end
 
-  newparam(:hard_links, :boolean => true) do
+  newparam(:hard_links, boolean: true) do
     desc 'Preserve hard links. Defaults to true.'
     newvalues(:true, :false)
     defaultto :true
@@ -208,7 +208,7 @@ Puppet::Type.newtype(:rsync) do
     munge do |value|
       [value].flatten
     end
-    defaultto ['.svn/','.git/']
+    defaultto ['.svn/', '.git/']
   end
 
   newparam(:timeout) do
@@ -220,8 +220,8 @@ Puppet::Type.newtype(:rsync) do
 
     munge do |value|
       if value.is_a?(String)
-        unless value =~ /^\d+$/
-          fail Puppet::Error, 'Timeout must be an integer'
+        unless %r{^\d+$}.match?(value)
+          raise Puppet::Error, 'Timeout must be an integer'
         end
         Integer(value)
       else
@@ -230,15 +230,15 @@ Puppet::Type.newtype(:rsync) do
     end
   end
 
-  newparam(:contimeout, :parent => self.paramclass(:timeout)) do
+  newparam(:contimeout, parent: paramclass(:timeout)) do
     desc 'Connection timeout in seconds.'
   end
 
-  newparam(:rsync_timeout, :parent => self.paramclass(:contimeout)) do
+  newparam(:rsync_timeout, parent: paramclass(:contimeout)) do
     desc 'Alias for :timeout'
   end
 
-  newparam(:iotimeout, :parent => self.paramclass(:timeout)) do
+  newparam(:iotimeout, parent: paramclass(:timeout)) do
     desc 'I/O timeout in seconds.'
   end
 
@@ -254,7 +254,7 @@ Puppet::Type.newtype(:rsync) do
     defaultto :on_failure
   end
 
-  newparam(:delete, :boolean => true) do
+  newparam(:delete, boolean: true) do
     desc 'Whether to delete files that do not exist on server. Defaults to false'
     newvalues(:true, :false)
     defaultto :false
@@ -265,8 +265,8 @@ Puppet::Type.newtype(:rsync) do
 
     munge do |value|
       if value.is_a?(String)
-        unless value =~ /^\d+$/
-          fail Puppet::Error, 'bwlimit must be an integer'
+        unless %r{^\d+$}.match?(value)
+          raise Puppet::Error, 'bwlimit must be an integer'
         end
         Integer(value)
       else
@@ -275,19 +275,19 @@ Puppet::Type.newtype(:rsync) do
     end
   end
 
-  newparam(:copy_links, :boolean => true) do
+  newparam(:copy_links, boolean: true) do
     desc 'Whether to copy links as symlinks. Defaults to false'
     newvalues(:true, :false)
     defaultto :false
   end
 
-  newparam(:size_only, :boolean => true) do
+  newparam(:size_only, boolean: true) do
     desc 'Whether to skip files that match in size. Defaults to true'
     newvalues(:true, :false)
     defaultto :false
   end
 
-  newparam(:no_implied_dirs, :boolean => true) do
+  newparam(:no_implied_dirs, boolean: true) do
     desc 'Do not send implied dirs.  Defaults to true'
     newvalues(:true, :false)
     defaultto :true
@@ -299,7 +299,7 @@ Puppet::Type.newtype(:rsync) do
 
   autorequire(:user) do
     # Autorequire users if they are specified by name
-    if user = self[:user] && user !~ /^\d+$/
+    if (user = self[:user] && user !~ %r{^\d+$})
       debug %(Autorequiring User[#{user}])
       user
     end
@@ -312,7 +312,7 @@ Puppet::Type.newtype(:rsync) do
     if !self[:server]
       path << self[:target]
       path << self[:source]
-    elsif self[:action] == :pull or self[:action].eql?('pull')
+    elsif (self[:action] == :pull) || self[:action].eql?('pull')
       path << self[:target]
     else
       path << self[:source]
@@ -346,7 +346,7 @@ Puppet::Type.newtype(:rsync) do
   end
 
   autorequire(:service) do
-    svcs = ['rsync','stunnel']
+    svcs = ['rsync', 'stunnel']
 
     svcs.each do |val|
       debug %(Autorequiring Service[#{val}])
@@ -364,42 +364,41 @@ Puppet::Type.newtype(:rsync) do
       [:protocol, :proto],
       [:timeout, :rsync_timeout],
       [:timeout, :contimeout],
-      [:password, :pass]
+      [:password, :pass],
     ]
 
     unless @parameters.include?(:protocol) || @parameters.include?(:proto)
-      self[:protocol] = "rsync"
+      self[:protocol] = 'rsync'
     end
 
     unless @parameters.include?(:timeout) || @parameters.include?(:rsync_timeout)
-      fail Puppet::Error, "You must specify an rsync timeout."
+      raise Puppet::Error, 'You must specify an rsync timeout.'
     end
 
     required_fields.each do |req|
       unless @parameters.include?(req.first) || @parameters.include?(req.last)
-        fail Puppet::Error, "You must specify one of #{req.first} or #{req.last}."
+        raise Puppet::Error, "You must specify one of #{req.first} or #{req.last}."
       end
     end
 
     aliases.each do |a|
       if @parameters.include?(a.first) && @parameters.include?(a.last)
-        fail Puppet::Error, %(You can only specify one of #{a.first} and #{a.last})
+        raise Puppet::Error, %(You can only specify one of #{a.first} and #{a.last})
       end
     end
 
-    if (self[:server] || self[:rsync_server]) && self[:action] == :pull
-      full_paths = [:path, :rsync_path, :target, :target_path]
-    elsif self[:server] || self[:rsync_server]
-      full_paths = [:path, :rsync_path, :source, :source_path]
-    else
-      full_paths = [:path, :rsync_path, :source, :source_path, :target, :target_path]
-    end
+    full_paths = if (self[:server] || self[:rsync_server]) && self[:action] == :pull
+                   [:path, :rsync_path, :target, :target_path]
+                 elsif self[:server] || self[:rsync_server]
+                   [:path, :rsync_path, :source, :source_path]
+                 else
+                   [:path, :rsync_path, :source, :source_path, :target, :target_path]
+                 end
 
     full_paths.each do |path|
-      if self[path]
-        unless self[path] =~ /^\/$/ || self[path] =~ /^\/[^\/]/
-          fail Puppet::Error, %(File paths must be fully qualified, not '#{self[path]}')
-        end
+      next unless self[path]
+      unless self[path] =~ %r{^/$} || self[path] =~ %r{^/[^/]}
+        raise Puppet::Error, %(File paths must be fully qualified, not '#{self[path]}')
       end
     end
 
@@ -432,8 +431,7 @@ Puppet::Type.newtype(:rsync) do
 
     if @parameters.include?(:user) &&
        !(@parameters.include?(:password) || @parameters.include?(:pass))
-    then
-      fail Puppet::Error, 'You must specify a password if you specify a user.'
+      raise Puppet::Error, 'You must specify a password if you specify a user.'
     end
   end
 end
