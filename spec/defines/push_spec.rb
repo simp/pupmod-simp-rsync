@@ -6,7 +6,8 @@ describe 'rsync::push' do
       let(:facts) { os_facts }
 
       # rsync::retrieve defined type isn't available in this rspec environment
-      let(:pre_condition) { <<-EOM
+      let(:pre_condition) do
+        <<-EOM
         include "::rsync::server"
 
         define rsync::retrieve (
@@ -37,17 +38,19 @@ describe 'rsync::push' do
           ) {
         }
         EOM
-      }
+      end
 
       context "on #{os}" do
-        let(:title){ 'test' }
-        let(:params){{
-          :source_path => 'foo/bar',
-          :target_path => '/foo/bar',
-          :rsync_server => 'rsync.bar.baz'
-        }}
+        let(:title) { 'test' }
+        let(:params) do
+          {
+            source_path: 'foo/bar',
+         target_path: '/foo/bar',
+         rsync_server: 'rsync.bar.baz'
+          }
+        end
 
-        it { should compile.with_all_deps }
+        it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_rsync__retrieve("push_#{title}") }
       end
     end
