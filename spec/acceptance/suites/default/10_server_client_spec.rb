@@ -9,18 +9,17 @@ describe 'server and client connectivity' do
     end
   else
     index_pairs = unique_host_pairs(hosts)
-    index_pairs.each do |index1,index2|
+    index_pairs.each do |index1, index2|
       # Test interoperability between a pair of hosts in the node set, each
       # acting as a rsync server to the other.
       server1 = hosts[index1]
       server2 = hosts[index2]
       context "Interoperability between #{server1} and #{server2}" do
-
-        let(:file_content) {
+        let(:file_content) do
           "What a Test File for #{server1} and #{server2} testing"
-        }
+        end
 
-        let(:manifest) {
+        let(:manifest) do
           <<-EOS
             include 'rsync::server'
 
@@ -53,9 +52,9 @@ describe 'server and client connectivity' do
               require     => File['/srv/rsync/test/test_file_srvcli']
             }
           EOS
-        }
+        end
 
-        let(:manifest_test_server1) {
+        let(:manifest_test_server1) do
           <<-EOS
             rsync::retrieve { 'test_pull':
               user         => 'test_user',
@@ -65,9 +64,9 @@ describe 'server and client connectivity' do
               rsync_server => '#{server2_fqdn}:8873',
             }
           EOS
-        }
+        end
 
-        let(:manifest_test_server2) {
+        let(:manifest_test_server2) do
           <<-EOS
             rsync::retrieve { 'test_pull':
               user         => 'test_user',
@@ -77,28 +76,32 @@ describe 'server and client connectivity' do
               rsync_server => '#{server1_fqdn}',
             }
           EOS
-        }
+        end
 
-        let(:hieradata_server1) {{
-          'iptables::precise_match'             => true,
-          'simp_options::pki'                   => false,
-          'simp_options::firewall'              => true,
-          'rsync::server::stunnel'              => false,
-          'rsync::server::trusted_nets'         => [server2_ip],
-          'rsync::server::global::trusted_nets' => [server2_ip],
-          'rsync::server::global::address'      => '0.0.0.0',
-        }}
+        let(:hieradata_server1) do
+          {
+            'iptables::precise_match'             => true,
+         'simp_options::pki'                   => false,
+         'simp_options::firewall'              => true,
+         'rsync::server::stunnel'              => false,
+         'rsync::server::trusted_nets'         => [server2_ip],
+         'rsync::server::global::trusted_nets' => [server2_ip],
+         'rsync::server::global::address'      => '0.0.0.0',
+          }
+        end
 
-        let(:hieradata_server2) {{
-          'iptables::precise_match'             => true,
-          'simp_options::pki'                   => false,
-          'simp_options::firewall'              => true,
-          'rsync::server::stunnel'              => false,
-          'rsync::server::global::port'         => 8873,
-          'rsync::server::trusted_nets'         => [server1_ip],
-          'rsync::server::global::trusted_nets' => [server1_ip],
-          'rsync::server::global::address'      => '0.0.0.0',
-        }}
+        let(:hieradata_server2) do
+          {
+            'iptables::precise_match'             => true,
+         'simp_options::pki'                   => false,
+         'simp_options::firewall'              => true,
+         'rsync::server::stunnel'              => false,
+         'rsync::server::global::port'         => 8873,
+         'rsync::server::trusted_nets'         => [server1_ip],
+         'rsync::server::global::trusted_nets' => [server1_ip],
+         'rsync::server::global::address'      => '0.0.0.0',
+          }
+        end
 
         let(:server1_interface) { get_private_network_interface(server1) }
         let(:server1_ip) { fact_on(server1, %(ipaddress_#{server1_interface})) }
@@ -108,22 +111,22 @@ describe 'server and client connectivity' do
         let(:server2_fqdn) { fact_on(server2, 'fqdn') }
 
         context 'setup server and client hosts' do
-          it "should set hieradata on #{server1}" do
+          it "sets hieradata on #{server1}" do
             set_hieradata_on(server1, hieradata_server1)
           end
 
-          it "should set hieradata on #{server2}" do
+          it "sets hieradata on #{server2}" do
             set_hieradata_on(server2, hieradata_server2)
           end
 
           [server1, server2].each do |host|
             context "on #{host}" do
-              it 'should work with no errors' do
-                apply_manifest_on(host, manifest, :catch_failures => true)
+              it 'works with no errors' do
+                apply_manifest_on(host, manifest, catch_failures: true)
               end
 
-              it 'should be idempotent' do
-                apply_manifest_on(host, manifest, {:catch_changes => true})
+              it 'is idempotent' do
+                apply_manifest_on(host, manifest, { catch_changes: true })
               end
             end
           end
@@ -131,24 +134,24 @@ describe 'server and client connectivity' do
 
         context 'test a file retrieval' do
           [server1, server2].each do |host|
-            it 'should start with a clean state' do
+            it 'starts with a clean state' do
               on(host, 'rm -rf  /tmp/test_file_srvcli')
             end
           end
 
-          it "should run retrieval code on #{server1}" do
-            apply_manifest_on(server1, manifest_test_server1, :catch_failures => true)
+          it "runs retrieval code on #{server1}" do
+            apply_manifest_on(server1, manifest_test_server1, catch_failures: true)
           end
 
-          it "should run retrieval code on #{server2}" do
-            apply_manifest_on(server2, manifest_test_server2, :catch_failures => true)
+          it "runs retrieval code on #{server2}" do
+            apply_manifest_on(server2, manifest_test_server2, catch_failures: true)
           end
 
           [server1, server2].each do |host|
-            it 'should have a file transferred' do
-              on(host, 'ls /tmp/test_file_srvcli', :acceptable_exit_codes => [0])
+            it 'has a file transferred' do
+              on(host, 'ls /tmp/test_file_srvcli', acceptable_exit_codes: [0])
               result = on(host, 'cat /tmp/test_file_srvcli').stdout
-              expect( result ).to match(/#{Regexp.escape(file_content)}/)
+              expect(result).to match(%r{#{Regexp.escape(file_content)}})
             end
           end
         end

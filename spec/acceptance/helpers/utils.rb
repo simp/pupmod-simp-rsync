@@ -2,7 +2,6 @@ module Acceptance; end
 module Acceptance::Helpers; end
 
 module Acceptance::Helpers::Utils
-
   # @return Array of pairs of host indices that contains the position-invariant
   #   permutations of hosts in which the indices are unique
   #
