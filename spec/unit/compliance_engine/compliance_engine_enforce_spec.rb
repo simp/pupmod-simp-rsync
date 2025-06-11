@@ -33,16 +33,19 @@ describe 'compliance_markup', type: :class do
       compliance_profiles.each do |target_profile|
         context "with compliance profile '#{target_profile}'" do
           let(:facts) do
-            _facts = os_facts.merge({
-                                      target_compliance_profile: target_profile
-                                    })
+            updated_facts = os_facts.merge(
+              {
+                target_compliance_profile: target_profile,
+              },
+            )
 
-            _facts[:os] ||= {}
-            _facts[:os]['selinux'] ||= {}
-            _facts[:os]['selinux']['enabled'] = true
+            updated_facts[:os] ||= {}
+            updated_facts[:os]['selinux'] ||= {}
+            updated_facts[:os]['selinux']['enabled'] = true
 
-            _facts
+            updated_facts
           end
+          # rubocop:disable RSpec/InstanceVariable
           let(:compliance_report) do
             @compliance_report ||= JSON.parse(
                 catalogue.resource("File[#{facts[:puppet_vardir]}/compliance_report.json]")[:content],
@@ -55,6 +58,7 @@ describe 'compliance_markup', type: :class do
 
             @compliance_profile_data
           end
+          # rubocop:enable RSpec/InstanceVariable
 
           let(:pre_condition) do
             %(

@@ -54,6 +54,7 @@ describe 'server and client connectivity' do
           EOS
         end
 
+        # rubocop:disable RSpec/IndexedLet
         let(:manifest_test_server1) do
           <<-EOS
             rsync::retrieve { 'test_pull':
@@ -109,6 +110,7 @@ describe 'server and client connectivity' do
         let(:server2_interface) { get_private_network_interface(server2) }
         let(:server2_ip) { fact_on(server2, %(ipaddress_#{server2_interface})) }
         let(:server2_fqdn) { fact_on(server2, 'fqdn') }
+        # rubocop:enable RSpec/IndexedLet
 
         context 'setup server and client hosts' do
           it "sets hieradata on #{server1}" do

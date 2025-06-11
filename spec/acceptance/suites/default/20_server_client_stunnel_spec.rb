@@ -15,6 +15,7 @@ describe 'server and client stunnel connectivity' do
       server1 = hosts[index1]
       server2 = hosts[index2]
       context "Interoperability between #{server1} and #{server2}" do
+        # rubocop:disable RSpec/IndexedLet
         let(:file_content1) do
           "What a Test File for #{server1} and #{server2} testing"
         end
@@ -154,6 +155,7 @@ describe 'server and client stunnel connectivity' do
         let(:server2_interface) { get_private_network_interface(server2) }
         let(:server2_ip) { fact_on(server2, %(ipaddress_#{server2_interface})) }
         let(:server2_fqdn) { fact_on(server2, 'fqdn') }
+        # rubocop:enable RSpec/IndexedLet
 
         context 'setup server and client hosts' do
           context "on #{server1}" do
@@ -186,6 +188,7 @@ describe 'server and client stunnel connectivity' do
         end
 
         context 'test a file retrieval' do
+          # rubocop:disable RSpec/RepeatedDescription
           [server1, server2].each do |host|
             it 'starts with a clean state' do
               on(host, 'rm -rf  /tmp/test_file_srvcli*')
@@ -211,6 +214,7 @@ describe 'server and client stunnel connectivity' do
               expect(result).to match(%r{#{Regexp.escape(file_content2)}})
             end
           end
+          # rubocop:enable RSpec/RepeatedDescription
         end
       end
     end
