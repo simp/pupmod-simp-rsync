@@ -7,6 +7,7 @@ HOSTS:
     platform: el-9-x86_64
     hypervisor: docker
     image: almalinux:9
+    options: --privileged
     docker_cmd: '/usr/sbin/init'
     docker_preserve_image: true
     docker_image_commands:
