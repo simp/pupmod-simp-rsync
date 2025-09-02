@@ -20,27 +20,27 @@ describe 'server and client connectivity' do
         end
 
         let(:manifest) do
-          <<-EOS
+          <<~EOS
             include 'rsync::server'
 
             include 'iptables'
 
             iptables::listen::tcp_stateful { 'ssh':
               dports       => 22,
-              trusted_nets => ['any']
+              trusted_nets => ['any'],
             }
 
             file { '/srv/rsync':
-              ensure => 'directory'
+              ensure => 'directory',
             }
 
             file { '/srv/rsync/test':
-              ensure => 'directory'
+              ensure => 'directory',
             }
 
             file { '/srv/rsync/test/test_file_srvcli':
               ensure  => 'file',
-              content => '#{file_content}'
+              content => '#{file_content}',
             }
 
             rsync::server::section { 'test':
@@ -49,14 +49,14 @@ describe 'server and client connectivity' do
               comment     => 'A test system',
               hosts_allow => ['#{server1_ip}', '#{server2_ip}'],
               path        => '/srv/rsync/test',
-              require     => File['/srv/rsync/test/test_file_srvcli']
+              require     => File['/srv/rsync/test/test_file_srvcli'],
             }
           EOS
         end
 
         # rubocop:disable RSpec/IndexedLet
         let(:manifest_test_server1) do
-          <<-EOS
+          <<~EOS
             rsync::retrieve { 'test_pull':
               user         => 'test_user',
               pass         => 'test_pass',
@@ -68,7 +68,7 @@ describe 'server and client connectivity' do
         end
 
         let(:manifest_test_server2) do
-          <<-EOS
+          <<~EOS
             rsync::retrieve { 'test_pull':
               user         => 'test_user',
               pass         => 'test_pass',
@@ -82,25 +82,25 @@ describe 'server and client connectivity' do
         let(:hieradata_server1) do
           {
             'iptables::precise_match'             => true,
-         'simp_options::pki'                   => false,
-         'simp_options::firewall'              => true,
-         'rsync::server::stunnel'              => false,
-         'rsync::server::trusted_nets'         => [server2_ip],
-         'rsync::server::global::trusted_nets' => [server2_ip],
-         'rsync::server::global::address'      => '0.0.0.0',
+            'simp_options::pki'                   => false,
+            'simp_options::firewall'              => true,
+            'rsync::server::stunnel'              => false,
+            'rsync::server::trusted_nets'         => [server2_ip],
+            'rsync::server::global::trusted_nets' => [server2_ip],
+            'rsync::server::global::address'      => '0.0.0.0',
           }
         end
 
         let(:hieradata_server2) do
           {
             'iptables::precise_match'             => true,
-         'simp_options::pki'                   => false,
-         'simp_options::firewall'              => true,
-         'rsync::server::stunnel'              => false,
-         'rsync::server::global::port'         => 8873,
-         'rsync::server::trusted_nets'         => [server1_ip],
-         'rsync::server::global::trusted_nets' => [server1_ip],
-         'rsync::server::global::address'      => '0.0.0.0',
+            'simp_options::pki'                   => false,
+            'simp_options::firewall'              => true,
+            'rsync::server::stunnel'              => false,
+            'rsync::server::global::port'         => 8873,
+            'rsync::server::trusted_nets'         => [server1_ip],
+            'rsync::server::global::trusted_nets' => [server1_ip],
+            'rsync::server::global::address'      => '0.0.0.0',
           }
         end
 

@@ -1,5 +1,5 @@
 Puppet::Type.newtype(:rsync) do
-  @doc = <<-EOM
+  @doc = <<~EOM
     Run an rsync command; almost all options are directly from the rsync man
     page.
 
@@ -25,14 +25,14 @@ Puppet::Type.newtype(:rsync) do
   end
 
   newparam(:name) do
-    desc <<-EOM
-    The globally unique name of the resource. Has no effect on provider functionality.
+    desc <<~EOM
+      The globally unique name of the resource. Has no effect on provider functionality.
     EOM
     isnamevar
   end
 
   newparam(:ignore_selinux) do
-    desc <<-EOM
+    desc <<~EOM
       If this is set to 'true' then this type will ignore SELinux errors. If
       set to false, then an SELinux permissions copy error is a complete
       failure state.
@@ -43,7 +43,7 @@ Puppet::Type.newtype(:rsync) do
   end
 
   newparam(:password) do
-    desc <<-EOM
+    desc <<~EOM
       The password to use. Only used if a username is specified
       If you want the password to be auto-generated, you can use the
       SIMP 'simplib::passgen' function.
@@ -61,7 +61,7 @@ Puppet::Type.newtype(:rsync) do
   end
 
   newparam(:pass) do
-    desc <<-EOM
+    desc <<~EOM
       The password to use. Only used if a username is specified
       If you want the password to be auto-generated, you can use the
       SIMP 'simplib::passgen' function.
@@ -214,11 +214,11 @@ Puppet::Type.newtype(:rsync) do
   end
 
   newparam(:timeout) do
-    desc <<-EOM
+    desc <<~EOM
       Connection timeout in seconds. Note: This is different from what the man
       page states due to backward compatibility issues. Use iotimeout for the
       man page compatible timeout value.
-     EOM
+    EOM
 
     munge do |value|
       if value.is_a?(String)
@@ -245,7 +245,7 @@ Puppet::Type.newtype(:rsync) do
   end
 
   newparam(:logoutput) do
-    desc <<-EOM
+    desc <<~EOM
       Whether to log output.  Defaults to logging output at the loglevel for
       the `exec` resource. Use *on_failure* to only log the output when the
       command reports an error.  Values are **true**, *false*, *on_failure*,

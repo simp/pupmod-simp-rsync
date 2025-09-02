@@ -18,7 +18,7 @@ describe 'rsync::server::global' do
         context 'with tcpwrappers' do
           let(:params) do
             {
-              tcpwrappers: true
+              tcpwrappers: true,
             }
           end
 

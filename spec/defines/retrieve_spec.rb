@@ -6,7 +6,7 @@ describe 'rsync::retrieve' do
       let(:facts) { os_facts }
 
       let(:pre_condition) do
-        'include "::rsync::server"'
+        'include "rsync::server"'
       end
 
       context "on #{os}" do
@@ -15,8 +15,8 @@ describe 'rsync::retrieve' do
         let(:params) do
           {
             source_path: 'foo/bar',
-         target_path: '/foo/bar',
-         rsync_server: 'rsync.bar.baz'
+            target_path: '/foo/bar',
+            rsync_server: 'rsync.bar.baz',
           }
         end
 

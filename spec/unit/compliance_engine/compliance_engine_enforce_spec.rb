@@ -34,9 +34,7 @@ describe 'compliance_markup', type: :class do
         context "with compliance profile '#{target_profile}'" do
           let(:facts) do
             updated_facts = os_facts.merge(
-              {
-                target_compliance_profile: target_profile,
-              },
+              target_compliance_profile: target_profile,
             )
 
             updated_facts[:os] ||= {}

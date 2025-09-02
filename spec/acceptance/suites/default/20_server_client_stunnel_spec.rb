@@ -25,27 +25,27 @@ describe 'server and client stunnel connectivity' do
         end
 
         let(:manifest_server1) do
-          <<-EOS
+          <<~EOS
             include 'rsync::server'
 
             include 'iptables'
 
             iptables::listen::tcp_stateful { 'ssh':
               dports       => 22,
-              trusted_nets => ['any']
+              trusted_nets => ['any'],
             }
 
             file { '/srv/rsync':
-              ensure => 'directory'
+              ensure => 'directory',
             }
 
             file { '/srv/rsync/test':
-              ensure => 'directory'
+              ensure => 'directory',
             }
 
             file { '/srv/rsync/test/test_file_srvcli2_server1':
               ensure  => 'file',
-              content => '#{file_content1}'
+              content => '#{file_content1}',
             }
 
             rsync::server::section { 'test':
@@ -53,38 +53,38 @@ describe 'server and client stunnel connectivity' do
               user_pass   => ['test_user:test_pass'],
               comment     => 'A test system',
               path        => '/srv/rsync/test',
-              require     => File['/srv/rsync/test/test_file_srvcli2_server1']
+              require     => File['/srv/rsync/test/test_file_srvcli2_server1'],
             }
 
             stunnel::connection { 'rsync':
               connect => ["#{server2_fqdn}:8730"],
-              accept  => '127.0.0.1:8873'
+              accept  => '127.0.0.1:8873',
             }
           EOS
         end
 
         let(:manifest_server2) do
-          <<-EOS
+          <<~EOS
             include 'rsync::server'
 
             include 'iptables'
 
             iptables::listen::tcp_stateful { 'ssh':
               dports       => 22,
-              trusted_nets => ['any']
+              trusted_nets => ['any'],
             }
 
             file { '/srv/rsync':
-              ensure => 'directory'
+              ensure => 'directory',
             }
 
             file { '/srv/rsync/test':
-              ensure => 'directory'
+              ensure => 'directory',
             }
 
             file { '/srv/rsync/test/test_file_srvcli2_server2':
               ensure  => 'file',
-              content => '#{file_content2}'
+              content => '#{file_content2}',
             }
 
             rsync::server::section { 'test':
@@ -92,18 +92,18 @@ describe 'server and client stunnel connectivity' do
               user_pass   => ['test_user:test_pass'],
               comment     => 'A test system',
               path        => '/srv/rsync/test',
-              require     => File['/srv/rsync/test/test_file_srvcli2_server2']
+              require     => File['/srv/rsync/test/test_file_srvcli2_server2'],
             }
 
             stunnel::connection { 'rsync':
               connect => ["#{server1_fqdn}:8730"],
-              accept  => '127.0.0.1:873'
+              accept  => '127.0.0.1:873',
             }
           EOS
         end
 
         let(:manifest_test_server1) do
-          <<-EOS
+          <<~EOS
             rsync::retrieve { 'test_pull':
               user         => 'test_user',
               pass         => 'test_pass',
@@ -115,7 +115,7 @@ describe 'server and client stunnel connectivity' do
         end
 
         let(:manifest_test_server2) do
-          <<-EOS
+          <<~EOS
             rsync::retrieve { 'test_pull':
               user         => 'test_user',
               pass         => 'test_pass',
@@ -129,23 +129,23 @@ describe 'server and client stunnel connectivity' do
         let(:hieradata_server1) do
           {
             'iptables::precise_match'     => true,
-         'simp_options::pki'           => true,
-         'simp_options::pki::source'   => '/etc/pki/simp-testing/pki',
-         'simp_options::firewall'      => true,
-         'rsync::server::stunnel'      => true,
-         'rsync::server::trusted_nets' => [server2_ip],
+            'simp_options::pki'           => true,
+            'simp_options::pki::source'   => '/etc/pki/simp-testing/pki',
+            'simp_options::firewall'      => true,
+            'rsync::server::stunnel'      => true,
+            'rsync::server::trusted_nets' => [server2_ip],
           }
         end
 
         let(:hieradata_server2) do
           {
             'iptables::precise_match'     => true,
-         'simp_options::pki'           => true,
-         'simp_options::pki::source'   => '/etc/pki/simp-testing/pki',
-         'simp_options::firewall'      => true,
-         'rsync::server::stunnel'      => true,
-         'rsync::server::global::port' => 8873,
-         'rsync::server::trusted_nets' => [server1_ip],
+            'simp_options::pki'           => true,
+            'simp_options::pki::source'   => '/etc/pki/simp-testing/pki',
+            'simp_options::firewall'      => true,
+            'rsync::server::stunnel'      => true,
+            'rsync::server::global::port' => 8873,
+            'rsync::server::trusted_nets' => [server1_ip],
           }
         end
 

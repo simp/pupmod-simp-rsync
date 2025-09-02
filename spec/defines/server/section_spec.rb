@@ -21,13 +21,13 @@ describe 'rsync::server::section' do
       end
 
       let(:pre_condition) do
-        'include "::rsync::server"'
+        'include "rsync::server"'
       end
 
       context 'with default parameters' do
         let(:params) do
           {
-            path: '/test/dir'
+            path: '/test/dir',
           }
         end
 
@@ -40,8 +40,8 @@ describe 'rsync::server::section' do
         let(:params) do
           {
             path: '/test/dir',
-         user_pass: [ 'user1:user1password', 'user2:user2password', 'skipme'],
-         comment: 'section TEST'
+            user_pass: [ 'user1:user1password', 'user2:user2password', 'skipme'],
+            comment: 'section TEST',
           }
         end
 
@@ -53,9 +53,9 @@ describe 'rsync::server::section' do
             group: 'root',
             mode: '0600',
             show_diff: false,
-            content: <<-EOM,
-user1:user1password
-user2:user2password
+            content: <<~EOM,
+              user1:user1password
+              user2:user2password
             EOM
           )
         end
@@ -65,7 +65,7 @@ user2:user2password
         let(:params) do
           {
             path: '/test/dir',
-         auth_users: [ 'authuser1', 'authuser2'],
+            auth_users: [ 'authuser1', 'authuser2'],
           }
         end
 
