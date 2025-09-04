@@ -5,11 +5,11 @@ Puppet::Type.type(:rsync).provide(:rsync) do
 
   desc 'Rsync provider'
 
-  confine :kernel => 'Linux'
-  commands :rsync => 'rsync'
+  confine kernel: 'Linux'
+  commands rsync: 'rsync'
 
   def initialize(*args)
-    super(*args)
+    super
   end
 
   def action
@@ -27,7 +27,7 @@ Puppet::Type.type(:rsync).provide(:rsync) do
 
     cmd = build_command.join(' ')
     debug %(Executing command #{cmd} with password #{get_password})
-    output = Puppet::Util::Execution.execute(cmd, :failonfail => false, :combine => true)
+    output = Puppet::Util::Execution.execute(cmd, failonfail: false, combine: true)
 
     # We're done with the password file here...
     @passfile.close
@@ -39,30 +39,28 @@ Puppet::Type.type(:rsync).provide(:rsync) do
 
       if @resource[:logoutput] != :false
         output.each_line do |line|
-          if ( Facter[:selinux_current_mode] != 'disabled' ) &&
-             line =~ /attr\(.*security.selinux/
-          then
+          if (Facter[:selinux_current_mode] != 'disabled') &&
+             line =~ %r{attr\(.*security.selinux}
             selinux_failure = true
           end
           if selinux_failure && @resource[:ignore_selinux] == :true
-            self.send(:debug, line.chomp)
+            send(:debug, line.chomp)
           else
-            self.send(@resource[:loglevel], line.chomp)
+            send(@resource[:loglevel], line.chomp)
           end
         end
       end
 
-      unless (selinux_failure && @resource[:ignore_selinux] == :true)
-        self.fail %(Rsync exited with code #{output.exitstatus.to_s}\n)
+      unless selinux_failure && @resource[:ignore_selinux] == :true
+        self.fail %(Rsync exited with code #{output.exitstatus}\n)
       end
 
-    elsif output !~ /^\s*$/
+    elsif !%r{^\s*$}.match?(output)
       if @resource[:logoutput] != false &&
          @resource[:logoutput] != :false &&
          @resource[:logoutput] != :on_failure
-      then
         output.each_line do |line|
-          self.send(@resource[:loglevel], line.chomp)
+          send(@resource[:loglevel], line.chomp)
         end
       end
       is_insync = false
@@ -70,7 +68,7 @@ Puppet::Type.type(:rsync).provide(:rsync) do
     is_insync
   end
 
-  def action=(should)
+  def action=(_should)
     debug 'syncing...'
   end
 
@@ -78,23 +76,23 @@ Puppet::Type.type(:rsync).provide(:rsync) do
 
   def get_source
     source = ''
-    if @resource[:source]
-      resource_source = @resource[:source]
-    else
-      resource_source = @resource[:source_path]
-    end
+    resource_source = if @resource[:source]
+                        @resource[:source]
+                      else
+                        @resource[:source_path]
+                      end
 
-    if @resource[:protocol]
-      resource_protocol = @resource[:protocol]
-    else
-      resource_protocol = @resource[:proto]
-    end
+    resource_protocol = if @resource[:protocol]
+                          @resource[:protocol]
+                        else
+                          @resource[:proto]
+                        end
 
-    if @resource[:server]
-      resource_server = @resource[:server]
-    else
-      resource_server = @resource[:rsync_server]
-    end
+    resource_server = if @resource[:server]
+                        @resource[:server]
+                      else
+                        @resource[:rsync_server]
+                      end
 
     if (
         @resource[:server] ||
@@ -102,39 +100,36 @@ Puppet::Type.type(:rsync).provide(:rsync) do
       ) && (
         @resource[:action] == :pull ||
         @resource[:action].eql?('pull')
-    )
-    then
+      )
       source << resource_protocol
       source << '://'
       if @resource[:user]
         source << %(#{@resource[:user]}@)
       end
       source << resource_server
-      source << '/' unless resource_source =~ /^\//
-      source << resource_source
-    else
-      source << resource_source
+      source << '/' unless %r{^/}.match?(resource_source)
     end
+    source << resource_source
     source
   end
 
   def get_target
     target = ''
-    if @resource[:target]
-      resource_target = @resource[:target]
-    else
-      resource_target = @resource[:target_path]
-    end
-    if @resource[:protocol]
-      resource_protocol = @resource[:protocol]
-    else
-      resource_protocol = @resource[:proto]
-    end
-    if @resource[:server]
-      resource_server = @resource[:server]
-    else
-      resource_server = @resource[:rsync_server]
-    end
+    resource_target = if @resource[:target]
+                        @resource[:target]
+                      else
+                        @resource[:target_path]
+                      end
+    resource_protocol = if @resource[:protocol]
+                          @resource[:protocol]
+                        else
+                          @resource[:proto]
+                        end
+    resource_server = if @resource[:server]
+                        @resource[:server]
+                      else
+                        @resource[:rsync_server]
+                      end
 
     if (
         @resource[:server] ||
@@ -142,25 +137,22 @@ Puppet::Type.type(:rsync).provide(:rsync) do
       ) && (
         @resource[:action] == :push ||
         @resource[:action].eql?('push')
-    )
-    then
+      )
       target << resource_protocol
       target << '://'
       if @resource[:user]
         target << %(#{@resource[:user]}@)
       end
       target << resource_server
-      target << '/' unless resource_target =~ /^\//
-      target << resource_target
-    else
-      target << resource_target
+      target << '/' unless %r{^/}.match?(resource_target)
     end
+    target << resource_target
   end
 
   def get_flags
     flags = []
     flags << '-p' if @resource.preserve_perms?
-    flags << '--chmod=u=rwX,g=rX,o-rwx' if not @resource.preserve_perms?
+    flags << '--chmod=u=rwX,g=rX,o-rwx' unless @resource.preserve_perms?
     flags << '-A' if @resource.preserve_acl?
     flags << '-X' if @resource.preserve_xattrs?
     flags << '-o' if @resource.preserve_owner?
@@ -171,26 +163,26 @@ Puppet::Type.type(:rsync).provide(:rsync) do
     flags << '-z' if @resource.compress?
     flags << '-r' if @resource.recurse?
     flags << '-H' if @resource.hard_links?
-    if @resource.copy_links?
-      flags << '-L'
-    else
-      flags << '-l'
-    end
-    if @resource.size_only?
-      flags << '--size-only'
-    else
-      flags << '-c'
-    end
+    flags << if @resource.copy_links?
+               '-L'
+             else
+               '-l'
+             end
+    flags << if @resource.size_only?
+               '--size-only'
+             else
+               '-c'
+             end
   end
 
   def get_timeout
-    if @resource[:timeout]
-      timeout = @resource[:timeout].to_s
-    elsif @resource[:rsync_timeout]
-      timeout = @resource[:rsync_timeout].to_s
-    else
-      timeout = @resource[:contimeout]
-    end
+    timeout = if @resource[:timeout]
+                @resource[:timeout].to_s
+              elsif @resource[:rsync_timeout]
+                @resource[:rsync_timeout].to_s
+              else
+                @resource[:contimeout]
+              end
 
     timeout and timeout = %(--contimeout=#{timeout})
 
@@ -207,10 +199,8 @@ Puppet::Type.type(:rsync).provide(:rsync) do
 
   def get_exclude
     exclude = []
-    if @resource[:exclude]
-      @resource[:exclude].each do |val|
-        exclude << %(--exclude='#{val}')
-      end
+    @resource[:exclude]&.each do |val|
+      exclude << %(--exclude='#{val}')
     end
     exclude
   end
@@ -218,7 +208,7 @@ Puppet::Type.type(:rsync).provide(:rsync) do
   def get_bwlimit
     bwlimit = ''
     if @resource[:bwlimit]
-      bwlimit << %(--bwlimit=#{@resource[:bwlimit].to_s})
+      bwlimit << %(--bwlimit=#{@resource[:bwlimit]})
     end
     bwlimit
   end
@@ -228,7 +218,7 @@ Puppet::Type.type(:rsync).provide(:rsync) do
     password = @resource[:pass] unless password
 
     # We *always* set a password so that we don't hang at a prompt!
-    if !password || ( password =~ /^(\s*)$/ )
+    if !password || (password =~ %r{^(\s*)$})
       password = '__*invalid_password_provided*__'
     end
 
@@ -239,16 +229,16 @@ Puppet::Type.type(:rsync).provide(:rsync) do
     @passfile.puts(get_password)
     @passfile.flush
 
-    return %(--password-file=#{@passfile.path})
+    %(--password-file=#{@passfile.path})
   end
 
   def build_command
     cmd = []
-    if @resource[:path]
-      cmd << @resource[:path]
-    else
-      cmd << command('rsync')
-    end
+    cmd << if @resource[:path]
+             @resource[:path]
+           else
+             command('rsync')
+           end
     cmd << ['-i', '-S']
     cmd << ['--dry-run'] if Puppet[:noop]
     cmd << get_flags
@@ -260,8 +250,7 @@ Puppet::Type.type(:rsync).provide(:rsync) do
     cmd << get_source
     cmd << get_target
     cmd.flatten!
-    cmd = cmd.reject{ |x| x =~ /^\s*$/ }
+    cmd = cmd.reject { |x| x =~ %r{^\s*$} }
     cmd
   end
-
 end

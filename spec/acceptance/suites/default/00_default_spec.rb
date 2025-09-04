@@ -3,35 +3,35 @@ require 'spec_helper_acceptance'
 test_name 'rsync class'
 
 describe 'rsync class' do
-  let(:manifest) {
-    <<-EOS
+  let(:manifest) do
+    <<~EOS
       include 'rsync::server'
 
       include 'iptables'
 
       iptables::listen::tcp_stateful { 'ssh':
         dports       => 22,
-        trusted_nets => ['any']
+        trusted_nets => ['any'],
       }
 
       file { '/srv/rsync':
-        ensure => 'directory'
+        ensure => 'directory',
       }
 
       file { '/srv/rsync/test':
-        ensure => 'directory'
+        ensure => 'directory',
       }
 
       file { '/srv/rsync/test/test_file':
         ensure  => 'file',
-        content => 'What a Test File'
+        content => 'What a Test File',
       }
 
       rsync::server::section { 'test':
         auth_users => ['test_user'],
         comment    => 'A test system',
         path       => '/srv/rsync/test',
-        require    => File['/srv/rsync/test/test_file']
+        require    => File['/srv/rsync/test/test_file'],
       }
 
       rsync::retrieve { 'test_pull':
@@ -40,34 +40,36 @@ describe 'rsync class' do
         source_path  => 'test/test_file',
         target_path  => '/tmp',
         rsync_server => '127.0.0.1',
-        require      => Rsync::Server::Section['test']
+        require      => Rsync::Server::Section['test'],
       }
     EOS
-  }
+  end
 
-  let(:hieradata) {{
-    'iptables::precise_match' => true,
-    'simp_options::pki'       => false,
-    'rsync::server::stunnel'  => false
-  }}
+  let(:hieradata) do
+    {
+      'iptables::precise_match' => true,
+      'simp_options::pki'       => false,
+      'rsync::server::stunnel'  => false,
+    }
+  end
 
   hosts.each do |host|
-    it 'should work with no errors' do
+    it 'works with no errors' do
       set_hieradata_on(host, hieradata)
-      apply_manifest_on(host, manifest, :catch_failures => true)
+      apply_manifest_on(host, manifest, catch_failures: true)
     end
 
-    it 'should be idempotent' do
-     # FIXME - Workaround for systemd::dropin_file idempotency issue:
-     #   Selinux type of the override unit file (from simp-rsyslog module)
-     #   gets fixed with a second puppet run.
-      apply_manifest_on(host, manifest, :catch_failures => true)
+    it 'is idempotent' do
+      # FIXME: - Workaround for systemd::dropin_file idempotency issue:
+      #   Selinux type of the override unit file (from simp-rsyslog module)
+      #   gets fixed with a second puppet run.
+      apply_manifest_on(host, manifest, catch_failures: true)
 
-      apply_manifest_on(host, manifest, {:catch_changes => true})
+      apply_manifest_on(host, manifest, { catch_changes: true })
     end
 
-    it 'should have a file transferred' do
-      on(host, 'ls /tmp/test_file', :acceptable_exit_codes => [0])
+    it 'has a file transferred' do
+      on(host, 'ls /tmp/test_file', acceptable_exit_codes: [0])
     end
   end
 end

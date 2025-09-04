@@ -33,6 +33,7 @@ describe 'rsync' do
             os_facts = mock_selinux_enforcing_facts(os_facts)
             os_facts
           end
+
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('rsync::selinux') }
           it { is_expected.to create_selboolean('rsync_client') }
@@ -47,7 +48,7 @@ describe 'rsync' do
           end
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to_not create_class('rsync::selinux') }
+          it { is_expected.not_to create_class('rsync::selinux') }
         end
       end
     end

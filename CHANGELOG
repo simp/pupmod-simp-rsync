@@ -1,3 +1,6 @@
+* Wed Aug 27 2025 Steven Pritchard <steve@sicura.us> - 7.0.1
+- Cleanup for rubocop
+
 * Tue Aug 12 2025 Mike Riddle <mike@sicura.us> - 7.0.0
 - Dropped el7 support
 - Added el10 support
