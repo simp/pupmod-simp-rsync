@@ -1,13 +1,12 @@
 ---
 HOSTS:
-  alma10:
+  rocky10:
     roles:
-    - default
     - master
     - client
     platform: el-10-x86_64
     hypervisor: docker
-    image: almalinux:10
+    image: rockylinux:10
     docker_cmd: '/usr/sbin/init'
     docker_preserve_image: true
     docker_image_commands:
@@ -16,4 +15,4 @@ HOSTS:
 CONFIG:
   log_level: verbose
   type: aio
-  puppet_collection: "<%= ENV.fetch('BEAKER_PUPPET_COLLECTION', 'openvox8') %>"
+  puppet_collection: <%= ENV.fetch('BEAKER_PUPPET_COLLECTION', 'openvox8') %>
