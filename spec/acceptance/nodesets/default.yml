@@ -1,18 +1,19 @@
 ---
 HOSTS:
-  el8:
+  alma10:
     roles:
     - default
     - master
     - client
-    platform: el-8-x86_64
-    box: generic/centos8
-    hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
-    family: centos-cloud/centos-stream-8
-    gce_machine_type: n1-standard-2
+    platform: el-10-x86_64
+    hypervisor: docker
+    image: almalinux:10
+    docker_cmd: '/usr/sbin/init'
+    docker_preserve_image: true
+    docker_image_commands:
+      # Puppet Deps
+      - 'yum install -y rsync openssl openssh-server'
 CONFIG:
-  type: aio
-  vagrant_memsize: 512
   log_level: verbose
-  synced_folder: disabled
-  puppet_collection: "<%= ENV.fetch('BEAKER_PUPPET_COLLECTION', 'puppet7') %>"
+  type: aio
+  puppet_collection: "<%= ENV.fetch('BEAKER_PUPPET_COLLECTION', 'openvox8') %>"
