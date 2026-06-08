@@ -2,6 +2,7 @@
 - Remove unmaintained Compliance Engine data
 - Drop support for end-of-life platforms (Amazon Linux 2, CentOS 8)
 - Drop Puppet 7 support; require openvox >= 8 < 9
+- Point `issues_url` at GitHub Issues; allow newer simp module dependencies (rsyslog 9.x, simplib 5.x, stunnel 8.x).
 
 * Wed Aug 27 2025 Steven Pritchard <steve@sicura.us> - 7.0.1
 - Cleanup for rubocop
