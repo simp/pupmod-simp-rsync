@@ -23,9 +23,6 @@
 #   The networks to allow to connect to this service
 #
 #
-# @param tcpwrappers
-#   Use tcpwrappers to secure the rsync service
-#
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class rsync::server::global (
@@ -35,22 +32,10 @@ class rsync::server::global (
   Simplib::Port                  $port            = 873,
   Simplib::IP                    $address         = '127.0.0.1',
   Simplib::Netlist               $trusted_nets    = simplib::lookup('simp_options::trusted_nets', { default_value => ['127.0.0.1'] }),
-  Boolean                        $tcpwrappers     = simplib::lookup('simp_options::tcpwrappers', { default_value => false })
 ) {
   assert_private()
 
   include '::rsync::server'
-
-  if $tcpwrappers {
-    include '::tcpwrappers'
-
-    $_tcp_wrappers_name = $::rsync::server::stunnel ? {
-      true    => 'rsync_server',
-      default => 'rsync',
-    }
-
-    tcpwrappers::allow { $_tcp_wrappers_name: pattern => $trusted_nets }
-  }
 
   if $facts['os']['selinux']['current_mode'] and $facts['os']['selinux']['current_mode'] != 'disabled' {
     vox_selinux::port { "allow_rsync_port_${port}":
