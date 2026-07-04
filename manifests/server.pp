@@ -51,8 +51,8 @@ class rsync::server (
   String           $package_ensure     = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
   String           $package            # module data
 ) {
-  include '::rsync'
-  include '::rsync::server::global'
+  include 'rsync'
+  include 'rsync::server::global'
 
   # ensure_resource instead of package resource, because for some OS versions,
   # the client package managed by the rsync class also contains the rsync
@@ -65,10 +65,10 @@ class rsync::server (
   }
 
   if $stunnel {
-    include '::stunnel'
+    include 'stunnel'
 
     stunnel::connection { 'rsync_server':
-      connect      => [$::rsync::server::global::port],
+      connect      => [$rsync::server::global::port],
       accept       => "${listen_address}:${stunnel_port}",
       client       => false,
       trusted_nets => $trusted_nets
@@ -78,7 +78,7 @@ class rsync::server (
       iptables::listen::tcp_stateful { 'allow_rsync_server':
         order        => 11,
         trusted_nets => $trusted_nets,
-        dports       => [$::rsync::server::global::port],
+        dports       => [$rsync::server::global::port],
       }
     }
   }
@@ -127,7 +127,7 @@ class rsync::server (
   Concat['/etc/rsyncd.conf'] ~> Service['rsyncd']
 
   if $drop_rsyslog_noise {
-    include '::rsyslog'
+    include 'rsyslog'
 
     rsyslog::rule::drop { '00_rsyncd':
       rule => '$programname == \'rsyncd\' and not ($msg contains \'rsync on\' or $msg contains \'SIG\' or $msg contains \'listening\')'
