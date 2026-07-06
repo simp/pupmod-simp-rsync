@@ -119,7 +119,7 @@ define rsync::retrieve (
   Optional[Catalogentry]                      $rnotify          = undef,
   Optional[Catalogentry]                      $rsubscribe       = undef
 ) {
-  include '::rsync'
+  include 'rsync'
 
   if $pass {
     $_pass = $pass

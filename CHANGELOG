@@ -2,6 +2,7 @@
 - Remove unmaintained Compliance Engine data
 - Drop support for end-of-life platforms (Amazon Linux 2, CentOS 8)
 - Drop Puppet 7 support; require openvox >= 8 < 9
+- Point `issues_url` at GitHub Issues; allow newer simp module dependencies (rsyslog 9.x, simplib 5.x, stunnel 8.x).
 
 * Wed Aug 27 2025 Steven Pritchard <steve@sicura.us> - 7.0.1
 - Cleanup for rubocop
@@ -116,7 +117,7 @@
 * Wed Mar 29 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.0.2-0
 - Ensure that rsync password files are not echoed to the Puppet log
 
-* Thu Mar 17 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.1-0
+* Fri Mar 17 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.1-0
 - Remove OBE 'pe' requirement from metadata.json
 - Update puppet version in .travis.yaml
 
