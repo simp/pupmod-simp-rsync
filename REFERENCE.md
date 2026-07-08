@@ -208,6 +208,8 @@ Data type: `String`
 
 The rsync daemon package
 
+Default value: `'rsync-daemon'`
+
 ### <a name="rsync--server--global"></a>`rsync::server::global`
 
 Setup the global section of /etc/rsyncd.conf.
@@ -1082,7 +1084,7 @@ Default value: `false`
 Exclude files matching PATTERN.  Multiple values may be specified as an
 array.  Defaults to ['.svn/','.git/']
 
-Default value: `['.svn/','.git/']`
+Default value: `['.svn/', '.git/']`
 
 ##### <a name="-rsync--hard_links"></a>`hard_links`
 
