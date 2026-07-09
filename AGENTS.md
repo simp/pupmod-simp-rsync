@@ -98,8 +98,8 @@ one custom resource type, `rsync`, shipped in `lib/`.
   parameter pairs (`source`/`source_path`, `target`/`target_path`,
   `server`/`rsync_server`, `protocol`/`proto`, `timeout`/`rsync_timeout`/
   `contimeout`, `password`/`pass`) and its `validate` block rejects specifying
-  both members of a pair (`type/rsync.rb`). The `action` property is
-  `pull`/`pull` and its `insync?` delegates to the provider's heavyweight
+  both members of a pair (`type/rsync.rb`). The `action` property accepts
+  `push`/`pull` (default `pull`) and its `insync?` delegates to the provider's heavyweight
   `action_insync?`, which actually performs the transfer
   (`type/rsync.rb`, `provider/rsync/rsync.rb`).
 
@@ -304,5 +304,3 @@ loads both `openvox` and `puppet` gems, defaulting to the `>= 8 < 9` range.
   local edits. Push changes to those files upstream to the baseline, not here.
 - Match the existing 2-space Puppet indentation and aligned-arrow parameter
   style used in `manifests/`.
-</content>
-</invoke>
