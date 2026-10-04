@@ -188,7 +188,7 @@ describe 'server and client stunnel connectivity' do
         end
 
         context 'test a file retrieval' do
-          # rubocop:disable RSpec/RepeatedDescription
+          # rubocop:disable-next RSpec/RepeatedDescription
           [server1, server2].each do |host|
             it 'starts with a clean state' do
               on(host, 'rm -rf  /tmp/test_file_srvcli*')
@@ -214,7 +214,6 @@ describe 'server and client stunnel connectivity' do
               expect(result).to match(%r{#{Regexp.escape(file_content2)}})
             end
           end
-          # rubocop:enable RSpec/RepeatedDescription
         end
       end
     end
