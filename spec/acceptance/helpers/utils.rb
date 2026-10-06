@@ -1,6 +1,5 @@
 # The nested Acceptance::Helpers::Utils namespace requires forward
 # declaration of its parent modules in this single helper file.
-# rubocop:disable Style/OneClassPerFile
 module Acceptance; end
 module Acceptance::Helpers; end
 
