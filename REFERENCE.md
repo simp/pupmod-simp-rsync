@@ -1287,4 +1287,3 @@ man page compatible timeout value.
 ##### <a name="-rsync--user"></a>`user`
 
 The username to use
-
