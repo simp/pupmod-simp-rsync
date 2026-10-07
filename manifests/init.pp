@@ -59,7 +59,6 @@ class rsync (
     owner  => 'root',
     group  => 'root',
     mode   => '0640',
-    purge  => true
   }
 
   if $facts['os']['selinux']['current_mode'] and $facts['os']['selinux']['current_mode'] != 'disabled' {
