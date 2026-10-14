@@ -811,8 +811,7 @@ secrets file
   ``simplib::passgen()`` function generate your passwords
 * Entries in this Array should be of the following form:
   ``username:password``
-* If ``auth_users`` is not set, the usernames in this list are the users
-  allowed to connect
+* If ``auth_users`` is not set, any user in this list may connect
 
 Default value: `undef`
 

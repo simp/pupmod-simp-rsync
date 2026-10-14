@@ -50,7 +50,7 @@ describe 'rsync::server::section' do
         end
 
         it { is_expected.to compile.with_all_deps }
-        it { is_expected.to create_concat__fragment(fragment).with_content(%r{^auth users = user1,user2$}) }
+        it { is_expected.to create_concat__fragment(fragment).with_content(%r{^auth users = \*$}) }
         it { is_expected.to create_concat__fragment(fragment).with_content(%r{^secrets file = #{secrets}$}) }
         it do
           is_expected.to create_file(secrets).with(
@@ -94,18 +94,26 @@ describe 'rsync::server::section' do
         it { is_expected.to create_file(secrets).with_content("user1:user1password\nuser2:user2password\n") }
       end
 
+      context 'with an empty auth_users' do
+        let(:params) { { path: '/test/dir', auth_users: [] } }
+
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.to create_concat__fragment(fragment).with_content(%r{^auth users = \*:deny$}) }
+        it { is_expected.to create_concat__fragment(fragment).with_content(%r{^secrets file = #{secrets}$}) }
+        it { is_expected.to create_file(secrets) }
+      end
+
       [
-        { auth_users: [] },
-        { user_pass: [] },
-        { user_pass: ['skipme'] },
-      ].each do |empty_params|
-        context "with #{empty_params}" do
-          let(:params) { { path: '/test/dir' }.merge(empty_params) }
+        [],
+        ['skipme'],
+      ].each do |user_pass|
+        context "with user_pass set to #{user_pass}" do
+          let(:params) { { path: '/test/dir', user_pass: user_pass } }
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_concat__fragment(fragment).with_content(%r{^auth users = \*:deny$}) }
+          it { is_expected.to create_concat__fragment(fragment).with_content(%r{^auth users = \*$}) }
           it { is_expected.to create_concat__fragment(fragment).with_content(%r{^secrets file = #{secrets}$}) }
-          it { is_expected.to create_file(secrets) }
+          it { is_expected.to create_file(secrets).with_content("\n") }
         end
       end
 

@@ -26,8 +26,7 @@
 #     ``simplib::passgen()`` function generate your passwords
 #   * Entries in this Array should be of the following form:
 #     ``username:password``
-#   * If ``auth_users`` is not set, the usernames in this list are the users
-#     allowed to connect
+#   * If ``auth_users`` is not set, any user in this list may connect
 #
 # @param comment
 #   A comment for the section
@@ -133,13 +132,7 @@ define rsync::server::section (
   # Authentication is enabled whenever either parameter is set, even to an empty
   # list, so that a share meant to be protected never falls back to anonymous
   # access.
-  if $auth_users =~ NotUndef {
-    $_auth_users = $auth_users
-  } elsif $user_pass =~ NotUndef {
-    $_auth_users = $user_pass.filter |$pair| { $pair =~ /\A[^:]+:/ }.map |$pair| { $pair.split(':')[0] }
-  } else {
-    $_auth_users = undef
-  }
+  $_auth_enabled = $auth_users =~ NotUndef or $user_pass =~ NotUndef
 
   concat::fragment { "rsync_${name}.section":
     order   => 10,
@@ -147,7 +140,7 @@ define rsync::server::section (
     content => template('rsync/rsyncd.conf.section.erb')
   }
 
-  if $_auth_users =~ NotUndef {
+  if $_auth_enabled {
     # rsyncd runs as root and rejects a secrets file that is not owned by root
     file { "/etc/rsync/${name}.rsyncd.secrets":
       ensure    => 'file',
