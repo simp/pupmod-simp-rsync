@@ -13,7 +13,10 @@
 #
 #   * ``simplib::passgen()`` will be used to generated random passwords for
 #     these users, if they do not already exist in the system
-#   * Ignored if ``user_pass`` is set.
+#   * If ``user_pass`` is set, its passwords are used instead of generated
+#     ones, but this list still controls which users may connect
+#   * An empty list denies all access; leave both ``auth_users`` and
+#     ``user_pass`` unset for an anonymous share
 #
 # @param user_pass
 #   An optional array of ``username:password`` combinations to be added to the
@@ -23,6 +26,7 @@
 #     ``simplib::passgen()`` function generate your passwords
 #   * Entries in this Array should be of the following form:
 #     ``username:password``
+#   * If ``auth_users`` is not set, any user in this list may connect
 #
 # @param comment
 #   A comment for the section
@@ -125,17 +129,23 @@ define rsync::server::section (
 ) {
   include 'rsync::server'
 
+  # Authentication is enabled whenever either parameter is set, even to an empty
+  # list, so that a share meant to be protected never falls back to anonymous
+  # access.
+  $_auth_enabled = $auth_users =~ NotUndef or $user_pass =~ NotUndef
+
   concat::fragment { "rsync_${name}.section":
     order   => 10,
     target  => '/etc/rsyncd.conf',
     content => template('rsync/rsyncd.conf.section.erb')
   }
 
-  if !empty($auth_users) or !empty($user_pass) {
+  if $_auth_enabled {
+    # rsyncd runs as root and rejects a secrets file that is not owned by root
     file { "/etc/rsync/${name}.rsyncd.secrets":
       ensure    => 'file',
-      owner     => $uid,
-      group     => $gid,
+      owner     => 'root',
+      group     => 'root',
       mode      => '0600',
       content   => template('rsync/secrets.erb'),
       show_diff => false,

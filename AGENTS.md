@@ -74,9 +74,14 @@ one custom resource type, `rsync`, shipped in `lib/`.
   `templates/rsyncd.conf.global.erb` (`global.pp`).
 - **`rsync::server::section` (`manifests/server/section.pp`)** — Public
   define. Emits one rsyncd share (module) into `/etc/rsyncd.conf` as
-  `concat::fragment` at order 10 (`section.pp`), and when `$auth_users`
-  or `$user_pass` is set, writes `/etc/rsync/${name}.rsyncd.secrets` at `0600`
-  with `show_diff => false` (`section.pp`). `$path` is required; many
+  `concat::fragment` at order 10 (`section.pp`). When `$auth_users` or
+  `$user_pass` is set (even to an empty list), it adds `auth users` and
+  `secrets file` lines and writes `/etc/rsync/${name}.rsyncd.secrets` as
+  `root:root` `0600` with `show_diff => false`, whatever `$uid`/`$gid` are,
+  because rsyncd running as root rejects a secrets file it doesn't own
+  (`section.pp`). An empty `$auth_users` renders `auth users = *:deny` (no one
+  can connect); `$user_pass` alone renders `auth users = *` (any user in the
+  secrets file) (`templates/rsyncd.conf.section.erb`). `$path` is required; many
   rsyncd knobs are exposed (`read_only` default `true`, `use_chroot` default
   `false`, `hosts_allow` from `simp_options::trusted_nets`, `hosts_deny` default
   `'*'`, etc.).

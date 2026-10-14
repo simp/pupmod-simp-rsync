@@ -793,7 +793,10 @@ A list of usernames that are allowed to connect to this section
 
 * ``simplib::passgen()`` will be used to generated random passwords for
   these users, if they do not already exist in the system
-* Ignored if ``user_pass`` is set.
+* If ``user_pass`` is set, its passwords are used instead of generated
+  ones, but this list still controls which users may connect
+* An empty list denies all access; leave both ``auth_users`` and
+  ``user_pass`` unset for an anonymous share
 
 Default value: `undef`
 
@@ -808,6 +811,7 @@ secrets file
   ``simplib::passgen()`` function generate your passwords
 * Entries in this Array should be of the following form:
   ``username:password``
+* If ``auth_users`` is not set, any user in this list may connect
 
 Default value: `undef`
 
