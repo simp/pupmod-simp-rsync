@@ -24,6 +24,9 @@ describe 'rsync::server::section' do
         'include "rsync::server"'
       end
 
+      let(:fragment) { "rsync_#{title}.section" }
+      let(:secrets) { "/etc/rsync/#{title}.rsyncd.secrets" }
+
       context 'with default parameters' do
         let(:params) do
           {
@@ -32,8 +35,9 @@ describe 'rsync::server::section' do
         end
 
         it { is_expected.to compile.with_all_deps }
-        it { is_expected.to create_concat__fragment("rsync_#{title}.section") }
-        it { is_expected.not_to create_file("/etc/rsync/#{title}.rsyncd.secrets") }
+        it { is_expected.to create_concat__fragment(fragment).without_content(%r{^auth users}) }
+        it { is_expected.to create_concat__fragment(fragment).without_content(%r{^secrets file}) }
+        it { is_expected.not_to create_file(secrets) }
       end
 
       context 'with user_pass and comment parameters set' do
@@ -46,8 +50,10 @@ describe 'rsync::server::section' do
         end
 
         it { is_expected.to compile.with_all_deps }
+        it { is_expected.to create_concat__fragment(fragment).with_content(%r{^auth users = user1,user2$}) }
+        it { is_expected.to create_concat__fragment(fragment).with_content(%r{^secrets file = #{secrets}$}) }
         it do
-          is_expected.to create_file("/etc/rsync/#{title}.rsyncd.secrets").with(
+          is_expected.to create_file(secrets).with(
             ensure: 'file',
             owner: 'root',
             group: 'root',
@@ -70,8 +76,52 @@ describe 'rsync::server::section' do
         end
 
         it { is_expected.to compile.with_all_deps }
-        it { is_expected.to create_file("/etc/rsync/#{title}.rsyncd.secrets").with_content(%r{^authuser1:}) }
-        it { is_expected.to create_file("/etc/rsync/#{title}.rsyncd.secrets").with_content(%r{^authuser2:}) }
+        it { is_expected.to create_concat__fragment(fragment).with_content(%r{^auth users = authuser1,authuser2$}) }
+        it { is_expected.to create_file(secrets).with_content(%r{^authuser1:}) }
+        it { is_expected.to create_file(secrets).with_content(%r{^authuser2:}) }
+      end
+
+      context 'with both auth_users and user_pass set' do
+        let(:params) do
+          {
+            path: '/test/dir',
+            auth_users: ['user1'],
+            user_pass: ['user1:user1password', 'user2:user2password'],
+          }
+        end
+
+        it { is_expected.to create_concat__fragment(fragment).with_content(%r{^auth users = user1$}) }
+        it { is_expected.to create_file(secrets).with_content("user1:user1password\nuser2:user2password\n") }
+      end
+
+      [
+        { auth_users: [] },
+        { user_pass: [] },
+        { user_pass: ['skipme'] },
+      ].each do |empty_params|
+        context "with #{empty_params}" do
+          let(:params) { { path: '/test/dir' }.merge(empty_params) }
+
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to create_concat__fragment(fragment).with_content(%r{^auth users = \*:deny$}) }
+          it { is_expected.to create_concat__fragment(fragment).with_content(%r{^secrets file = #{secrets}$}) }
+          it { is_expected.to create_file(secrets) }
+        end
+      end
+
+      context 'with a non-root uid and gid' do
+        let(:params) do
+          {
+            path: '/test/dir',
+            auth_users: ['authuser1'],
+            uid: 'rsyncuser',
+            gid: 'rsyncgroup',
+          }
+        end
+
+        it { is_expected.to create_concat__fragment(fragment).with_content(%r{^uid = rsyncuser$}) }
+        it { is_expected.to create_concat__fragment(fragment).with_content(%r{^gid = rsyncgroup$}) }
+        it { is_expected.to create_file(secrets).with(owner: 'root', group: 'root', mode: '0600') }
       end
     end
   end
