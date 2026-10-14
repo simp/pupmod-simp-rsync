@@ -1,7 +1,7 @@
 * Wed Oct 14 2026 Hazel Caballero <hazel@sicura.us> - 8.1.1
 - Fix `rsync::server::section` falling back to an anonymous share when only
-  `user_pass` was set or a user list was empty; an empty list now denies all
-  access
+  `user_pass` was set or `auth_users` was empty; clients of these shares must
+  now send credentials, and an empty `auth_users` rejects every connection
 - Make section secrets files owned by root so rsyncd accepts them
 
 * Thu Oct 08 2026 Steven Pritchard <steve@sicura.us> - 8.1.0
