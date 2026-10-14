@@ -42,7 +42,7 @@ from the client_nets listed. To configure clients to utilize this new server,
 set their hieradata:
 
 ```
-simp_options::rsync: 'fqdn.rsync.server'
+simp_options::rsync::server: 'fqdn.rsync.server'
 ```
 
 to override the standard 'true' boolean value.
