@@ -1,3 +1,5 @@
+# The nested Acceptance::Helpers::Utils namespace requires forward
+# declaration of its parent modules in this single helper file.
 module Acceptance; end
 module Acceptance::Helpers; end
 
@@ -21,3 +23,4 @@ module Acceptance::Helpers::Utils
     unique_pairs.to_a
   end
 end
+# rubocop:enable Style/OneClassPerFile

@@ -95,12 +95,12 @@ Puppet::Type.type(:rsync).provide(:rsync) do
                       end
 
     if (
-        @resource[:server] ||
-        @resource[:rsync_server]
-      ) && (
-        @resource[:action] == :pull ||
-        @resource[:action].eql?('pull')
-      )
+      @resource[:server] ||
+      @resource[:rsync_server]
+    ) && (
+      @resource[:action] == :pull ||
+      @resource[:action].eql?('pull')
+    )
       source << resource_protocol
       source << '://'
       if @resource[:user]
@@ -132,12 +132,12 @@ Puppet::Type.type(:rsync).provide(:rsync) do
                       end
 
     if (
-        @resource[:server] ||
-        @resource[:rsync_server]
-      ) && (
-        @resource[:action] == :push ||
-        @resource[:action].eql?('push')
-      )
+      @resource[:server] ||
+      @resource[:rsync_server]
+    ) && (
+      @resource[:action] == :push ||
+      @resource[:action].eql?('push')
+    )
       target << resource_protocol
       target << '://'
       if @resource[:user]

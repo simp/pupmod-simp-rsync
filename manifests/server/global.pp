@@ -39,12 +39,12 @@ class rsync::server::global (
 ) {
   assert_private()
 
-  include '::rsync::server'
+  include 'rsync::server'
 
   if $tcpwrappers {
-    include '::tcpwrappers'
+    include 'tcpwrappers'
 
-    $_tcp_wrappers_name = $::rsync::server::stunnel ? {
+    $_tcp_wrappers_name = $rsync::server::stunnel ? {
       true    => 'rsync_server',
       default => 'rsync',
     }

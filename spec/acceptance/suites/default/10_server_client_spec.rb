@@ -51,6 +51,20 @@ describe 'server and client connectivity' do
               path        => '/srv/rsync/test',
               require     => File['/srv/rsync/test/test_file_srvcli'],
             }
+
+            rsync::server::section { 'userpass_only':
+              user_pass   => ['test_user:test_pass'],
+              hosts_allow => ['#{server1_ip}', '#{server2_ip}'],
+              path        => '/srv/rsync/test',
+              require     => File['/srv/rsync/test/test_file_srvcli'],
+            }
+
+            rsync::server::section { 'no_users':
+              auth_users  => [],
+              hosts_allow => ['#{server1_ip}', '#{server2_ip}'],
+              path        => '/srv/rsync/test',
+              require     => File['/srv/rsync/test/test_file_srvcli'],
+            }
           EOS
         end
 
@@ -154,6 +168,42 @@ describe 'server and client connectivity' do
               on(host, 'ls /tmp/test_file_srvcli', acceptable_exit_codes: [0])
               result = on(host, 'cat /tmp/test_file_srvcli').stdout
               expect(result).to match(%r{#{Regexp.escape(file_content)}})
+            end
+          end
+        end
+
+        context 'authentication' do
+          # Each host queries the other's rsync server
+          let(:remote_url) do
+            {
+              server1 => "rsync://test_user@#{server2_fqdn}:8873",
+              server2 => "rsync://test_user@#{server1_fqdn}",
+            }
+          end
+
+          def rsync_list(host, url, password)
+            on(host, "RSYNC_PASSWORD=#{password} rsync --list-only #{url}", accept_all_exit_codes: true)
+          end
+
+          [server1, server2].each do |host|
+            context "from #{host}" do
+              it 'allows a user_pass-only share with the correct password' do
+                result = rsync_list(host, "#{remote_url[host]}/userpass_only/", 'test_pass')
+                expect(result.exit_code).to eq(0)
+                expect(result.stdout).to include('test_file_srvcli')
+              end
+
+              it 'rejects a user_pass-only share with the wrong password' do
+                result = rsync_list(host, "#{remote_url[host]}/userpass_only/", 'wrong_pass')
+                expect(result.exit_code).not_to eq(0)
+                expect(result.stderr).to include('auth failed')
+              end
+
+              it 'rejects every user on a share with an empty auth_users list' do
+                result = rsync_list(host, "#{remote_url[host]}/no_users/", 'test_pass')
+                expect(result.exit_code).not_to eq(0)
+                expect(result.stderr).to include('auth failed')
+              end
             end
           end
         end
