@@ -19,10 +19,6 @@
 #
 #   * Leave this at ``127.0.0.1`` if using stunnel
 #
-# @param trusted_nets
-#   The networks to allow to connect to this service
-#
-#
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class rsync::server::global (
@@ -31,11 +27,10 @@ class rsync::server::global (
   String                         $syslog_facility = 'daemon',
   Simplib::Port                  $port            = 873,
   Simplib::IP                    $address         = '127.0.0.1',
-  Simplib::Netlist               $trusted_nets    = simplib::lookup('simp_options::trusted_nets', { default_value => ['127.0.0.1'] }),
 ) {
   assert_private()
 
-  include '::rsync::server'
+  include 'rsync::server'
 
   if $facts['os']['selinux']['current_mode'] and $facts['os']['selinux']['current_mode'] != 'disabled' {
     vox_selinux::port { "allow_rsync_port_${port}":

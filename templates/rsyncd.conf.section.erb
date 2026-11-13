@@ -17,7 +17,8 @@ log format = <%= @log_format %>
 dont compress = <%= Array(@dont_compress).join(' ') %>
 hosts allow = <%= Array(@hosts_allow).join(',') %>
 hosts deny = <%= Array(@hosts_deny).join(',') %>
-<% if @auth_users -%>
-auth users = <%= Array(@auth_users).join(',') %>
+<% if @_auth_enabled -%>
+<%# With only user_pass set, '*' admits exactly the users in the secrets file -%>
+auth users = <%= @auth_users.nil? ? '*' : (@auth_users.empty? ? '*:deny' : @auth_users.join(',')) %>
 secrets file = /etc/rsync/<%= @name %>.rsyncd.secrets
 <% end -%>

@@ -28,29 +28,56 @@ supplemental rsync servers to sync files to clients (one example: PE MoM and
 Compile Master architecture).
 
 To configure a Compile Master (or other node) to function as both a server
-and a client (of the primary server), setup hiera for the node:
+and a client (of the primary server), set hieradata for the node as shown
+below for your connection type.
 
-```
+#### With stunnel (the default)
+
+On the node that will serve files, set:
+
+```yaml
 rsync::server::global::port: 8873
 rsync::server::trusted_nets:
   - <client_net>
   - <client_net>
 ```
 
-This will configure an rsync server that utilizes stunnel for connections
-from the client_nets listed. To configure clients to utilize this new server,
-set their hieradata:
+The node is still a client of the primary server, and its own rsync stunnel
+connection already listens on `127.0.0.1:873`, so the local rsync daemon
+moves to port 8873. Clients in the listed `client_net`s reach it through
+stunnel on port 8730.
 
+To configure clients to use this new server instead of the primary Puppet
+server, set their hieradata:
+
+```yaml
+simp::rsync_stunnel: 'fqdn.rsync.server'
 ```
-simp_options::rsync: 'fqdn.rsync.server'
+
+`simp::rsync_stunnel` defaults to `true`, which points the client's rsync
+stunnel connection at the primary Puppet server. Nodes that do not include
+the `simp` class must declare the equivalent `stunnel::connection` themselves.
+
+#### Without stunnel
+
+The rsync daemon must listen on an external address, and the values of
+`rsync::server::trusted_nets`, `rsync::server::global::trusted_nets` and the
+`trusted_nets` of any `rsync::server::section` resources must match:
+
+```yaml
+rsync::server::stunnel: false
+rsync::server::global::address: '0.0.0.0'
+rsync::server::trusted_nets:
+  - <client_net>
+rsync::server::global::trusted_nets:
+  - <client_net>
 ```
 
-to override the standard 'true' boolean value.
+Clients then connect to the server directly:
 
-NOTE: If not using stunnel for the server/client connections, both values for
-`rsync::server::trusted_nets` and `rsync::server::global::trusted_nets` will
-need to match, as well as the `trusted_nets` values for any `rsync::server::section`
-resources. These all default to '127.0.0.1' for stunnel usage.
+```yaml
+simp_options::rsync::server: 'fqdn.rsync.server'
+```
 
 ## Reference
 

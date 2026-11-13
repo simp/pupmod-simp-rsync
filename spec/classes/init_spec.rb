@@ -35,6 +35,7 @@ describe 'rsync' do
           end
 
           it { is_expected.to compile.with_all_deps }
+          it { is_expected.to create_file('/etc/rsync').without_purge.without_recurse }
           it { is_expected.to create_class('rsync::selinux') }
           it { is_expected.to create_selboolean('rsync_client') }
           it { is_expected.to create_selboolean('rsync_export_all_ro') }

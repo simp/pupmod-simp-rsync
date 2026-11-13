@@ -1,3 +1,37 @@
+* Fri Nov 13 2026 Steven Pritchard <steve@sicura.us> - 9.0.0
+- BREAKING: Remove support for the archived `simp/tcpwrappers` module:
+  `rsync::server::global::tcpwrappers` and `rsync::server::global::trusted_nets`
+  (which only fed the tcpwrappers rule) are removed, and
+  `simp_options::tcpwrappers` is no longer read. Restrict access with
+  `rsync::server::trusted_nets` (stunnel or firewall) and
+  `rsync::server::section::hosts_allow` instead.
+
+* Wed Oct 14 2026 Hazel Caballero <hazel@sicura.us> - 8.1.1
+- Fix `rsync::server::section` falling back to an anonymous share when only
+  `user_pass` was set or `auth_users` was empty; clients of these shares must
+  now send credentials, and an empty `auth_users` rejects every connection
+- Make section secrets files owned by root so rsyncd accepts them
+
+* Thu Oct 08 2026 Steven Pritchard <steve@sicura.us> - 8.1.0
+- Add support for OpenVox 9
+- Update metadata.json dependency ranges from the Forge
+
+* Wed Oct 07 2026 Hazel Caballero <hazel@sicura.us> - 8.0.3
+- Remove the ineffective `purge` from `File['/etc/rsync']`; it never purged
+  because `recurse` was not set
+
+* Sun Oct 04 2026 Steven Pritchard <steve@sicura.us> - 8.0.2
+- Fix rubocop 1.91 style offenses (no functional change)
+
+* Mon Aug 24 2026 Steven Pritchard <steve@sicura.us> - 8.0.1
+- [puppetsync] Update metadata.json dependency ranges from the Forge
+
+* Mon May 11 2026 Steven Pritchard <steve@sicura.us> - 8.0.0
+- Remove unmaintained Compliance Engine data
+- Drop support for end-of-life platforms (Amazon Linux 2, CentOS 8)
+- Drop Puppet 7 support; require openvox >= 8 < 9
+- Point `issues_url` at GitHub Issues; allow newer simp module dependencies (rsyslog 9.x, simplib 5.x, stunnel 8.x).
+
 * Wed Aug 27 2025 Steven Pritchard <steve@sicura.us> - 7.0.1
 - Cleanup for rubocop
 
@@ -111,7 +145,7 @@
 * Wed Mar 29 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.0.2-0
 - Ensure that rsync password files are not echoed to the Puppet log
 
-* Thu Mar 17 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.1-0
+* Fri Mar 17 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.1-0
 - Remove OBE 'pe' requirement from metadata.json
 - Update puppet version in .travis.yaml
 
