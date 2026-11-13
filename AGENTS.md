@@ -179,17 +179,17 @@ Keep routing SIMP feature toggles through `simplib::lookup('simp_options::*', {
 
 Module dependencies (from `metadata.json`):
 
-- `puppetlabs/concat` `>= 6.4.0 < 10.0.0` (provides the `concat` /
+- `puppetlabs/concat` `>= 6.4.0 < 11.0.0` (provides the `concat` /
   `concat::fragment` used to assemble `/etc/rsyncd.conf`)
-- `puppetlabs/stdlib` `>= 8.0.0 < 10.0.0` (provides `ensure_resource`)
-- `simp/rsyslog` `>= 7.6.0 < 10.0.0` (provides `rsyslog::rule::drop`, used when
+- `puppetlabs/stdlib` `>= 8.0.0 < 11.0.0` (provides `ensure_resource`)
+- `simp/rsyslog` `>= 7.6.0 < 12.0.0` (provides `rsyslog::rule::drop`, used when
   `$drop_rsyslog_noise`)
-- `simp/simplib` `>= 4.9.0 < 6.0.0` (provides `simplib::lookup`,
+- `simp/simplib` `>= 4.9.0 < 8.0.0` (provides `simplib::lookup`,
   `simplib::assert_metadata`, `simplib::passgen`, and the `Simplib::*` data
   types)
-- `simp/stunnel` `>= 6.6.0 < 9.0.0` (provides `stunnel::connection`, the default
+- `simp/stunnel` `>= 6.6.0 < 10.0.0` (provides `stunnel::connection`, the default
   server transport)
-- `simp/vox_selinux` `>= 3.1.0 < 4.0.0` (provides `vox_selinux::port`)
+- `simp/vox_selinux` `>= 3.1.0 < 7.0.0` (provides `vox_selinux::port`)
 
 No optional dependencies are declared (`metadata.json` has no
 `simp.optional_dependencies` block).
