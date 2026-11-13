@@ -1,3 +1,11 @@
+* Fri Nov 13 2026 Steven Pritchard <steve@sicura.us> - 9.0.0
+- BREAKING: Remove support for the archived `simp/tcpwrappers` module:
+  `rsync::server::global::tcpwrappers` and `rsync::server::global::trusted_nets`
+  (which only fed the tcpwrappers rule) are removed, and
+  `simp_options::tcpwrappers` is no longer read. Restrict access with
+  `rsync::server::trusted_nets` (stunnel or firewall) and
+  `rsync::server::section::hosts_allow` instead.
+
 * Wed Oct 14 2026 Hazel Caballero <hazel@sicura.us> - 8.1.1
 - Fix `rsync::server::section` falling back to an anonymous share when only
   `user_pass` was set or `auth_users` was empty; clients of these shares must

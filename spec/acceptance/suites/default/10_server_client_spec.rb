@@ -100,7 +100,6 @@ describe 'server and client connectivity' do
             'simp_options::firewall'              => true,
             'rsync::server::stunnel'              => false,
             'rsync::server::trusted_nets'         => [server2_ip],
-            'rsync::server::global::trusted_nets' => [server2_ip],
             'rsync::server::global::address'      => '0.0.0.0',
           }
         end
@@ -113,7 +112,6 @@ describe 'server and client connectivity' do
             'rsync::server::stunnel'              => false,
             'rsync::server::global::port'         => 8873,
             'rsync::server::trusted_nets'         => [server1_ip],
-            'rsync::server::global::trusted_nets' => [server1_ip],
             'rsync::server::global::address'      => '0.0.0.0',
           }
         end

@@ -65,12 +65,10 @@ one custom resource type, `rsync`, shipped in `lib/`.
   rules that discard rsyncd chatter and localhost noise (`server.pp`).
 - **`rsync::server::global` (`manifests/server/global.pp`)** — **Private**
   (`assert_private()` at `global.pp`). Builds the global section of
-  `/etc/rsyncd.conf`. Parameters include `$port` (`Simplib::Port`, `873`),
-  `$address` (`Simplib::IP`, `127.0.0.1` — the stunnel back end), `$trusted_nets`
-  and `$tcpwrappers` (from the `simp_options` seam). `include '::rsync::server'`
-  (`global.pp`); optional `tcpwrappers::allow` (`global.pp`); on SELinux
-  systems a `vox_selinux::port` labelling the port `rsync_port_t`
-  (`global.pp`); and `concat::fragment { 'rsync_global' }` at order 5 from
+  `/etc/rsyncd.conf`. Parameters include `$port` (`Simplib::Port`, `873`)
+  and `$address` (`Simplib::IP`, `127.0.0.1` — the stunnel back end).
+  `include 'rsync::server'` (`global.pp`); on SELinux systems a
+  `vox_selinux::port` labelling the port `rsync_port_t` (`global.pp`); and `concat::fragment { 'rsync_global' }` at order 5 from
   `templates/rsyncd.conf.global.erb` (`global.pp`).
 - **`rsync::server::section` (`manifests/server/section.pp`)** — Public
   define. Emits one rsyncd share (module) into `/etc/rsyncd.conf` as
@@ -130,7 +128,7 @@ one custom resource type, `rsync`, shipped in `lib/`.
   (`server.pp`); `rsync::server::global` binds the daemon to `127.0.0.1`
   (`global.pp`) and stunnel accepts on `$listen_address:8730` and forwards
   to it (`server.pp`). Turning stunnel off exposes the daemon directly and
-  switches security over to the `$firewall` / tcpwrappers paths.
+  switches security over to the `$firewall` path.
 - **`sebool_use_nfs` / `sebool_use_cifs` are dead parameters.** They are declared
   on the base class (`init.pp`, documented El6-only and "will be removed")
   but `rsync::selinux` never reads them (`selinux.pp` only handles four
@@ -148,10 +146,10 @@ one custom resource type, `rsync`, shipped in `lib/`.
 - **Several classes are `include`d but their modules are only optional/soft
   deps.** `rsync::server` `include`s `stunnel`, `iptables` (via
   `iptables::listen::tcp_stateful`), and `rsyslog`; `rsync::server::global`
-  `include`s `tcpwrappers` and uses `vox_selinux::port`. `simp/stunnel`,
+  uses `vox_selinux::port`. `simp/stunnel`,
   `simp/rsyslog`, and `simp/vox_selinux` are declared runtime deps, but
-  `iptables` and `tcpwrappers` are **not** in `metadata.json` — they are only
-  reached on the non-stunnel/tcpwrappers code paths and are fixture-only.
+  `iptables` is **not** in `metadata.json` — it is only reached on the
+  non-stunnel code path and is fixture-only.
 
 ## The `simp_options` / `simplib::lookup` seam
 
@@ -165,8 +163,6 @@ non-`simp_options` / no-default cases called out below.
 | `manifests/server.pp` | `simp_options::firewall` | `false` |
 | `manifests/server.pp` | `simp_options::trusted_nets` | `['127.0.0.1']` |
 | `manifests/server.pp` | `simp_options::package_ensure` | `'installed'` |
-| `manifests/server/global.pp` | `simp_options::trusted_nets` | `['127.0.0.1']` |
-| `manifests/server/global.pp` | `simp_options::tcpwrappers` | `false` |
 | `manifests/server/section.pp` | `simp_options::trusted_nets` | `['127.0.0.1']` |
 | `manifests/retrieve.pp` | `simp_options::rsync::server` | **none** (compile fails if unset) |
 | `manifests/retrieve.pp` | `rsync::bwlimit` (module-local, not `simp_options`) | `undef` |
@@ -179,27 +175,27 @@ Keep routing SIMP feature toggles through `simplib::lookup('simp_options::*', {
 
 Module dependencies (from `metadata.json`):
 
-- `puppetlabs/concat` `>= 6.4.0 < 10.0.0` (provides the `concat` /
+- `puppetlabs/concat` `>= 6.4.0 < 11.0.0` (provides the `concat` /
   `concat::fragment` used to assemble `/etc/rsyncd.conf`)
-- `puppetlabs/stdlib` `>= 8.0.0 < 10.0.0` (provides `ensure_resource`)
-- `simp/rsyslog` `>= 7.6.0 < 10.0.0` (provides `rsyslog::rule::drop`, used when
+- `puppetlabs/stdlib` `>= 8.0.0 < 11.0.0` (provides `ensure_resource`)
+- `simp/rsyslog` `>= 7.6.0 < 11.0.0` (provides `rsyslog::rule::drop`, used when
   `$drop_rsyslog_noise`)
-- `simp/simplib` `>= 4.9.0 < 6.0.0` (provides `simplib::lookup`,
+- `simp/simplib` `>= 4.9.0 < 8.0.0` (provides `simplib::lookup`,
   `simplib::assert_metadata`, `simplib::passgen`, and the `Simplib::*` data
   types)
-- `simp/stunnel` `>= 6.6.0 < 9.0.0` (provides `stunnel::connection`, the default
+- `simp/stunnel` `>= 6.6.0 < 10.0.0` (provides `stunnel::connection`, the default
   server transport)
-- `simp/vox_selinux` `>= 3.1.0 < 4.0.0` (provides `vox_selinux::port`)
+- `simp/vox_selinux` `>= 3.1.0 < 7.0.0` (provides `vox_selinux::port`)
 
 No optional dependencies are declared (`metadata.json` has no
 `simp.optional_dependencies` block).
 
 Fixture-only dependencies (from `.fixtures.yml`, checked out for test
 compilation, not runtime deps) include the runtime deps above plus `simp_options`,
-`iptables`, `tcpwrappers`, `systemd`, `auditd`, `augeas_core`,
+`iptables`, `systemd`, `auditd`, `augeas_core`,
 `augeasproviders_core`/`_grub`, `firewalld`/`simp_firewalld`, `haveged`,
-`logrotate`, `pki`, `selinux_core`, and `simpcat`. Note `simp_options`,
-`iptables`, and `tcpwrappers` are consumed by the manifests but are **not**
+`logrotate`, `pki`, `selinux_core`, and `simpcat`. Note `simp_options`
+and `iptables` are consumed by the manifests but are **not**
 declared runtime dependencies.
 
 Runtime requirement (from `metadata.json` `requirements`): `openvox >= 8.0.0
@@ -216,7 +212,7 @@ OracleLinux 8/9/10; Rocky 8/9/10; AlmaLinux 8/9/10.
 - `manifests/server.pp` — the `rsync::server` class (daemon, stunnel/firewall,
   `concat` config, service, rsyslog noise drops).
 - `manifests/server/global.pp` — private `rsync::server::global`
-  (`assert_private()`; the global rsyncd.conf section, tcpwrappers, SELinux
+  (`assert_private()`; the global rsyncd.conf section, SELinux
   port).
 - `manifests/server/section.pp` — the `rsync::server::section` define (one
   rsyncd share + secrets file).
