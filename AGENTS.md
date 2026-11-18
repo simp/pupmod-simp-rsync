@@ -178,7 +178,7 @@ Module dependencies (from `metadata.json`):
 - `puppetlabs/concat` `>= 6.4.0 < 11.0.0` (provides the `concat` /
   `concat::fragment` used to assemble `/etc/rsyncd.conf`)
 - `puppetlabs/stdlib` `>= 8.0.0 < 11.0.0` (provides `ensure_resource`)
-- `simp/rsyslog` `>= 7.6.0 < 11.0.0` (provides `rsyslog::rule::drop`, used when
+- `simp/rsyslog` `>= 7.6.0 < 12.0.0` (provides `rsyslog::rule::drop`, used when
   `$drop_rsyslog_noise`)
 - `simp/simplib` `>= 4.9.0 < 8.0.0` (provides `simplib::lookup`,
   `simplib::assert_metadata`, `simplib::passgen`, and the `Simplib::*` data
