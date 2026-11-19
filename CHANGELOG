@@ -1,10 +1,12 @@
-* Fri Nov 13 2026 Steven Pritchard <steve@sicura.us> - 9.0.0
-- BREAKING: Remove support for the archived `simp/tcpwrappers` module:
-  `rsync::server::global::tcpwrappers` and `rsync::server::global::trusted_nets`
-  (which only fed the tcpwrappers rule) are removed, and
-  `simp_options::tcpwrappers` is no longer read. Restrict access with
-  `rsync::server::trusted_nets` (stunnel or firewall) and
-  `rsync::server::section::hosts_allow` instead.
+* Thu Nov 19 2026 Steven Pritchard <steve@sicura.us> - 8.2.0
+- Remove support for the archived `simp/tcpwrappers` module. The private
+  `rsync::server::global` class no longer has the `tcpwrappers` and
+  `trusted_nets` parameters (`trusted_nets` only fed the TCP Wrappers rule),
+  and `simp_options::tcpwrappers` is no longer read. TCP Wrappers has no effect
+  on EL8 and later. Hiera settings for the removed parameters are ignored and
+  can be deleted. Restrict access with `rsync::server::trusted_nets` (stunnel
+  or firewall) and `rsync::server::section::hosts_allow`
+- Allow `simp/stunnel` 10.x
 
 * Fri Nov 13 2026 Steven Pritchard <steve@sicura.us> - 8.1.2
 - Allow `simp/rsyslog` 11.x

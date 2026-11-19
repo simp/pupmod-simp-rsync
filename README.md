@@ -61,15 +61,13 @@ the `simp` class must declare the equivalent `stunnel::connection` themselves.
 #### Without stunnel
 
 The rsync daemon must listen on an external address, and the values of
-`rsync::server::trusted_nets`, `rsync::server::global::trusted_nets` and the
-`trusted_nets` of any `rsync::server::section` resources must match:
+`rsync::server::trusted_nets` and the `hosts_allow` of any
+`rsync::server::section` resources must match:
 
 ```yaml
 rsync::server::stunnel: false
 rsync::server::global::address: '0.0.0.0'
 rsync::server::trusted_nets:
-  - <client_net>
-rsync::server::global::trusted_nets:
   - <client_net>
 ```
 

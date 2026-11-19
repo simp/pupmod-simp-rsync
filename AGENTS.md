@@ -183,7 +183,7 @@ Module dependencies (from `metadata.json`):
 - `simp/simplib` `>= 4.9.0 < 8.0.0` (provides `simplib::lookup`,
   `simplib::assert_metadata`, `simplib::passgen`, and the `Simplib::*` data
   types)
-- `simp/stunnel` `>= 6.6.0 < 10.0.0` (provides `stunnel::connection`, the default
+- `simp/stunnel` `>= 6.6.0 < 11.0.0` (provides `stunnel::connection`, the default
   server transport)
 - `simp/vox_selinux` `>= 3.1.0 < 7.0.0` (provides `vox_selinux::port`)
 
