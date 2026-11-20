@@ -225,8 +225,6 @@ The following parameters are available in the `rsync::server::global` class:
 * [`syslog_facility`](#-rsync--server--global--syslog_facility)
 * [`port`](#-rsync--server--global--port)
 * [`address`](#-rsync--server--global--address)
-* [`trusted_nets`](#-rsync--server--global--trusted_nets)
-* [`tcpwrappers`](#-rsync--server--global--tcpwrappers)
 
 ##### <a name="-rsync--server--global--motd_file"></a>`motd_file`
 
@@ -269,22 +267,6 @@ The IP address upon which to listen for connections
 * Leave this at ``127.0.0.1`` if using stunnel
 
 Default value: `'127.0.0.1'`
-
-##### <a name="-rsync--server--global--trusted_nets"></a>`trusted_nets`
-
-Data type: `Simplib::Netlist`
-
-The networks to allow to connect to this service
-
-Default value: `simplib::lookup('simp_options::trusted_nets', { default_value => ['127.0.0.1'] })`
-
-##### <a name="-rsync--server--global--tcpwrappers"></a>`tcpwrappers`
-
-Data type: `Boolean`
-
-Use tcpwrappers to secure the rsync service
-
-Default value: `simplib::lookup('simp_options::tcpwrappers', { default_value => false })`
 
 ## Defined types
 
