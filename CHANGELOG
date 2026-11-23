@@ -1,3 +1,7 @@
+* Mon Nov 23 2026 Hazel Caballero <hazel@sicura.us> - 8.2.1
+- Fixed the README's "Without stunnel" example, which omitted the `hosts_allow`
+  each `rsync::server::section` needs to accept remote clients
+
 * Thu Nov 19 2026 Steven Pritchard <steve@sicura.us> - 8.2.0
 - Remove support for the archived `simp/tcpwrappers` module. The private
   `rsync::server::global` class no longer has the `tcpwrappers` and

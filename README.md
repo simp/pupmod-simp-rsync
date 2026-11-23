@@ -71,6 +71,18 @@ rsync::server::trusted_nets:
   - <client_net>
 ```
 
+Each `rsync::server::section` must allow the same clients. Its `hosts_allow`
+defaults to `simp_options::trusted_nets`, or to `['127.0.0.1']` when that is
+not set, so set it on every section unless `simp_options::trusted_nets`
+already covers your clients:
+
+```puppet
+rsync::server::section { 'example':
+  path        => '/srv/rsync/example',
+  hosts_allow => ['<client_net>'],
+}
+```
+
 Clients then connect to the server directly:
 
 ```yaml
